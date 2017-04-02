@@ -44,7 +44,6 @@ class Home extends Component {
               </MuiThemeProvider>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <RaisedButton onTouchTap={this.handleSubmit}>Submit</RaisedButton>
-
               </MuiThemeProvider>
             </form>
           </Col>
