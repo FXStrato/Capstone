@@ -3,7 +3,6 @@ import {Row, Col} from 'react-materialize';
 
 class Project extends Component {
   render() {
-    console.log(this.props);
     return (
       <Row>
         <Col s={12}>
