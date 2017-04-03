@@ -1,33 +1,15 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import CompanyForm from './adminComponents/companySubmissionForm';
+import ProjectForm from './adminComponents/projectSubmissionForm';
 
 class AdminPanel extends Component {
     render() {
         return (
-            <CompanyForm></CompanyForm>
-        );
-    }
-
-    addCompany(companyName,logoFile){
-        // Generate a unique company key
-        var newCompanyKey = firebase.database().ref().child('companies').push().key;
-
-        console.log(newCompanyKey);
-        console.log(logoFile);
-
-        // Upload the logo file to Firebase storage, naming it the key of the company
-        var storageReference = firebase.storage().ref('company_logos/' + newCompanyKey);
-        var task = storageReference.put(logoFile);
-
-        // Check for when the logo is finished uploading
-        task.on('state_changed',
-            function complete(){
-                // Add the new company to the database
-                firebase.database().ref('/companies' + newCompanyKey).set({
-                    name: companyName
-                });
-            }
+            <div>
+                <CompanyForm></CompanyForm>
+                <ProjectForm></ProjectForm>
+            </div>
         );
     }
 
