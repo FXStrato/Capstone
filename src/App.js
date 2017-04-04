@@ -42,7 +42,7 @@ class App extends Component {
     });
 
     return (
-      <div>
+      <div className="body-wrapper">
         <header>
           <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Toolbar style={{height: '64px', backgroundColor: '#212121'}}>

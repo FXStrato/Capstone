@@ -49,21 +49,23 @@ class Home extends Component {
           </Row>
           <Row>
             <Col s={12} m={4}>
-              <div className="card hoverable">
-                <div className="card-image">
-                  <img src="https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg" alt="AnswerDash Software Engineer Banner"/>
-                  <span className="card-title truncate">Software Engineer</span>
+              <Link to="project/123" style={{color: 'black'}}>
+                <div className="card hoverable">
+                  <div className="card-image">
+                    <img src="https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg" alt="AnswerDash Software Engineer Banner"/>
+                    <span className="card-title truncate">Software Engineer</span>
+                  </div>
+                  <div className="card-content">
+                    <p className="truncate">
+                      Company: AnswerDash <br/>
+                      Project: Design an automated answer bot
+                    </p>
+                  </div>
+                  <div className="card-action">
+                    Open for 5 more days
+                  </div>
                 </div>
-                <div className="card-content">
-                  <p className="truncate">
-                    Company: AnswerDash <br/>
-                    Project: Design an automated answer bot
-                  </p>
-                </div>
-                <div className="card-action">
-                  Open for 5 more days
-                </div>
-              </div>
+              </Link>
             </Col>
             <Col s={12} m={4}>
               <div className="card hoverable">
