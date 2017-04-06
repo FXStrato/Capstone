@@ -52,7 +52,7 @@ class App extends Component {
                 style={{backgroundColor: '#212121', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={<span style={{cursor: 'pointer'}}>Capstone</span>}
+                title={<span style={{cursor: 'pointer'}}>Frontier</span>}
               />
             </ToolbarGroup>
             <ToolbarGroup>
@@ -72,7 +72,7 @@ class App extends Component {
               </Drawer>
             </MuiThemeProvider>
         </header>
-        <main>
+        <main class="container">
           {this.props.children}
         </main>
         <footer className="page-footer" style={{backgroundColor: '#212121'}}>
