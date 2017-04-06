@@ -27,13 +27,33 @@ class ProjectSubmissionForm extends Component {
     var pCoId = this.state.postingCompanyId;
     var pProId = this.state.professionID;
 
+    var one_Liner = this.state.oneLiner;
+    var shortDescription = this.state.shortDesc;
+    var posting_Date = this.state.postingDate;
+    var due = this.state.dueDate;
+    var estDur = this.state.estimatedDuration;
+
+    // Testing variables
+
+    var supportingCompanies = ["-Kgl0j0pOVUWZdrczJXB","-KglpkMFxCoiFyr_vt_x"];
+    var additionalResources = ["Check out this link: https://www.google.com/", "A great resources for memes: https://www.reddit.com/r/AskReddit/"];
+    var submissionRequirements = ["Must be mobile responsive", "Please add colors to show off visual design"];
+
     var newProjectKey = firebase.database().ref().child('projects').push().key;
     // Adds project to database
     firebase.database().ref('/projects/' + newProjectKey).set({
         name: pName,
         posting_company: pCoId,
-        profession_type: pProId
-    });   
+        profession_type: pProId,
+        one_liner: one_Liner,
+        short_description: shortDescription,
+        posting_date: posting_Date,
+        due_date: due,
+        estimated_duration: estDur,
+        supporting_companies: supportingCompanies,
+        additional_resources: additionalResources,
+        submission_requirements: submissionRequirements
+    });     
   }
 
   render() {
@@ -41,7 +61,7 @@ class ProjectSubmissionForm extends Component {
       <form>
         <h2>Add a Project</h2>
         <label>
-          Project Name:
+          Project Title:
           <input name="projectName" type="text" onChange={this.handleInputChange} />
         </label>
         <br />
@@ -54,6 +74,46 @@ class ProjectSubmissionForm extends Component {
           Profession Type ID:
           <input name="professionID" type="text" onChange={this.handleInputChange} />
         </label>
+        <label>
+          One Liner:
+          <input name="oneLiner" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Short Description:
+          <input name="shortDesc" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        {/*<label>
+          Supporting Company ID's:
+          <input name="postingCompanyId" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />*/}
+        {/*<label>
+          Additional Resources:
+          <input name="postingCompanyId" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />*/}
+        <label>
+          Posting Date:
+          <input name="postingDate" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Submission Due Date:
+          <input name="dueDate" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        {/*<label>
+          Submission Requirements:
+          <input name="postingCompanyId" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />*/}
+        <label>
+          Estimated Duration:
+          <input name="estimatedDuration" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
         <button onClick={this.handleSubmit}>Submit</button>
       </form>
     );

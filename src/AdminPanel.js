@@ -6,7 +6,7 @@ import ProjectForm from './adminComponents/projectSubmissionForm';
 class AdminPanel extends Component {
     render() {
         return (
-            <div>
+            <div className="container">
                 <CompanyForm></CompanyForm>
                 <ProjectForm></ProjectForm>
             </div>
