@@ -1,39 +1,16 @@
-.body-wrapper {
-   display: flex;
-   min-height: 100vh;
-   flex-direction: column;
- }
-
- main {
-   flex: 1 0 auto;
- }
-
 /* label focus color */
+
 input:focus+label {
     opacity: 0;
     color: white !important;
 }
 
+
 /* label underline focus color */
+
 input:focus {
     border-bottom: none !important;
     box-shadow: none !important;
-}
-
-.banner {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: url('https://static.pexels.com/photos/201187/pexels-photo-201187.jpeg');
-  background-size: 100%;
-  background-position: center;
-  height: 200px;
-}
-
-.card-title {
-  background: rgba(0,0,0, 0.5);
-  padding: 2px 8px 2px 8px !important;
-  width: 100%;
 }
 
 @media only screen and (max-width: 992px) {
