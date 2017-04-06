@@ -32,6 +32,7 @@ class ProjectSubmissionForm extends Component {
     var posting_Date = this.state.postingDate;
     var due = this.state.dueDate;
     var estDur = this.state.estimatedDuration;
+    var coverImage = this.state.coverImageLink;
 
     // Testing variables
 
@@ -52,7 +53,8 @@ class ProjectSubmissionForm extends Component {
         estimated_duration: estDur,
         supporting_companies: supportingCompanies,
         additional_resources: additionalResources,
-        submission_requirements: submissionRequirements
+        submission_requirements: submissionRequirements,
+        cover_image_link: coverImage
     });     
   }
 
@@ -82,6 +84,11 @@ class ProjectSubmissionForm extends Component {
         <label>
           Short Description:
           <input name="shortDesc" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Cover Image Link:
+          <input name="coverImageLink" type="text" onChange={this.handleInputChange} />
         </label>
         <br />
         {/*<label>
