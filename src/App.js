@@ -45,11 +45,11 @@ class App extends Component {
       <div>
         <header>
           <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Toolbar style={{height: '64px', backgroundColor: '#455A64'}}>
+          <Toolbar style={{height: '64px', backgroundColor: '#212121'}}>
             <ToolbarGroup firstChild={true}>
               <AppBar
                 onTitleTouchTap={this.goHome}
-                style={{backgroundColor: '#455A64', boxShadow: 'none'}}
+                style={{backgroundColor: '#212121', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
                 title={<span style={{cursor: 'pointer'}}>Frontier</span>}
@@ -67,7 +67,7 @@ class App extends Component {
                 docked={false}
                 onRequestChange={(open) => this.setState({open})}
               >
-                <div style={{height: 64, backgroundColor: '#455A64'}}></div>
+                <div style={{height: 64, backgroundColor: '#212121'}}></div>
                 {drawerlinks}
               </Drawer>
             </MuiThemeProvider>
@@ -75,8 +75,30 @@ class App extends Component {
         <main class="container">
           {this.props.children}
         </main>
-        <footer>
-          	&copy; Frontier 2017
+        <footer className="page-footer" style={{backgroundColor: '#212121'}}>
+          <div className="container">
+            <div className="row">
+              <div className="col l6 s12">
+                <h5 className="white-text">Footer Content</h5>
+                <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+              </div>
+              <div className="col l4 offset-l2 s12">
+                <h5 className="white-text">Links</h5>
+                <ul>
+                  <li><a className="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="footer-copyright" style={{backgroundColor: "#333"}}>
+            <div className="container">
+            © 2017 Copyright Text
+            <a className="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
         </footer>
       </div>
     );
