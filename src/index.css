@@ -6,7 +6,7 @@ html, main {
 
 }
     #nav .topLogo {
-        height: 50px;
+        height: 45px;
         margin-top: 10px;
     }
 
@@ -39,10 +39,15 @@ html, main {
     }
 
 #projectPage {
-
+    margin: 50px 0px;
 }
     #projectPage .oneLiner {
-        font-size: 2rem;
+        font-size: 1.5rem;
+    }
+
+    #projectPage .projectTitle {
+        font-size: 3em;
+        margin-top: 0px;
     }
 
 /* label focus color */

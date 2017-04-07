@@ -83,7 +83,7 @@ class Project extends Component {
         <div className="container">
           <Row>
             <Col s={8} m={8}>
-              <h2>{this.state.projTitle || 'Empty project'}</h2>
+              <h2 className="projectTitle">{this.state.projTitle || 'Empty project'}</h2>
               <h4 className="oneLiner">
                 {this.state.projLiner || 'One liner goes here'}
               </h4>
@@ -98,8 +98,7 @@ class Project extends Component {
                   <p>Submission Due: {this.state.projEndDate || 'End Date'}</p>
                 </Col>
               </Row>
-              <div>Posting Company: {this.state.projPostingCompany || 'Posting company goes here'}</div>
-              <div>Supporting Companies: {this.state.projSupportingComps || 'Supprting companies here'}</div>
+              
               
               <p>{this.state.projDesc || 'Project description'}</p>
               <br/>
@@ -124,7 +123,10 @@ class Project extends Component {
                   <img src={this.state.projImage} alt="AnswerDash Software Engineer Banner" className="responsive-img"/>
 
                 </div>
+                
                 <div className="card-content">
+                  <div>Posting Company: <b>{this.state.projPostingCompany || 'Posting company goes here'}</b></div>
+                  <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.projSupportingComps || 'Supprting companies here'}</b></div>
                   <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <RaisedButton primary={true} fullWidth={true} onTouchTap={this.handleOpen} label="Submit Project" />
                   </MuiThemeProvider>
