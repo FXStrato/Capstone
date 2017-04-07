@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   render() {
-    let links = [{link: '/', body: 'Home'}, {link: '/project/123', body: 'Project 123'}];
+    let links = [{link: '/', body: 'Home'}, {link: '/', body: 'Projects - NA'}, {link: '/', body: 'Profile - NA'}, {link: '/', body: 'About - NA'}];
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (
@@ -55,10 +55,6 @@ class App extends Component {
                 id="navbar-appbar"
                 title={ <span style={{color: "#383838"}}>Frontier</span> }
               />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <FlatButton>Projects</FlatButton>
-              <FlatButton>About</FlatButton>
             </ToolbarGroup>
           </Toolbar>
         </MuiThemeProvider>
