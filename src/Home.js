@@ -49,7 +49,7 @@ class Home extends Component {
           </Row>
           <Row>
             <Col s={12} m={4}>
-              <Link to="project/123" style={{color: 'black'}}>
+              <Link to="project/-Kh4diidw7jpXDbKz-go" style={{color: 'black'}}>
                 <div className="card hoverable">
                   <div className="card-image">
                     <img src="https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg" alt="AnswerDash Software Engineer Banner"/>

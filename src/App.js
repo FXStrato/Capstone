@@ -72,7 +72,7 @@ class App extends Component {
               </Drawer>
             </MuiThemeProvider>
         </header>
-        <main class="container">
+        <main>
           {this.props.children}
         </main>
         <footer className="page-footer" style={{backgroundColor: '#212121'}}>
