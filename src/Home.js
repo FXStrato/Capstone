@@ -34,12 +34,12 @@ class Home extends Component {
         <div className="banner">
           <div className="container">
             <Row>
-              <Col s={7}>
+              <Col s={12} m={7}>
                 <h2>Create cool projects.</h2>
                 <h2>Get cool jobs.</h2>
-                <h4>Build your portfolio of work while simultaneously<br/>creating projects employers are interested in. Win win.</h4>
+                <h4>Build your portfolio while simultaneously creating projects employers are interested in. Win win.</h4>
               </Col>
-              <Col s={5}>
+              <Col s={12} m={5}>
                 <iframe className="topVideo" src="https://www.youtube.com/embed/Y5pjQQE4W4c" frameborder="0" allowfullscreen></iframe>
               </Col>
             </Row>

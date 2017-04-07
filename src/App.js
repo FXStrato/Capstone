@@ -4,6 +4,7 @@ import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'mater
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
+import BlackLogo from "./img/logo_black.png";
 
 class App extends Component {
   state = {
@@ -43,7 +44,7 @@ class App extends Component {
 
     return (
       <div className="body-wrapper">
-        <header style={{backgroundColor: '#ffffff'}}>
+        <header id="nav" style={{backgroundColor: '#ffffff'}}>
           <div className="container">
           <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
@@ -53,7 +54,7 @@ class App extends Component {
                 style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={ <span style={{color: "#383838"}}>Frontier</span> }
+                title={ <img className="topLogo" src={BlackLogo} alt=""/> }
               />
             </ToolbarGroup>
             <ToolbarGroup>
