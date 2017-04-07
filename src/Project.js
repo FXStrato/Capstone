@@ -143,7 +143,13 @@ class Project extends Component {
             open={this.state.open}
             onRequestClose={this.handleClose}
           >
-            Submit a project link: <MuiThemeProvider muiTheme={getMuiTheme()}><TextField name="projectSubmission" /></MuiThemeProvider>
+            Congrats on finishing! Please email us at <b>jith@uw.edu</b> the following:
+            <ul>
+              <li>Your Name</li>
+              <li>Resume</li>
+              <li>Link to project submission</li>
+            </ul>
+
           </Dialog>
         </MuiThemeProvider>
       </section>
