@@ -43,20 +43,22 @@ class App extends Component {
 
     return (
       <div className="body-wrapper">
-        <header>
+        <header style={{backgroundColor: '#ffffff'}}>
+          <div className="container">
           <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Toolbar style={{height: '64px', backgroundColor: '#212121'}}>
+          <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
             <ToolbarGroup firstChild={true}>
               <AppBar
                 onTitleTouchTap={this.goHome}
-                style={{backgroundColor: '#212121', boxShadow: 'none'}}
+                style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={<span style={{cursor: 'pointer'}}>Frontier</span>}
+                title={ <span style={{color: "#383838"}}>Frontier</span> }
               />
             </ToolbarGroup>
             <ToolbarGroup>
-              <FlatButton>Profile</FlatButton>
+              <FlatButton>Projects</FlatButton>
+              <FlatButton>About</FlatButton>
             </ToolbarGroup>
           </Toolbar>
         </MuiThemeProvider>
@@ -71,6 +73,7 @@ class App extends Component {
                 {drawerlinks}
               </Drawer>
             </MuiThemeProvider>
+            </div>
         </header>
         <main>
           {this.props.children}
@@ -79,24 +82,22 @@ class App extends Component {
           <div className="container">
             <div className="row">
               <div className="col l6 s12">
-                <h5 className="white-text">Footer Content</h5>
-                <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                <h5 className="white-text">About Frontier</h5>
+                <p className="grey-text text-lighten-4">Frontier is a platform that helps job seekers create amazing projects while connecting them to employers looking for incredible talent.</p>
               </div>
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">Links</h5>
                 <ul>
-                  <li><a className="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">Projects</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">About</a></li>
+                  <li><a className="grey-text text-lighten-3" href="#!">Contact Us</a></li>
                 </ul>
               </div>
             </div>
           </div>
           <div className="footer-copyright" style={{backgroundColor: "#333"}}>
             <div className="container">
-            © 2017 Copyright Text
-            <a className="grey-text text-lighten-4 right" href="#!">More Links</a>
+            © 2017 Frontier
             </div>
           </div>
         </footer>

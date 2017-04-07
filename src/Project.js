@@ -79,20 +79,31 @@ class Project extends Component {
       />,
     ];
     return (
-      <section>
+      <section id="projectPage">
         <div className="container">
           <Row>
-            <Col s={12} m={6}>
+            <Col s={8} m={8}>
               <h2>{this.state.projTitle || 'Empty project'}</h2>
-              <div>
+              <h4 className="oneLiner">
                 {this.state.projLiner || 'One liner goes here'}
-              </div>
-              <p>{this.state.projPostDate || 'Post Date'} - {this.state.projEndDate || 'End Date'}</p>
-              <p>{this.state.projDesc || 'Project description'}</p>
-              <div>For: {this.state.projProfession || 'Profession goes here'}</div>
-              <br/>
-              <div>Company: {this.state.projPostingCompany || 'Posting company goes here'}</div>
+              </h4>
+              <Row>
+                <Col s={4}>
+                  <p>{this.state.projProfession || 'Profession goes here'}</p>
+                </Col>
+                <Col s={4}>
+                  <p>Posted: {this.state.projPostDate || 'Post Date'}</p>
+                </Col>
+                <Col s={4}>
+                  <p>Submission Due: {this.state.projEndDate || 'End Date'}</p>
+                </Col>
+              </Row>
+              <div>Posting Company: {this.state.projPostingCompany || 'Posting company goes here'}</div>
               <div>Supporting Companies: {this.state.projSupportingComps || 'Supprting companies here'}</div>
+              
+              <p>{this.state.projDesc || 'Project description'}</p>
+              <br/>
+              
               <div>
                 <ul>
                   Additional Resources:
@@ -107,7 +118,7 @@ class Project extends Component {
                 <div className="chip">SQL</div>
               </div>
             </Col>
-            <Col s={12} m={6}>
+            <Col s={4} m={4}>
               <div className="card">
                 <div className="card-image">
                   <img src={this.state.projImage} alt="AnswerDash Software Engineer Banner" className="responsive-img"/>

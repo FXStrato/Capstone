@@ -31,34 +31,37 @@ class Home extends Component {
   render() {
     return (
       <section>
-        <Row>
-          <Col s={12} style={{paddingBottom: 200}}>
-            <div className="banner"></div>
-          </Col>
-        </Row>
-        <div className="container">
+        <div className="banner">
+          <div className="container">
+            <Row>
+              <Col s={7}>
+                <h2>Create cool projects.</h2>
+                <h2>Get cool jobs.</h2>
+                <h4>Build your portfolio of work while simultaneously<br/>creating projects employers are interested in. Win win.</h4>
+              </Col>
+              <Col s={5}>
+                <iframe className="topVideo" src="https://www.youtube.com/embed/Y5pjQQE4W4c" frameborder="0" allowfullscreen></iframe>
+              </Col>
+            </Row>
+          </div>
+        </div>
+
+        <div id="listOfTopProjects" className="container">
           <Row>
-            <Col s={12} className="center-align">
-              This bit can cover the main tech fields we cover, like Project Manager, Software Developer, Data Scientist, etc.
-            </Col>
+            <h5 style={{textAlign: "center"}}>Select interested profession</h5>
           </Row>
-          <Row>
-            <Col s={12} className="center-align">
-              <h2>Top Projects</h2>
-            </Col>
-          </Row>
-          <Row>
+          <Row style={{marginBottom: "0px"}}>
             <Col s={12} m={4}>
               <Link to="project/-Kh4diidw7jpXDbKz-go" style={{color: 'black'}}>
                 <div className="card hoverable">
                   <div className="card-image">
                     <img src="https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg" alt="AnswerDash Software Engineer Banner"/>
-                    <span className="card-title truncate">Software Engineer</span>
+                    <span className="card-title truncate">Front-End Engineer</span>
                   </div>
                   <div className="card-content">
                     <p className="truncate">
-                      Company: AnswerDash <br/>
-                      Project: Design an automated answer bot
+                      Company: Boogle <br/>
+                      Project: Build a blogging app
                     </p>
                   </div>
                   <div className="card-action">
