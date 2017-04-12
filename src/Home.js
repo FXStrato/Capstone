@@ -12,48 +12,64 @@ import _ from 'lodash';
 
 class Home extends Component {
   state = {
-    topProjects: [],
-    topProjectIDs: []
+    topProjects: {},
+    topProjectIDs: [],
+    projCompanies: [],
+    projProfessions: []
   }
 
   componentDidMount = () => {
-    this.getProjects();
-  }
-
-  getProjects = () => {
+    firebase.database().ref('professions/').once('value').then((snapshot) => {
+      this.setState({projProfessions: snapshot.val()});
+    });
     firebase.database().ref('/landingpage/top_projects').once('value').then((snapshot) => {
       this.setState({topProjectIDs: snapshot.val()});
       for(let i = 0; i < snapshot.val().length; i++) {
-        firebase.database().ref('projects/' + snapshot.val()[i]).once('value').then((snapshot) => {
+        firebase.database().ref('projects/' + snapshot.val()[i]).once('value').then((projectSnapshot) => {
           let temp = this.state.topProjects;
-          temp.push(snapshot.val());
+          temp[this.state.topProjectIDs[i]] = projectSnapshot.val();
           this.setState({topProjects: temp});
+          firebase.database().ref('companies/' + projectSnapshot.val()['posting_company']).once('value').then((companySnapshot) => {
+            let companyTemp = this.state.projCompanies;
+            companyTemp.push(companySnapshot.val()['name']);
+            this.setState({projCompanies: companyTemp});
+          });
         });
       }
     });
-    let result = _.map(this.state.topProjects, (elem, index) => {
+  }
+
+  getProjects = () => {
+    if(this.state.topProjects) {
+      return _.map(this.state.topProjects, (elem, index) => {
+        let spot = this.state.topProjectIDs.indexOf(index);
+        return (
+          <Col s={12} m={4} key={'topProject-' + spot}>
+            <Link to={'project/' + index} style={{color: 'black'}}>
+              <div className="card hoverable">
+                <div className="card-image">
+                  <img src={elem.cover_image_link} alt="AnswerDash Software Engineer Banner"/>
+                  <span className="card-title truncate">{this.state.projProfessions[elem.profession_type]}</span>
+                </div>
+                <div className="card-content">
+                  <p className="truncate">
+                    Company: {this.state.projCompanies[spot]} <br/>
+                    {elem.one_liner}
+                  </p>
+                </div>
+                <div className="card-action">
+                  End Date: {elem.due_date}
+                </div>
+              </div>
+            </Link>
+          </Col>
+        )
+      });
+    } else {
       return (
-        <Col s={12} m={4} key={'topProject-' + index}>
-          <Link to={'projects/' + this.state.topProjectIDs[index]} style={{color: 'black'}}>
-            <div className="card hoverable">
-              <div className="card-image">
-                <img src={elem.cover_image_link} alt="AnswerDash Software Engineer Banner"/>
-                <span className="card-title truncate">Front-End Engineer</span>
-              </div>
-              <div className="card-content">
-                <p className="truncate">
-                  Company: Boogle <br/>
-                  Project: Build a blogging app
-                </p>
-              </div>
-              <div className="card-action">
-                Open for 5 more days
-              </div>
-            </div>
-          </Link>
-        </Col>
+        <div>Nothing here</div>
       )
-    });
+    }
   }
 
   handleChange = (event) => {
@@ -98,7 +114,7 @@ class Home extends Component {
             <h5 style={{textAlign: "center"}}>Select interested profession</h5>
           </Row>
           <Row style={{marginBottom: "0px"}}>
-            {this.state.topProjects}
+            {this.getProjects()}
           </Row>
         </div>
       </section>

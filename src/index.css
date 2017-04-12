@@ -2,13 +2,10 @@ html, main {
     background-color: #ecf0f1;
 }
 
-#nav {
-
+#nav .topLogo {
+    height: 45px;
+    margin-top: 10px;
 }
-    #nav .topLogo {
-        height: 45px;
-        margin-top: 10px;
-    }
 
 .banner {
     background-color: white;
@@ -25,6 +22,12 @@ html, main {
     font-size: 1.5rem;
     color: gray;
 }
+
+.card-title {
+  background: rgba(0,0,0, 0.5);
+  padding: 2px 8px 2px 8px !important;
+  width: 100%;
+ }
 
 #listOfTopProjects {
     padding: 25px 0px;
