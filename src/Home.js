@@ -5,12 +5,55 @@ import {Row, Col, Card, CardTitle} from 'react-materialize';
 import {TextField, RaisedButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
+import firebase from 'firebase';
+import _ from 'lodash';
 
 /* Home will be the landing page for the application. */
 
 class Home extends Component {
   state = {
+    topProjects: [],
+    topProjectIDs: []
+  }
+
+  componentDidMount = () => {
+    this.getProjects();
+  }
+
+  getProjects = () => {
+    firebase.database().ref('/landingpage/top_projects').once('value').then((snapshot) => {
+      this.setState({topProjectIDs: snapshot.val()});
+      for(let i = 0; i < snapshot.val().length; i++) {
+        firebase.database().ref('projects/' + snapshot.val()[i]).once('value').then((snapshot) => {
+          let temp = this.state.topProjects;
+          temp.push(snapshot.val());
+          this.setState({topProjects: temp});
+        });
+      }
+    });
+    let result = _.map(this.state.topProjects, (elem, index) => {
+      return (
+        <Col s={12} m={4} key={'topProject-' + index}>
+          <Link to={'projects/' + this.state.topProjectIDs[index]} style={{color: 'black'}}>
+            <div className="card hoverable">
+              <div className="card-image">
+                <img src={elem.cover_image_link} alt="AnswerDash Software Engineer Banner"/>
+                <span className="card-title truncate">Front-End Engineer</span>
+              </div>
+              <div className="card-content">
+                <p className="truncate">
+                  Company: Boogle <br/>
+                  Project: Build a blogging app
+                </p>
+              </div>
+              <div className="card-action">
+                Open for 5 more days
+              </div>
+            </div>
+          </Link>
+        </Col>
+      )
+    });
   }
 
   handleChange = (event) => {
@@ -26,6 +69,7 @@ class Home extends Component {
       console.log('email', this.state.email);
       event.preventDefault();
     }
+
 
 
   render() {
@@ -54,59 +98,7 @@ class Home extends Component {
             <h5 style={{textAlign: "center"}}>Select interested profession</h5>
           </Row>
           <Row style={{marginBottom: "0px"}}>
-            <Col s={12} m={4}>
-              <Link to="project/-Kh4diidw7jpXDbKz-go" style={{color: 'black'}}>
-                <div className="card hoverable">
-                  <div className="card-image">
-                    <img src="https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg" alt="AnswerDash Software Engineer Banner"/>
-                    <span className="card-title truncate">Front-End Engineer</span>
-                  </div>
-                  <div className="card-content">
-                    <p className="truncate">
-                      Company: Boogle <br/>
-                      Project: Build a blogging app
-                    </p>
-                  </div>
-                  <div className="card-action">
-                    Open for 5 more days
-                  </div>
-                </div>
-              </Link>
-            </Col>
-            <Col s={12} m={4}>
-              <div className="card hoverable">
-                <div className="card-image">
-                  <img src="https://static.pexels.com/photos/241544/pexels-photo-241544.jpeg" alt="Data Analyst Banner"/>
-                  <span className="card-title">Data Analyst</span>
-                </div>
-                <div className="card-content">
-                  <p className="truncate">
-                    Company: Amazon <br/>
-                    Project: Design a structural database with image hosting and tag based sort.
-                  </p>
-                </div>
-                <div className="card-action">
-                  Open for 10 more days
-                </div>
-              </div>
-            </Col>
-            <Col s={12} m={4}>
-              <div className="card hoverable">
-                <div className="card-image">
-                  <img src="https://static.pexels.com/photos/57825/pexels-photo-57825.jpeg" alt="Project Manager Banner"/>
-                  <span className="card-title">Project Manager</span>
-                </div>
-                <div className="card-content">
-                  <p className="truncate">
-                    Company: Yahoo <br/>
-                    Project: Create a schedule for a team building a web app with a deadline in 3 weeks.
-                  </p>
-                </div>
-                <div className="card-action">
-                  Open for 2 more days
-                </div>
-              </div>
-            </Col>
+            {this.state.topProjects}
           </Row>
         </div>
       </section>
