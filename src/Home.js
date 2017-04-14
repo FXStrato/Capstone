@@ -48,7 +48,7 @@ class Home extends Component {
             <Link to={'project/' + index} style={{color: 'black'}}>
               <div className="card hoverable">
                 <div className="card-image">
-                  <img src={elem.cover_image_link} alt="AnswerDash Software Engineer Banner"/>
+                  <img src={elem.cover_image_link} alt={elem.posting_company + ' Banner'}/>
                   <span className="card-title truncate">{this.state.projProfessions[elem.profession_type]}</span>
                 </div>
                 <div className="card-content">

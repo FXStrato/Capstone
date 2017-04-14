@@ -54,7 +54,7 @@ class App extends Component {
                 style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={ <img className="topLogo" src={BlackLogo} alt=""/> }
+                title={ <img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}} /> }
               />
             </ToolbarGroup>
           </Toolbar>
