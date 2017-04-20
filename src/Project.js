@@ -11,7 +11,9 @@ import _ from 'lodash';
 
 class Project extends Component {
   state = {
+    displayFull: false,
     open: false,
+    fullOpen: false,
     projTitle: '',
     projDesc: '',
     projLiner: '',
@@ -31,6 +33,7 @@ class Project extends Component {
   }
 
 //Temp: -Kh4diidw7jpXDbKz-go
+/*Add check to see if user is logged in, and if project ID is under user, display full spec, and submit project.*/
 
   componentDidMount = () => {
     window.scrollTo(0, 0);
@@ -56,12 +59,14 @@ class Project extends Component {
     });
   }
 
-  handleOpen = () => {
-    this.setState({open: true});
+  handleOpen = (type) => {
+    if(type === 'open') this.setState({open: true});
+    else this.setState({fullOpen: true});
   };
 
-  handleClose = () => {
-    this.setState({open: false});
+  handleClose = (type) => {
+    if(type === 'open') this.setState({open: false});
+    else this.setState({fullOpen: false});
   };
 
 
@@ -70,19 +75,31 @@ class Project extends Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={() => {this.handleClose('open')}}
       />,
       <FlatButton
         label="Submit"
         primary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={() => {this.handleClose('open')}}
+      />,
+    ];
+    const fullActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={() => {this.handleClose('fullOpen')}}
+      />,
+      <FlatButton
+        label="Begin Project"
+        primary={true}
+        onTouchTap={() => {this.handleClose('fullOpen')}}
       />,
     ];
     return (
       <section id="projectPage">
         <div className="container">
           <Row>
-            <Col s={8} m={8}>
+            <Col s={12} m={8}>
               <h2 className="projectTitle">{this.state.projTitle || 'Empty project'}</h2>
               <h4 className="oneLiner">
                 {this.state.projLiner || 'One liner goes here'}
@@ -98,11 +115,8 @@ class Project extends Component {
                   <p>Submission Due: {this.state.projEndDate || 'End Date'}</p>
                 </Col>
               </Row>
-              
-              
               <p>{this.state.projDesc || 'Project description'}</p>
               <br/>
-              
               <div>
                 <ul>
                   Additional Resources:
@@ -117,19 +131,23 @@ class Project extends Component {
                 <div className="chip">SQL</div>
               </div>
             </Col>
-            <Col s={4} m={4}>
+            <Col s={12} m={4}>
               <div className="card">
                 <div className="card-image">
-                  <img src={this.state.projImage} alt="AnswerDash Software Engineer Banner" className="responsive-img"/>
-
+                  <img src={this.state.projImage} alt={this.state.projTitle + ' Banner'} className="responsive-img"/>
                 </div>
-                
                 <div className="card-content">
                   <div>Posting Company: <b>{this.state.projPostingCompany || 'Posting company goes here'}</b></div>
                   <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.projSupportingComps || 'Supprting companies here'}</b></div>
-                  <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <RaisedButton primary={true} fullWidth={true} onTouchTap={this.handleOpen} label="Submit Project" />
-                  </MuiThemeProvider>
+                  {this.state.displayFull ?
+                    <MuiThemeProvider muiTheme={getMuiTheme()}>
+                      <RaisedButton primary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('open')}} label="Submit Project" />
+                    </MuiThemeProvider>
+                    :
+                    <MuiThemeProvider muiTheme={getMuiTheme()}>
+                      <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
+                    </MuiThemeProvider>
+                  }
                 </div>
               </div>
             </Col>
@@ -141,7 +159,7 @@ class Project extends Component {
             actions={actions}
             modal={false}
             open={this.state.open}
-            onRequestClose={this.handleClose}
+            onRequestClose={() => {this.handleClose('open')}}
           >
             Congrats on finishing! Please email us at <b>jith@uw.edu</b> the following:
             <ul>
@@ -150,6 +168,17 @@ class Project extends Component {
               <li>Link to project submission</li>
             </ul>
 
+          </Dialog>
+        </MuiThemeProvider>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <Dialog
+            title={"Beginning " + this.state.projTitle}
+            actions={fullActions}
+            modal={false}
+            open={this.state.fullOpen}
+            onRequestClose={() => {this.handleClose('fullOpen')}}
+          >
+            Would you like to begin this project?
           </Dialog>
         </MuiThemeProvider>
       </section>
