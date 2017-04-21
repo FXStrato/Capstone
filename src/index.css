@@ -6,6 +6,11 @@ html, main {
     height: 45px;
     margin-top: 10px;
 }
+    #nav .profilePic {
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+    }
 
 .banner {
     background-color: white;
