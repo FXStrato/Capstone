@@ -2,15 +2,15 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 
-/* Home will be the landing page for the application. */
+/*This page will display the full spec of the passed in project */
 
-class Home extends Component {
+class ProjectFullSpec extends Component {
   render() {
     return (
       <div>
         <Row>
           <Col s={12}>
-            This is the Home page
+            This is the Full Spec Project Page
           </Col>
         </Row>
       </div>
@@ -18,4 +18,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default ProjectFullSpec;

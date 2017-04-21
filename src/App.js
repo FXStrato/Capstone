@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   render() {
-    let links = [{link: '/', body: 'Home'}, {link: '/', body: 'Projects - NA'}, {link: '/', body: 'Profile - NA'}, {link: '/', body: 'About - NA'}];
+    let links = [{link: '/', body: 'Home'}, {link: '/about', body: 'About'}];
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (

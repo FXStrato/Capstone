@@ -2,15 +2,15 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 
-/* Home will be the landing page for the application. */
+/* Search Projects  */
 
-class Home extends Component {
+class SearchProjects extends Component {
   render() {
     return (
       <div>
         <Row>
           <Col s={12}>
-            This is the Home page
+            This is the Search Projects Page
           </Col>
         </Row>
       </div>
@@ -18,4 +18,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default SearchProjects;

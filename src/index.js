@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import * as firebase from 'firebase';
 import App from './App';
 import Home from './Home';
+import About from './About';
 import Project from './Project';
 import AdminPanel from './AdminPanel';
 import './index.css';
@@ -31,6 +32,7 @@ ReactDOM.render(
       <IndexRoute component={Home}/>
       <Route path="project/:projectID" component={Project}/>
       <Route path="admin" component={AdminPanel}/>
+      <Route path ="about" component={About}/>
     </Route>
   </Router>,
   document.getElementById('root')

@@ -4,13 +4,13 @@ import { Row, Col } from 'react-materialize';
 
 /* Home will be the landing page for the application. */
 
-class Home extends Component {
+class Dashboard extends Component {
   render() {
     return (
       <div>
         <Row>
           <Col s={12}>
-            This is the Home page
+            This is the Dashboard
           </Col>
         </Row>
       </div>
@@ -18,4 +18,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Dashboard;
