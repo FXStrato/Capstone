@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {Link,browserHistory} from 'react-router';
-import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup} from 'material-ui';
+import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
 import BlackLogo from "./img/logo_black.png";
+import SignoutButton from "./signoutButton";
+import firebase from 'firebase';
 
 class App extends Component {
   state = {
@@ -35,6 +37,32 @@ class App extends Component {
     }
   }
 
+  componentDidMount(){
+    firebase.auth().onAuthStateChanged(user => {
+     if(user) {
+       console.log('Auth state changed: logged in as', user.email);
+       this.setState({userID:user.uid});
+       this.setState({userEmail:user.email})
+       this.setState({isAuth: true})
+       firebase.database().ref('users/' + user.uid).once('value').then(snapshot=> {
+         if(snapshot.val()) {
+           this.setState({
+             userHandle: snapshot.val().firstName,
+             userProfilePicLink: snapshot.val().photoURL
+            })
+         }
+       });
+     }
+     else{
+       console.log('Auth state changed: logged out');
+       this.setState({userID: null}); //null out the saved state
+       this.setState({userEmail: null})
+       this.setState({userHandle: ''});
+       this.setState({isAuth: false})
+     }
+   });  
+  }
+
   render() {
     let links = [{link: '/', body: 'Home'}, {link: '/interests', body: 'Interests'}, {link: '/projects', body: 'Search Projects'}, {link: '/about', body: 'About'},];
     let drawerlinks = _.map(links, (elem, index) => {
@@ -46,6 +74,8 @@ class App extends Component {
     let children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
         isAuth: this.state.isAuth,
+        userEmail: this.state.userEmail,
+        userHandle: this.state.userHandle,
       })
     })
 
@@ -60,8 +90,14 @@ class App extends Component {
                 style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={ <img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}} /> }
+                title={ <img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/> }
               />
+            </ToolbarGroup>
+            <ToolbarGroup>
+              <div className="hide-on-med-and-down">
+                {this.state.isAuth ? <div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div> : ''}
+                
+              </div>
             </ToolbarGroup>
           </Toolbar>
         </MuiThemeProvider>
@@ -86,6 +122,7 @@ class App extends Component {
               <div className="col l6 s12">
                 <h5 className="white-text">About Frontier</h5>
                 <p className="grey-text text-lighten-4">Frontier is a platform that helps job seekers create amazing projects while connecting them to employers looking for incredible talent.</p>
+                <SignoutButton />
               </div>
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">Links</h5>
