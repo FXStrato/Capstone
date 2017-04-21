@@ -7,6 +7,11 @@ import * as firebase from 'firebase';
 import App from './App';
 import Home from './Home';
 import About from './About';
+import Interests from './Interests';
+import Dashboard from './Dashboard';
+import Contact from './Contact';
+import ProjectFullSpec from './ProjectFullSpec';
+import SearchProjects from './SearchProjects';
 import Project from './Project';
 import AdminPanel from './AdminPanel';
 import './index.css';
@@ -33,6 +38,9 @@ ReactDOM.render(
       <Route path="project/:projectID" component={Project}/>
       <Route path="admin" component={AdminPanel}/>
       <Route path ="about" component={About}/>
+      <Route path="interests" component={Interests}/>
+      <Route path="projects" component={SearchProjects}/>
+      <Route path="contact" component={Contact}/>
     </Route>
   </Router>,
   document.getElementById('root')

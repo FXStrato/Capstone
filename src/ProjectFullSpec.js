@@ -7,7 +7,7 @@ import { Row, Col } from 'react-materialize';
 class ProjectFullSpec extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <Row>
           <Col s={12}>
             This is the Full Spec Project Page

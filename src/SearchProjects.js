@@ -7,10 +7,10 @@ import { Row, Col } from 'react-materialize';
 class SearchProjects extends Component {
   render() {
     return (
-      <div>
+      <div className="container">
         <Row>
           <Col s={12}>
-            This is the Search Projects Page
+            <p>This is the Search Projects Page</p>
           </Col>
         </Row>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {browserHistory} from 'react-router';
-import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
+import {Link,browserHistory} from 'react-router';
+import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   handleActive = (path) => {
+    this.handleToggle();
     if(browserHistory.getCurrentLocation().pathname !== path) browserHistory.push(path);
   }
 
@@ -34,7 +35,7 @@ class App extends Component {
   }
 
   render() {
-    let links = [{link: '/', body: 'Home'}, {link: '/about', body: 'About'}];
+    let links = [{link: '/', body: 'Home'}, {link: '/interests', body: 'Interests'}, {link: '/projects', body: 'Search Projects'}, {link: '/about', body: 'About'},];
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (
@@ -45,7 +46,6 @@ class App extends Component {
     return (
       <div className="body-wrapper">
         <header id="nav" style={{backgroundColor: '#ffffff'}}>
-          <div className="container">
           <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
             <ToolbarGroup firstChild={true}>
@@ -60,17 +60,16 @@ class App extends Component {
           </Toolbar>
         </MuiThemeProvider>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Drawer
-                width={230}
-                open={this.state.open}
-                docked={false}
-                onRequestChange={(open) => this.setState({open})}
-              >
-                <div style={{height: 64, backgroundColor: '#212121'}}></div>
-                {drawerlinks}
-              </Drawer>
-            </MuiThemeProvider>
-            </div>
+            <Drawer
+              width={230}
+              open={this.state.open}
+              docked={false}
+              onRequestChange={(open) => this.setState({open})}
+            >
+              <div style={{height: 64, backgroundColor: '#212121'}}></div>
+              {drawerlinks}
+            </Drawer>
+          </MuiThemeProvider>
         </header>
         <main>
           {this.props.children}
@@ -85,9 +84,9 @@ class App extends Component {
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">Links</h5>
                 <ul>
-                  <li><a className="grey-text text-lighten-3" href="#!">Projects</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">About</a></li>
-                  <li><a className="grey-text text-lighten-3" href="#!">Contact Us</a></li>
+                  <li><Link to="projects" className="grey-text text-lighten-3">Projects</Link></li>
+                  <li><Link to="about" className="grey-text text-lighten-3">About</Link></li>
+                  <li><Link to="contact" className="grey-text text-lighten-3">Contact Us</Link></li>
                 </ul>
               </div>
             </div>
