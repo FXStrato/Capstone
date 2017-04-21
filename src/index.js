@@ -3,7 +3,7 @@ import {IndexRoute, browserHistory, Route, Router} from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 import App from './App';
 import Home from './Home';
 import About from './About';
@@ -20,7 +20,7 @@ import '../node_modules/materialize-css/dist/css/materialize.min.css';
 // Needed for onTouchTap
 injectTapEventPlugin();
 
-var app = firebase.initializeApp(
+let app = firebase.initializeApp(
   {
     apiKey: "AIzaSyBobw2x0kYkbUQuYQ_lINdR6f_IXy23En0",
     authDomain: "capstone-35f4e.firebaseapp.com",
@@ -37,7 +37,7 @@ ReactDOM.render(
       <IndexRoute component={Home}/>
       <Route path="project/:projectID" component={Project}/>
       <Route path="admin" component={AdminPanel}/>
-      <Route path ="about" component={About}/>
+      <Route path="about" component={About}/>
       <Route path="interests" component={Interests}/>
       <Route path="projects" component={SearchProjects}/>
       <Route path="contact" component={Contact}/>

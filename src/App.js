@@ -9,6 +9,7 @@ import BlackLogo from "./img/logo_black.png";
 class App extends Component {
   state = {
     open: false,
+    isAuth: false,
   }
 
   goHome = () => {
@@ -42,6 +43,11 @@ class App extends Component {
         <MenuItem style={activeStyle} key={'drawerlink-' + index} onTouchTap={() => this.handleActive(elem.link)}>{elem.body}</MenuItem>
       )
     });
+    let children = React.Children.map(this.props.children, (child) => {
+      return React.cloneElement(child, {
+        isAuth: this.state.isAuth,
+      })
+    })
 
     return (
       <div className="body-wrapper">
@@ -72,7 +78,7 @@ class App extends Component {
           </MuiThemeProvider>
         </header>
         <main>
-          {this.props.children}
+          {children}
         </main>
         <footer className="page-footer" style={{backgroundColor: '#212121'}}>
           <div className="container">
