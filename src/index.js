@@ -40,6 +40,7 @@ ReactDOM.render(
       <Route path="about" component={About}/>
       <Route path="interests" component={Interests}/>
       <Route path="projects" component={SearchProjects}/>
+      <Route path="projects/:searchTerm" component={SearchProjects}/>
       <Route path="contact" component={Contact}/>
     </Route>
   </Router>,

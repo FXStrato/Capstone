@@ -1,14 +1,19 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
+import { Link, browserHistory } from 'react-router';
+import { TextField, RaisedButton } from 'material-ui';
 import firebase from 'firebase';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
 
-/* Search Projects using fuzzy search through project tags*/
+/* Search Projects using substring matching through project tags*/
 
 class SearchProjects extends Component {
   state = {
-
+    search: '',
+    searchTerm: this.props.params.searchTerm,
   }
 
   componentDidMount = () => {
@@ -21,31 +26,65 @@ class SearchProjects extends Component {
     });
   }
 
+  handleChange(event) {
+      var field = event.target.name;
+      var value = event.target.value;
+      var changes = {}; //object to hold changes
+      changes[field] = value; //change this field
+      this.setState(changes); //update state
+      this.setState({errorText: ''});
+  }
+
+  passSearch = (event) => {
+    event.preventDefault();
+    if(this.state.search !== this.state.searchTerm) browserHistory.push('/projects/' + this.state.search);
+    this.setState({searchTerm: this.state.search});
+  }
+
   //Function will get the necessary data from allProjects and generate a display for it
   renderProjects = () => {
     if(this.state.allProjects && this.state.allCompanies) {
+      let projectList = [];
+      if(this.state.searchTerm) {
+        //Means we are searching. Pull all projects with that set of characters in tags, case insensitive, and then pass that in to result to generate.
+        for(let project in this.state.allProjects) {
+          let temp = this.state.allProjects[project];
+          for(let i = 0; i < temp.tags.length; i++) {
+            if(temp.tags[i].toLowerCase().includes(this.state.searchTerm.toLowerCase())) {
+              temp.projectID = project;
+              projectList.push(temp);
+            }
+          }
+        }
+      }
       //Each project should display the name, one_liner, posting_company, estimated_duration, and tags
-      let result = _.map(this.state.allProjects, (elem, index) => {
+      let result = _.map(projectList, (elem, index) => {
         let company = this.state.allCompanies[elem.posting_company].name;
         let tags = _.map(elem.tags, (elem2, index2) => {
           return (
             <div key={'project_'+index+'_'+index2} className="chip">{elem2}</div>
           )
-        })
+        });
         return (
           <Col key={'project_'+index} s={12}>
-            <p>{elem.name} : {elem.one_liner}</p>
-            <ul>
-              <li>Posting Company: {company}</li>
-              <li>Estimated Duration: {elem.estimated_duration}</li>
-              <li>Tags: {tags}</li>
-            </ul>
+            <Link to={'/project/' + elem.projectID}><p>{elem.name} : {elem.one_liner}</p></Link>
+              <ul>
+                <li>Posting Company: {company}</li>
+                <li>Estimated Duration: {elem.estimated_duration}</li>
+                <li>Tags: {tags}</li>
+              </ul>
           </Col>
         )
       });
       return result;
+      // this.setState({renderedProjects: result})
     } else {
-      return <div>Projects have not loaded</div>
+        if(this.state.searchTerm) {
+          return <div>"{this.state.searchTerm}" did not bring any results</div>;
+        } else {
+          return <div>Projects not loaded</div>;
+        }
+      // this.setState({renderedProjects: <div>Projects have not loaded</div>})
     }
   }
 
@@ -57,6 +96,14 @@ class SearchProjects extends Component {
         <Row>
           <Col s={12}>
             <p>This is the Search Projects Page</p>
+            <form onSubmit={(e) => {this.passSearch(e)}}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <TextField floatingLabelText="Search by Keyword or Tag" name="search" onChange={(e) => {this.handleChange(e)}} />
+              </MuiThemeProvider>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <RaisedButton type="submit" label="Search Projects" />
+              </MuiThemeProvider>
+            </form>
           </Col>
         </Row>
         <Row>
