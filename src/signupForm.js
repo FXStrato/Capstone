@@ -38,9 +38,9 @@ class signupForm extends Component {
 
   render() {
     return (
-    <div>      
+    <div id="signUpModal">      
         <h2>Sign up to start creating!</h2>
-        <button onClick={this.popupGoogleSignup}>Sign Up with Google</button>
+        <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>
     </div>
     );
   }

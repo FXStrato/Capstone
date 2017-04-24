@@ -28,6 +28,13 @@ html, main {
     color: gray;
 }
 
+#signUpModal {
+
+}
+    #signUpModal .googleAuthImg {
+        max-width: 260px;
+    }
+
 .card-title {
   background: rgba(0,0,0, 0.5);
   padding: 2px 8px 2px 8px !important;
