@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -42,7 +42,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     firebase.auth().onAuthStateChanged(user => {
      if(user) {
        console.log('Auth state changed: logged in as', user.email);
@@ -113,12 +113,13 @@ class App extends Component {
         <main>
           <Switch>
             <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
-            <Route path="/project/:projectID" component={Project}/>
+            <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>
+            <Route path="/projectfull/:projectID" render={(props)=><ProjectFullSpec {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>
             <Route path="/interests" component={Interests}/>
-            <Route path="/projects" component={SearchProjects}/>
             <Route path="/projects/:searchTerm" component={SearchProjects}/>
+            <Route path="/projects" component={SearchProjects}/>
             <Route path="/contact" component={Contact}/>
           </Switch>
         </main>
@@ -151,4 +152,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -11,8 +11,17 @@ class Interests extends Component {
       <div className="container">
         <Row>
           <Col s={12}>
-            <p>This is the Interests Page. <Link to="/projects">It links to View/Search Projects</Link></p>
+            <p>This is the Interests Page. <Link to="/projects/">It links to View/Search Projects</Link></p>
           </Col>
+        </Row>
+        <Row className="center-align">
+          <Col s={12} m={12} l={4}><Link to="/projects/design">Design</Link></Col>
+          <Col s={12} m={12} l={4}><Link to="/projects/software%20development">Software Development</Link></Col>
+          <Col s={12} m={12} l={4}><Link to="/projects/management">Management</Link></Col>
+        </Row>
+        <Row className="center-align">
+          <Col s={12} m={12} l={6}><Link to="/projects/marketing">Marketing</Link></Col>
+          <Col s={12} m={12} l={6}><Link to="/projects/security">Security</Link></Col>
         </Row>
       </div>
     );
@@ -20,3 +29,5 @@ class Interests extends Component {
 }
 
 export default Interests;
+
+//Marketing, Security

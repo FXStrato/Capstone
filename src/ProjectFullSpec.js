@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 
+
 /*This page will display the full spec of the passed in project */
 
 class ProjectFullSpec extends Component {
@@ -11,6 +12,7 @@ class ProjectFullSpec extends Component {
         <Row>
           <Col s={12}>
             This is the Full Spec Project Page
+            <p>{this.props.isAuth ? "I'm True" : "I'm False"}</p>
           </Col>
         </Row>
       </div>
