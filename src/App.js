@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link,browserHistory} from 'react-router';
+import { Route, Switch, Link } from 'react-router-dom';
 import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -7,6 +7,15 @@ import _ from 'lodash';
 import BlackLogo from "./img/logo_black.png";
 import SignoutButton from "./signoutButton";
 import firebase from 'firebase';
+import Home from './Home';
+import About from './About';
+import Interests from './Interests';
+import Dashboard from './Dashboard';
+import Contact from './Contact';
+import ProjectFullSpec from './ProjectFullSpec';
+import SearchProjects from './SearchProjects';
+import Project from './Project';
+import AdminPanel from './AdminPanel';
 
 class App extends Component {
   state = {
@@ -14,13 +23,9 @@ class App extends Component {
     isAuth: false,
   }
 
-  goHome = () => {
-    if(browserHistory.getCurrentLocation().pathname !== '/') browserHistory.push('/');
-  }
-
   handleActive = (path) => {
     this.handleToggle();
-    if(browserHistory.getCurrentLocation().pathname !== path) browserHistory.push(path);
+    if(location.pathname !== path) this.history.push(path);
   }
 
   handleToggle = () => {
@@ -28,16 +33,16 @@ class App extends Component {
   }
 
   handleActiveLink = (link) => {
-    let path = browserHistory.getCurrentLocation().pathname;
+    let path = location.pathname;
     if(path === link) {
-      if(browserHistory.getCurrentLocation().pathname !== '/' && link === '/') return {color: '#000'};
+      if(location.pathname !== '/' && link === '/') return {color: '#000'};
       return {backgroundColor: 'pink', color: '#000'};
     } else {
       return {color: '#000'};
     }
   }
 
-  componentDidMount(){
+  componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
      if(user) {
        console.log('Auth state changed: logged in as', user.email);
@@ -60,7 +65,7 @@ class App extends Component {
        this.setState({userHandle: ''});
        this.setState({isAuth: false})
      }
-   });  
+   });
   }
 
   render() {
@@ -68,16 +73,9 @@ class App extends Component {
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (
-        <MenuItem style={activeStyle} key={'drawerlink-' + index} onTouchTap={() => this.handleActive(elem.link)}>{elem.body}</MenuItem>
+        <Link to={elem.link} key={'drawerlink-' + index}><MenuItem style={activeStyle}>{elem.body}</MenuItem></Link>
       )
     });
-    let children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
-        isAuth: this.state.isAuth,
-        userEmail: this.state.userEmail,
-        userHandle: this.state.userHandle,
-      })
-    })
 
     return (
       <div className="body-wrapper">
@@ -86,17 +84,16 @@ class App extends Component {
           <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
             <ToolbarGroup firstChild={true}>
               <AppBar
-                onTitleTouchTap={this.goHome}
                 style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
                 onLeftIconButtonTouchTap={this.handleToggle}
                 id="navbar-appbar"
-                title={ <img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/> }
+                title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
               />
             </ToolbarGroup>
             <ToolbarGroup>
               <div className="hide-on-med-and-down">
                 {this.state.isAuth ? <div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div> : ''}
-                
+
               </div>
             </ToolbarGroup>
           </Toolbar>
@@ -114,7 +111,16 @@ class App extends Component {
           </MuiThemeProvider>
         </header>
         <main>
-          {children}
+          <Switch>
+            <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
+            <Route path="/project/:projectID" component={Project}/>
+            <Route path="/admin" component={AdminPanel}/>
+            <Route path="/about" component={About}/>
+            <Route path="/interests" component={Interests}/>
+            <Route path="/projects" component={SearchProjects}/>
+            <Route path="/projects/:searchTerm" component={SearchProjects}/>
+            <Route path="/contact" component={Contact}/>
+          </Switch>
         </main>
         <footer className="page-footer" style={{backgroundColor: '#212121'}}>
           <div className="container">

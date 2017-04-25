@@ -1,7 +1,7 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { TextField, RaisedButton } from 'material-ui';
 import firebase from 'firebase';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -13,7 +13,7 @@ import _ from 'lodash';
 class SearchProjects extends Component {
   state = {
     search: '',
-    searchTerm: this.props.params.searchTerm,
+    searchTerm: this.props.match.params.searchTerm,
   }
 
   componentDidMount = () => {
@@ -37,7 +37,7 @@ class SearchProjects extends Component {
 
   passSearch = (event) => {
     event.preventDefault();
-    if(this.state.search !== this.state.searchTerm) browserHistory.push('/projects/' + this.state.search);
+    if(this.state.search !== this.state.searchTerm) this.props.history.push('/projects/' + this.state.search);
     this.setState({searchTerm: this.state.search});
   }
 
@@ -62,7 +62,7 @@ class SearchProjects extends Component {
         let company = this.state.allCompanies[elem.posting_company].name;
         let tags = _.map(elem.tags, (elem2, index2) => {
           return (
-            <div key={'project_'+index+'_'+index2} className="chip">{elem2}</div>
+            <div key={'project_'+index+'_'+index2} className="chip">{elem2.toLowerCase().includes(this.state.searchTerm.toLowerCase()) ? <span style={{backgroundColor: 'yellow'}}>{elem2}</span> : elem2}</div>
           )
         });
         return (
@@ -76,15 +76,13 @@ class SearchProjects extends Component {
           </Col>
         )
       });
-      return result;
+      if(result.length > 0) return result;
+      else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not bring any results</div>;
+      else return <div></div>;
       // this.setState({renderedProjects: result})
     } else {
-        if(this.state.searchTerm) {
-          return <div>"{this.state.searchTerm}" did not bring any results</div>;
-        } else {
-          return <div>Projects not loaded</div>;
-        }
-      // this.setState({renderedProjects: <div>Projects have not loaded</div>})
+        return <div>Projects not loaded</div>;
+        // this.setState({renderedProjects: <div>Projects have not loaded</div>})
     }
   }
 

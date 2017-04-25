@@ -1,19 +1,10 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
-import {IndexRoute, browserHistory, Route, Router} from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import firebase from 'firebase';
 import App from './App';
-import Home from './Home';
-import About from './About';
-import Interests from './Interests';
-import Dashboard from './Dashboard';
-import Contact from './Contact';
-import ProjectFullSpec from './ProjectFullSpec';
-import SearchProjects from './SearchProjects';
-import Project from './Project';
-import AdminPanel from './AdminPanel';
 import './index.css';
 import '../node_modules/materialize-css/dist/css/materialize.min.css';
 
@@ -31,18 +22,9 @@ let app = firebase.initializeApp(
   }
 );
 
-ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
-      <Route path="project/:projectID" component={Project}/>
-      <Route path="admin" component={AdminPanel}/>
-      <Route path="about" component={About}/>
-      <Route path="interests" component={Interests}/>
-      <Route path="projects" component={SearchProjects}/>
-      <Route path="projects/:searchTerm" component={SearchProjects}/>
-      <Route path="contact" component={Contact}/>
-    </Route>
+render(
+  <Router>
+    <App/>
   </Router>,
   document.getElementById('root')
 );
