@@ -8,6 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
 import SignUpForm from './signupForm';
 import _ from 'lodash';
+import Loading from './loading.js'
 
 /* Page displaying the specific details of each project */
 
@@ -17,13 +18,22 @@ class Project extends Component {
     project: {},
     projID: this.props.match.params.projectID,
     isAuth: this.props.isAuth,
+    userID: this.props.userID,
+    showLoading: false,
   }
 
 //Temp: -Kh4diidw7jpXDbKz-go
 /*Add check to see if user is logged in, and if project ID is under user, display full spec, and submit project.*/
 
   componentWillReceiveProps = (newProps) => {
-    if(this.state.isAuth !== newProps.isAuth) this.setState({isAuth: newProps.isAuth})
+    // This listens for when the new props change
+    // ie: when firebase's promises send the new data
+    if(this.state.isAuth !== newProps.isAuth) {
+      this.setState({
+        isAuth: newProps.isAuth,
+        userID: newProps.userID,
+      });
+    }
   }
 
 
@@ -60,9 +70,36 @@ class Project extends Component {
     });
   }
 
-  addProjectToUser(){
+  addProjectToUser = () => {
+    this.setState({
+      showLoading : true
+    });
+    firebase.database().ref('users/' + this.state.userID + "/activeProjects").once('value', (snapshot) => {
+      console.log(snapshot.val());
+      var actProjects = snapshot.val();
+      // If this is the first project that the user is adding to their list
+      if(actProjects == null){
+        actProjects = [];
+        actProjects[0] = this.state.projID;
+      } else {
+        // Checks if the project ID is already in the user's list of active projects
+        if(actProjects.indexOf(this.state.projID) < 0){
+          actProjects.push(this.state.projID);
+        }
+      }
+      // Updates firebase with new project
+      firebase.database().ref('users/' + this.state.userID).update({
+        activeProjects: actProjects
+      }).then(() => {
+        // After project is uploaded, sends user to the full specification of the page
+        this.props.history.push('/projectfull/' + this.state.projID);
+      });
 
+    });
+    
   }
+
+
 
   handleOpen = () => {
     this.setState({open: true})
@@ -83,7 +120,7 @@ class Project extends Component {
       <FlatButton
         label="Begin Project"
         primary={true}
-        onTouchTap={() => {this.props.history.push('/projectfull/' + this.state.projID)}}
+        onTouchTap={() => {this.addProjectToUser()}}
       />,
     ];
     const nonlogactions = [
@@ -95,6 +132,7 @@ class Project extends Component {
     ];
     return (
       <section id="projectPage">
+        {this.state.showLoading ? <Loading /> : ""}
         <div className="container">
           <Row>
             <Col s={12} m={12} l={8}>
@@ -134,15 +172,9 @@ class Project extends Component {
                 <div className="card-content">
                   <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
                   <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
-                  {this.state.displayFull ?
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
-                      <RaisedButton primary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('open')}} label="Submit Project" />
-                    </MuiThemeProvider>
-                    :
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
-                      <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
-                    </MuiThemeProvider>
-                  }
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
+                  </MuiThemeProvider>
                 </div>
               </div>
             </Col>

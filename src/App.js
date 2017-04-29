@@ -47,14 +47,14 @@ class App extends Component {
      if(user) {
        console.log('Auth state changed: logged in as', user.email);
        this.setState({userID:user.uid});
-       this.setState({userEmail:user.email})
-       this.setState({isAuth: true})
+       this.setState({userEmail:user.email});
+       this.setState({isAuth: true});
        firebase.database().ref('users/' + user.uid).once('value').then(snapshot=> {
          if(snapshot.val()) {
            this.setState({
              userHandle: snapshot.val().firstName,
              userProfilePicLink: snapshot.val().photoURL
-            })
+            });
          }
        });
      }
@@ -114,7 +114,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
             <Route path="/dashboard" render={()=><Dashboard userEmail={this.state.userEmail}/>}/>
-            <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>
+            <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
             <Route path="/projectfull/:projectID" render={(props)=><ProjectFullSpec {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>
