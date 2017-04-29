@@ -113,6 +113,7 @@ class App extends Component {
         <main>
           <Switch>
             <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
+            <Route path="/dashboard" render={()=><Dashboard userEmail={this.state.userEmail}/>}/>
             <Route path="/project/:projectID" component={Project}/>
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>

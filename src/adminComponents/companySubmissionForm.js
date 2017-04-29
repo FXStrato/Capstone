@@ -50,7 +50,7 @@ class CompanySubmissionForm extends Component {
   render() {
     return (
       <form>
-        <h2>Add a Company</h2>
+        <h4>Add a Company</h4>
         <label>
           Company Name:
           <input name="companyName" type="text" onChange={this.handleInputChange} />

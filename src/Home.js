@@ -9,6 +9,11 @@ import ProjectForm from './adminComponents/projectSubmissionForm';
 /* Home will be the landing page for the application. */
 
 class Home extends Component {
+
+  componentDidMount = () => {
+    console.log(this.props);
+  }
+
   render() {
     return (
       <div className="container">

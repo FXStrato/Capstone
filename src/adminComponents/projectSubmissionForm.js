@@ -61,7 +61,7 @@ class ProjectSubmissionForm extends Component {
   render() {
     return (
       <form>
-        <h2>Add a Project</h2>
+        <h4>Add a Project</h4>
         <label>
           Project Title:
           <input name="projectName" type="text" onChange={this.handleInputChange} />

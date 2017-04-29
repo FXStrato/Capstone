@@ -1,36 +1,33 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase';
+import { Row, Col } from 'react-materialize';
+import firebase from 'firebase';
 import CompanyForm from './adminComponents/companySubmissionForm';
 import ProjectForm from './adminComponents/projectSubmissionForm';
 
 class AdminPanel extends Component {
+
+    test(){
+        console.log(this.props.userID);
+    }
+
     render() {
         return (
             <div className="container">
-                <CompanyForm></CompanyForm>
-                <ProjectForm></ProjectForm>
+                <Row>
+                    <Col m={4}>
+                        <CompanyForm></CompanyForm>
+                    </Col>
+                    <Col m={4}>
+                        <ProjectForm></ProjectForm>
+                    </Col>
+                    <Col m={4}>
+                        <button onClick={this.test}>Add Projects to User</button>
+                    </Col>
+                </Row>
+                
+                
             </div>
         );
-    }
-
-    addProject(projectName,postingCompany,professionTypeID){
-        // Generate a unique project key
-        var newProjectKey = firebase.database().ref().child('projects').push().key;
-        // Adds project to database
-        firebase.database().ref('/projects' + newProjectKey).set({
-            name: projectName,
-            posting_company: postingCompany,
-            profession_type: professionTypeID
-        });
-    }
-
-    addProfession(professionName){
-        // Generate a unique profession key
-        var newProfessionKey = firebase.database().ref().child('professions').push().key;
-        // Adds profession to database
-        firebase.database().ref('/professions' + newProfessionKey).set({
-            name: professionName
-        });
     }
 }
 
