@@ -1,72 +1,71 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import {Row, Col} from 'react-materialize';
+import { withRouter } from 'react-router-dom';
 import { RaisedButton, Dialog, FlatButton, TextField } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
+import SignUpForm from './signupForm';
 import _ from 'lodash';
 
 /* Page displaying the specific details of each project */
 
 class Project extends Component {
   state = {
-    displayFull: false,
     open: false,
-    fullOpen: false,
-    projTitle: '',
-    projDesc: '',
-    projLiner: '',
-    projTags: '',
-    projPostingCompany: '',
-    projSupportingComps: '',
-    projResources: '',
-    projProfessionID: '',
-    projPostDate: '',
-    projEndDate: '',
-    projEstimatedDuration: '',
-    projRequirements: '',
-    projFull: '',
-    projID: this.props.params.projectID,
-    projImage: '',
-    projProfession: '',
+    project: {},
+    projID: this.props.match.params.projectID,
+    isAuth: this.props.isAuth,
   }
 
 //Temp: -Kh4diidw7jpXDbKz-go
 /*Add check to see if user is logged in, and if project ID is under user, display full spec, and submit project.*/
 
-  componentDidMount = () => {
+  componentWillReceiveProps = (newProps) => {
+    if(this.state.isAuth !== newProps.isAuth) this.setState({isAuth: newProps.isAuth})
+  }
+
+
+  componentWillMount = () => {
     window.scrollTo(0, 0);
-    firebase.database().ref('/projects/' + this.props.params.projectID).once('value').then((snapshot) => {
-      let temp = snapshot.val();
+    firebase.database().ref('/projects/' + this.props.match.params.projectID).once('value').then((snapshot) => {
+      let project = snapshot.val();
+
+      let newTags = _.map(project.tags, (elem, index) => {
+        return <div key={'tag-'+index} className="chip">{elem}</div>
+      })
 
       //Additional Resources
-      let addResources = _.map(temp.additional_resources, (elem,index) => {
+      let addResources = _.map(project.additional_resources, (elem,index) => {
         return <li key={'addResource-'+index}>{elem}</li>
       });
 
-      this.setState({projTitle: temp.name, projDesc: temp.short_description, projEndDate: temp.due_date, projEstimatedDuration: temp.estimated_duration, projLiner: temp.one_liner, projProfessionID: temp.profession_type, projPostDate: temp.posting_date, projImage: temp.cover_image_link, projRequirements: temp.submission_requirements, projResources: addResources});
+      project.additional_resources = addResources; //Set array to React HTML
+      project.tags = newTags;
 
-      firebase.database().ref('/professions/').once('value').then((snapshot) => {
-        this.setState({projProfession: snapshot.val()[temp.profession_type]});
-      });
       firebase.database().ref('/companies/').once('value').then((snapshot) => {
-        let supportResults = _.map(temp.supporting_companies, (elem, index) => {
+        let supportResults = _.map(project.supporting_companies, (elem, index) => {
           return <span key={'supportingCompany-'+index} style={{marginRight: 10}}>{snapshot.val()[elem]['name']}</span>;
         });
-        this.setState({projPostingCompany: snapshot.val()[temp.posting_company]['name'], projSupportingComps: supportResults});
+        project.posting_company = snapshot.val()[project.posting_company]['name'];
+        project.supporting_companies = supportResults;
+        this.setState({project: project});
+      });
+
+      firebase.database().ref('/professions/').once('value').then((snapshot) => {
+        project.profession_type = snapshot.val()[project.profession_type];
+        this.setState({project: project});
       });
     });
   }
 
-  handleOpen = (type) => {
-    if(type === 'open') this.setState({open: true});
-    else this.setState({fullOpen: true});
+  handleOpen = () => {
+    this.setState({open: true})
   };
 
-  handleClose = (type) => {
-    if(type === 'open') this.setState({open: false});
-    else this.setState({fullOpen: false});
+  handleClose = () => {
+    this.setState({open: false})
   };
 
 
@@ -75,70 +74,62 @@ class Project extends Component {
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={() => {this.handleClose('open')}}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onTouchTap={() => {this.handleClose('open')}}
-      />,
-    ];
-    const fullActions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={() => {this.handleClose('fullOpen')}}
+        onTouchTap={() => {this.handleClose()}}
       />,
       <FlatButton
         label="Begin Project"
         primary={true}
-        onTouchTap={() => {this.handleClose('fullOpen')}}
+        onTouchTap={() => {this.props.history.push('/projectfull/' + this.state.projID)}}
+      />,
+    ];
+    const nonlogactions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={() => {this.handleClose()}}
       />,
     ];
     return (
       <section id="projectPage">
         <div className="container">
           <Row>
-            <Col s={12} m={8}>
-              <h2 className="projectTitle">{this.state.projTitle || 'Empty project'}</h2>
+            <Col s={12} m={12} l={8}>
+              <h2 className="projectTitle">{this.state.project.name}</h2>
               <h4 className="oneLiner">
-                {this.state.projLiner || 'One liner goes here'}
+                {this.state.project.one_liner}
               </h4>
               <Row>
                 <Col s={4}>
-                  <p>{this.state.projProfession || 'Profession goes here'}</p>
+                  <p>{this.state.project.profession_type}</p>
                 </Col>
                 <Col s={4}>
-                  <p>Posted: {this.state.projPostDate || 'Post Date'}</p>
+                  <p>Posted: {this.state.project.posting_date}</p>
                 </Col>
                 <Col s={4}>
-                  <p>Submission Due: {this.state.projEndDate || 'End Date'}</p>
+                  <p>Submission Due: {this.state.project.due_date}</p>
                 </Col>
               </Row>
-              <p>{this.state.projDesc || 'Project description'}</p>
+              <p>{this.state.project.short_description}</p>
               <br/>
               <div>
                 <ul>
                   Additional Resources:
-                  {this.state.projResources}
+                  {this.state.project.additional_resources}
                 </ul>
               </div>
               <div>
                 Tags:
-                <div className="chip">Java</div>
-                <div className="chip">Python</div>
-                <div className="chip">Django</div>
-                <div className="chip">SQL</div>
+                {this.state.project.tags}
               </div>
             </Col>
-            <Col s={12} m={4}>
+            <Col s={12} m={12} l={4}>
               <div className="card">
                 <div className="card-image">
-                  <img src={this.state.projImage} alt={this.state.projTitle + ' Banner'} className="responsive-img"/>
+                  <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
                 </div>
                 <div className="card-content">
-                  <div>Posting Company: <b>{this.state.projPostingCompany || 'Posting company goes here'}</b></div>
-                  <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.projSupportingComps || 'Supprting companies here'}</b></div>
+                  <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
+                  <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
                   {this.state.displayFull ?
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
                       <RaisedButton primary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('open')}} label="Submit Project" />
@@ -155,30 +146,20 @@ class Project extends Component {
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
-            title={"Submission for " + this.state.projTitle}
-            actions={actions}
+            title={this.state.isAuth ? "Beginning " + this.state.project.name: "Sign up to begin " + this.state.project.name}
+            actions={this.state.isAuth ? actions : nonlogactions}
             modal={false}
             open={this.state.open}
-            onRequestClose={() => {this.handleClose('open')}}
+            onRequestClose={() => {this.handleClose()}}
           >
-            Congrats on finishing! Please email us at <b>jith@uw.edu</b> the following:
-            <ul>
-              <li>Your Name</li>
-              <li>Resume</li>
-              <li>Link to project submission</li>
-            </ul>
-
-          </Dialog>
-        </MuiThemeProvider>
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Dialog
-            title={"Beginning " + this.state.projTitle}
-            actions={fullActions}
-            modal={false}
-            open={this.state.fullOpen}
-            onRequestClose={() => {this.handleClose('fullOpen')}}
-          >
-            Would you like to begin this project?
+            {this.state.isAuth ?
+              'Would you like to begin this project?'
+            :
+              <div>
+                It seems like you haven't logged in yet. Login now <br/>
+                <SignUpForm/>
+              </div>
+            }
           </Dialog>
         </MuiThemeProvider>
       </section>
@@ -187,4 +168,4 @@ class Project extends Component {
 }
 
 
-export default Project;
+export default withRouter(Project);
