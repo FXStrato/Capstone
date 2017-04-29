@@ -60,6 +60,10 @@ class Project extends Component {
     });
   }
 
+  addProjectToUser(){
+
+  }
+
   handleOpen = () => {
     this.setState({open: true})
   };
@@ -146,7 +150,7 @@ class Project extends Component {
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
-            title={this.state.isAuth ? "Beginning " + this.state.project.name: "Sign up to begin " + this.state.project.name}
+            title={this.state.isAuth ? "Begin " + this.state.project.name: "Sign up to begin " + this.state.project.name}
             actions={this.state.isAuth ? actions : nonlogactions}
             modal={false}
             open={this.state.open}

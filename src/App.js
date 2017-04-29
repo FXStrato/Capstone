@@ -92,7 +92,7 @@ class App extends Component {
             </ToolbarGroup>
             <ToolbarGroup>
               <div className="hide-on-med-and-down">
-                {this.state.isAuth ? <div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div> : ''}
+                {this.state.isAuth ? <Link to="/dashboard"><div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div></Link> : ''}
 
               </div>
             </ToolbarGroup>
