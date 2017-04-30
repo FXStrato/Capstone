@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 import { Link } from 'react-router-dom';
-import { TextField, RaisedButton } from 'material-ui';
+import { TextField, RaisedButton, Checkbox } from 'material-ui';
 import firebase from 'firebase';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -13,17 +13,63 @@ import _ from 'lodash';
 class SearchProjects extends Component {
   state = {
     search: '',
-    searchTerm: this.props.match.params.searchTerm,
+    searchTerm: '',
+    durations: '',
+    professions: '',
+    filters: {},
   }
 
   componentDidMount = () => {
+    if(this.props.location.state.professions) {
+      let temp = {};
+      temp['profession_type'] = this.props.location.state.professions;
+      this.setState({filters: temp});
+    }
+    // let search = this.props.location.search; // could be '?foo=bar'
+    // let params = new URLSearchParams(search);
+    // let filterResults = params.get('_filter');
+    // console.log(filterResults);
     //Pull all projects from firebase, and store in state.
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
+      let durations = [];
+      let professions = [];
+      //Obtain all the necessary data from each project, getting the unique ones
+      for(let project in snapshot.val()) {
+        if(_.indexOf(durations, snapshot.val()[project].estimated_duration) === -1) {
+          durations.push(snapshot.val()[project].estimated_duration);
+        }
+        if(_.indexOf(professions, snapshot.val()[project].profession_type) === -1) {
+          professions.push(snapshot.val()[project].profession_type);
+        }
+      }
+      this.setState({durations: durations, professions: professions});
     });
     firebase.database().ref('/companies/').once('value').then((snapshot) => {
       this.setState({allCompanies: snapshot.val()})
     });
+  }
+
+  //Since multiple check boxes can be selected
+  handleFilter = (name, isChecked, type) => {
+    let temp = this.state.filters;
+    //If isChecked is true, add it to array. Otherwise, remove it.
+    if(isChecked) {
+      //If filter doesn't already exist in list and ischecked is true, add it to filter list
+      if(_.indexOf(temp[type], name) === -1){
+        if(!temp[type]) temp[type] = [];
+        temp[type].push(name);
+      }
+    } else {
+      //If isChecked is false, remove it from filter list
+      if(_.indexOf(temp[type], name) !== -1) {
+        temp[type] = _.remove(temp[type], (n) => {
+          return n !== name
+        });
+        if(temp[type].length < 1) delete temp[type];
+      }
+    }
+    this.setState({filters: temp});
   }
 
   handleChange(event) {
@@ -37,14 +83,67 @@ class SearchProjects extends Component {
 
   passSearch = (event) => {
     event.preventDefault();
-    if(this.state.search !== this.state.searchTerm) this.props.history.push('/projects/' + this.state.search);
+    //if(this.state.search !== this.state.searchTerm) this.props.history.push('/projects/' + this.state.search);
     this.setState({searchTerm: this.state.search});
   }
+
+  renderFilteredDurations = () => {
+    let result;
+    if(this.state.durations) {
+      result = _.map(this.state.durations, (elem, index) => {
+        return (
+          <MuiThemeProvider muiTheme={getMuiTheme()} key={'filterDuration-'+index}>
+            <Checkbox onCheck={(e, isChecked) => {this.handleFilter(elem, isChecked, 'estimated_duration')}} name={elem} label={elem} labelStyle={{fontSize: '1rem'}}/>
+          </MuiThemeProvider>
+        )
+      })
+      return result;
+    }
+    return <div>No filters for duration</div>
+  }
+
+  renderFilteredProfessions = () => {
+    let professions = [];
+    let result;
+    if(this.state.professions) {
+      result = _.map(this.state.professions, (elem, index) => {
+        return (
+          <MuiThemeProvider muiTheme={getMuiTheme()} key={'filterProfession-'+index}>
+            <Checkbox defaultChecked={_.indexOf(this.state.filters['profession_type'], elem) === -1 ? false : true} onCheck={(e, isChecked) => {this.handleFilter(elem, isChecked, 'profession_type')}} name={elem} label={elem} labelStyle={{fontSize: '1rem'}}/>
+          </MuiThemeProvider>
+        )
+      })
+      return result;
+    }
+    return <div>No filters for professions</div>
+  }
+
+
 
   //Function will get the necessary data from allProjects and generate a display for it
   renderProjects = () => {
     if(this.state.allProjects && this.state.allCompanies) {
       let projectList = [];
+      if(!_.isEmpty(this.state.filters)) {
+        console.log(this.state.filters);
+        //Means we have filters
+        //For every filter selected, we need to check to see if it satisfies each filter.
+        for(let project in this.state.allProjects) {
+          let temp = this.state.allProjects[project];
+          let canAdd = true;
+          for(let type in this.state.filters) {
+            //Inside each filter, we can pull projects that satisfy it. But when we move to another filter, we then have to filter the projectsList again.
+            if(_.indexOf(this.state.filters[type], temp[type]) === -1) {
+              //If ever filter comes back false, then we can't add the project.
+              canAdd = false;
+            }
+          }
+          if(canAdd) {
+            temp.projectID = project;
+            projectList.push(temp);
+          }
+        }
+      }
       if(this.state.searchTerm) {
         //Means we are searching. Pull all projects with that set of characters in tags, case insensitive, and then pass that in to result to generate.
         for(let project in this.state.allProjects) {
@@ -62,7 +161,7 @@ class SearchProjects extends Component {
         let company = this.state.allCompanies[elem.posting_company].name;
         let tags = _.map(elem.tags, (elem2, index2) => {
           return (
-            <div key={'project_'+index+'_'+index2} className="chip">{elem2.toLowerCase().includes(this.state.searchTerm.toLowerCase()) ? <span style={{backgroundColor: 'yellow'}}>{elem2}</span> : elem2}</div>
+            <div key={'project_'+index+'_'+index2} className="chip">{elem2}</div>
           )
         });
         return (
@@ -71,6 +170,7 @@ class SearchProjects extends Component {
               <ul>
                 <li>Posting Company: {company}</li>
                 <li>Estimated Duration: {elem.estimated_duration}</li>
+                <li>Profession: {elem.profession_type}</li>
                 <li>Tags: {tags}</li>
               </ul>
           </Col>
@@ -92,7 +192,14 @@ class SearchProjects extends Component {
     return (
       <div className="container">
         <Row>
-          <Col s={12}>
+          <Col s={12} m={3} l={2}>
+            <h2 style={{fontSize: '1.5rem'}}>Filter By</h2>
+            <h3 style={{fontSize: '1.2rem'}}>Duration</h3>
+            {this.renderFilteredDurations()}
+            <h3 style={{fontSize: '1.2rem'}}>Profession</h3>
+            {this.renderFilteredProfessions()}
+          </Col>
+          <Col s={12} l={10}>
             <p>This is the Search Projects Page</p>
             <form onSubmit={(e) => {this.passSearch(e)}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -102,10 +209,8 @@ class SearchProjects extends Component {
                 <RaisedButton type="submit" label="Search Projects" />
               </MuiThemeProvider>
             </form>
+            {this.renderProjects()}
           </Col>
-        </Row>
-        <Row>
-          {this.renderProjects()}
         </Row>
       </div>
     );
