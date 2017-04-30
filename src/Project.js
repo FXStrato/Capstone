@@ -75,7 +75,6 @@ class Project extends Component {
       showLoading : true
     });
     firebase.database().ref('users/' + this.state.userID + "/activeProjects").once('value', (snapshot) => {
-      console.log(snapshot.val());
       var actProjects = snapshot.val();
       // If this is the first project that the user is adding to their list
       if(actProjects == null){
