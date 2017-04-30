@@ -19,10 +19,10 @@ class Dashboard extends React.PureComponent {
   // ie: when firebase's promises send the new data
   componentWillReceiveProps = (newProps) => {
     this.setState({
-        isAuth: newProps.isAuth,
-        userID: newProps.userID,
-      });
-      this.getActiveProjects();
+      isAuth: newProps.isAuth,
+      userID: newProps.userID,
+    });
+    this.getActiveProjects();
   }
 
   componentDidMount = () => {
@@ -33,15 +33,19 @@ class Dashboard extends React.PureComponent {
     firebase.database().ref('/companies/').once('value').then((snapshot) => {
       this.setState({allCompanies: snapshot.val()})
     });
-    this.getActiveProjects();
+    if(this.state.isAuth){
+      this.getActiveProjects();
+    }
   }
 
   // Gets the active projects of the user from firebase and saves them locally
   getActiveProjects = () => {
+    console.log("GOING INTO ACTIVE PROJECTS");
     firebase.database().ref('users/' + this.props.userID + "/activeProjects").once('value', (snapshot) => {
       this.setState({
         activeProjects: snapshot.val()
       });
+      console.log("...checking active projects");
     });
   }
 
@@ -49,17 +53,18 @@ class Dashboard extends React.PureComponent {
   renderActiveProjects = () => {
     console.log(this.state);
     // If the user is not authenticated
-    if(this.state.isAuth == false){
+    if(!this.state.isAuth){
       return ("");
-    } else if(this.state.isAuth == true) {
+    } else if(this.state.isAuth) {
       // Build each project
+      console.log("Active Projects",this.state.activeProjects);
       let result = _.map(this.state.activeProjects, (projectID, index) => {
         var targetProject = this.state.allProjects[this.state.activeProjects[index]];
         return (
           <Row key={'activeProject-'+index}><Link to={'/projectfull/' + projectID}>{targetProject.name}</Link></Row>
         )
       });
-      console.log(this.state.activeProjects);
+      
       if(result.length > 0){
         return result;
       } else {
