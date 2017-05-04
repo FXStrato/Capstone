@@ -81,7 +81,17 @@ class Dashboard extends React.PureComponent {
     return (
       <div className="container">
         <h3>Active Projects</h3>
-        {this.renderActiveProjects()}        
+        {this.renderActiveProjects()}
+        <h3>Browse new projects</h3>
+        <Row className="center-align">
+          <Col s={12} m={12} l={4}><Link to={{pathname: '/projects/', state: {professions: ['UX Designer','Visual Communication Designer']}}}>Design</Link></Col>
+          <Col s={12} m={12} l={4}><Link to={{pathname: '/projects/', state:{professions: ['Software Developer']}}}>Software Development</Link></Col>
+          <Col s={12} m={12} l={4}><Link to={{pathname: '/projects/', state:{professions: ['Project Manager ']}}}>Management</Link></Col>
+        </Row>
+        <Row className="center-align">
+          <Col s={12} m={12} l={6}><Link to={{pathname: '/projects/', state:{professions: ['Marketing, Analyst']}}}>Marketing</Link></Col>
+          <Col s={12} m={12} l={6}><Link to={{pathname: '/projects/', state:{professions: ['Security Analyst', 'System Administrator']}}}>Security</Link></Col>
+        </Row>       
       </div>
     );
   }
