@@ -28,10 +28,10 @@ html, main {
     color: gray;
 }
 
-#signUpModal {
+.authModal {
 
 }
-    #signUpModal .googleAuthImg {
+    .authModal .googleAuthImg {
         max-width: 260px;
     }
 

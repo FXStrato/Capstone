@@ -112,7 +112,7 @@ class App extends Component {
         </header>
         <main>
           <Switch>
-            <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
+            <Route exact path="/" render={(props)=><Home {...props} userEmail={this.state.userEmail}/>}/>
             <Route path="/dashboard" render={(props)=><Dashboard {...props} userID={this.state.userID} isAuth={this.state.isAuth}/>}/>
             <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
             <Route path="/projectfull/:projectID" render={(props)=><ProjectFullSpec {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>

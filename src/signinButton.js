@@ -4,12 +4,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import SignupForm from './signupForm';
+import SignupForm from './signinForm';
 
 /**
  * A modal dialog can only be closed by selecting one of the actions.
  */
-export default class signupButton extends React.Component {
+export default class signinButton extends React.Component {
   state = {
     open: false,
   };
@@ -33,17 +33,16 @@ export default class signupButton extends React.Component {
 
     return (
       <div>
-        <button label="Sign Up" onTouchTap={this.handleOpen}>Create an Account</button>
+        <button label="Sign Up" onTouchTap={this.handleOpen}>Log In</button>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           
           <Dialog
+            
             actions={actions}
             modal={true}
             open={this.state.open}
           >
             <SignupForm/>
-            
-            
           </Dialog>
         </MuiThemeProvider>
       </div>

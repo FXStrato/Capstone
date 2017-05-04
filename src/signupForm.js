@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import Redirect from 'react-router-dom';
 import * as firebase from 'firebase';
+import { Row, Col } from 'react-materialize';
+
 
 class signupForm extends Component {
 
   popupGoogleSignup(){
       var provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(function(result) {
+      firebase.auth().signInWithPopup(provider).then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
@@ -25,7 +28,12 @@ class signupForm extends Component {
               email: user.email,
               firstName: fName
             }
-            var userPromise = userRef.set(userData);
+            var userPromise = userRef.set(userData).then(() => {
+              window.location.assign("/interests");
+            });
+          } else {
+            window.location.assign("/dashboard");
+            // <Redirect push to="/dashboard"/>
           }
         });
 
@@ -45,8 +53,15 @@ class signupForm extends Component {
 
   render() {
     return (
-    <div id="signUpModal">      
-        <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>
+    <div className="authModal" id="signUpModal">
+        <Row>
+          <Col s={6}>
+            <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="http://app.candidatezap.com/images/signUpGoogle.png" alt=""/>
+          </Col>
+          <Col s={6}>
+            <h2>Welcome to Frontier!</h2>
+          </Col>
+        </Row>      
     </div>
     );
   }
