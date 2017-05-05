@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
 import SignUpForm from './signupForm';
 import _ from 'lodash';
-import Loading from './loading.js'
+import Loading from './loading.js';
 
 /* Page displaying the specific details of each project */
 
@@ -41,32 +41,28 @@ class Project extends Component {
     window.scrollTo(0, 0);
     firebase.database().ref('/projects/' + this.props.match.params.projectID).once('value').then((snapshot) => {
       let project = snapshot.val();
+      if(project) {
+        let newTags = _.map(project.tags, (elem, index) => {
+          return <div key={'tag-'+index} className="chip">{elem}</div>
+        })
 
-      let newTags = _.map(project.tags, (elem, index) => {
-        return <div key={'tag-'+index} className="chip">{elem}</div>
-      })
-
-      //Additional Resources
-      let addResources = _.map(project.additional_resources, (elem,index) => {
-        return <li key={'addResource-'+index}>{elem}</li>
-      });
-
-      project.additional_resources = addResources; //Set array to React HTML
-      project.tags = newTags;
-
-      firebase.database().ref('/companies/').once('value').then((snapshot) => {
-        let supportResults = _.map(project.supporting_companies, (elem, index) => {
-          return <span key={'supportingCompany-'+index} style={{marginRight: 10}}>{snapshot.val()[elem]['name']}</span>;
+        //Additional Resources
+        let addResources = _.map(project.additional_resources, (elem,index) => {
+          return <li key={'addResource-'+index}>{elem}</li>
         });
-        project.posting_company = snapshot.val()[project.posting_company]['name'];
-        project.supporting_companies = supportResults;
-        this.setState({project: project});
-      });
 
-      firebase.database().ref('/professions/').once('value').then((snapshot) => {
-        project.profession_type = snapshot.val()[project.profession_type];
-        this.setState({project: project});
-      });
+        project.additional_resources = addResources; //Set array to React HTML
+        project.tags = newTags;
+
+        firebase.database().ref('/companies/').once('value').then((snapshot) => {
+          let supportResults = _.map(project.supporting_companies, (elem, index) => {
+            return <span key={'supportingCompany-'+index} style={{marginRight: 10}}>{snapshot.val()[elem]['name']}</span>;
+          });
+          project.posting_company = snapshot.val()[project.posting_company]['name'];
+          project.supporting_companies = supportResults;
+          this.setState({project: project});
+        });
+      }
     });
   }
 
@@ -95,7 +91,7 @@ class Project extends Component {
       });
 
     });
-    
+
   }
 
 
@@ -133,51 +129,55 @@ class Project extends Component {
       <section id="projectPage">
         {this.state.showLoading ? <Loading /> : ""}
         <div className="container">
-          <Row>
-            <Col s={12} m={12} l={8}>
-              <h2 className="projectTitle">{this.state.project.name}</h2>
-              <h4 className="oneLiner">
-                {this.state.project.one_liner}
-              </h4>
-              <Row>
-                <Col s={4}>
-                  <p>{this.state.project.profession_type}</p>
-                </Col>
-                <Col s={4}>
-                  <p>Posted: {this.state.project.posting_date}</p>
-                </Col>
-                <Col s={4}>
-                  <p>Submission Due: {this.state.project.due_date}</p>
-                </Col>
-              </Row>
-              <p>{this.state.project.short_description}</p>
-              <br/>
-              <div>
-                <ul>
-                  Additional Resources:
-                  {this.state.project.additional_resources}
-                </ul>
-              </div>
-              <div>
-                Tags:
-                {this.state.project.tags}
-              </div>
-            </Col>
-            <Col s={12} m={12} l={4}>
-              <div className="card">
-                <div className="card-image">
-                  <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
+          {Object.keys(this.state.project).length > 0 ?
+            <Row>
+              <Col s={12} m={12} l={8}>
+                <h2 className="projectTitle">{this.state.project.name}</h2>
+                <h4 className="oneLiner">
+                  {this.state.project.one_liner}
+                </h4>
+                <Row>
+                  <Col s={4}>
+                    <p>{this.state.project.profession_type}</p>
+                  </Col>
+                  <Col s={4}>
+                    <p>Posted: {this.state.project.posting_date}</p>
+                  </Col>
+                  <Col s={4}>
+                    <p>Submission Due: {this.state.project.due_date}</p>
+                  </Col>
+                </Row>
+                <p>{this.state.project.short_description}</p>
+                <br/>
+                <div>
+                  <ul>
+                    Additional Resources:
+                    {this.state.project.additional_resources}
+                  </ul>
                 </div>
-                <div className="card-content">
-                  <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
-                  <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
-                  <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
-                  </MuiThemeProvider>
+                <div>
+                  Tags:
+                  {this.state.project.tags}
                 </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+              <Col s={12} m={12} l={4}>
+                <div className="card">
+                  <div className="card-image">
+                    <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
+                  </div>
+                  <div className="card-content">
+                    <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
+                    <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
+                    <MuiThemeProvider muiTheme={getMuiTheme()}>
+                      <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
+                    </MuiThemeProvider>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+            :
+            <div>That project doesn't exist</div>
+          }
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
