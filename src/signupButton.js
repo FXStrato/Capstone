@@ -41,7 +41,7 @@ export default class signupButton extends React.Component {
             modal={true}
             open={this.state.open}
           >
-            <SignupForm/>
+            <SignupForm history={this.props.history}/>
             
             
           </Dialog>

@@ -18,13 +18,37 @@ class Home extends Component {
   render() {
     return (
       <div className="container">
-        {this.props.userEmail ? "" : <div><SignupButton/><SigninButton/></div>}
-        <Row>
-          <Col s={12}>
-            <p>This is the home page. <Link to="/interests">It will link to the Interests page</Link></p>
-            <p>Testing props {this.props.userEmail ? this.props.userEmail : 'User is not logged in'}</p>
-          </Col>
-        </Row>
+        <div id="homePage">
+          <div className="heroBanner">
+            <h1>Portfolio Building,<br/><b>Reimagined</b>.</h1>
+            <h3>Create brilliant projects, get jobs with brilliant companies.</h3>
+            <Link to="/interests"><button className="primaryCTA">Start Browsing Projects</button></Link>
+          </div>
+          <div className="companyLogosList">
+            <p>Work with these companies &#38; more</p>
+            <Row>
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/google.png'} style={{height:"40px"}} />
+              </Col>
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/hulu.png'} />
+              </Col>
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/facebook.png'} />
+              </Col>
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/sony.png'} style={{height:"27px"}} />
+              </Col>
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/msft.png'} />
+              </Col>
+              
+              <Col s={2}>
+                <img src={process.env.PUBLIC_URL + '/img/nasa.png'} />
+              </Col>
+            </Row>
+          </div>
+        </div>
       </div>
     );
   }

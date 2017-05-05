@@ -6,7 +6,7 @@ import { Row, Col } from 'react-materialize';
 
 class signupForm extends Component {
 
-  popupGoogleSignup(){
+  popupGoogleSignup = () => {
       var provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider).then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -29,10 +29,10 @@ class signupForm extends Component {
               firstName: fName
             }
             var userPromise = userRef.set(userData).then(() => {
-              window.location.assign("/interests");
+              this.props.history.push('/interests');
             });
           } else {
-            window.location.assign("/dashboard");
+            this.props.history.push('/dashboard');
             // <Redirect push to="/dashboard"/>
           }
         });

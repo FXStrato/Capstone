@@ -14,6 +14,8 @@ import Dashboard from './Dashboard';
 import Contact from './Contact';
 import ProjectFullSpec from './ProjectFullSpec';
 import SearchProjects from './SearchProjects';
+import SignupButton from './signupButton';
+import SigninButton from './signinButton';
 import Project from './Project';
 import AdminPanel from './AdminPanel';
 
@@ -80,35 +82,39 @@ class App extends Component {
     return (
       <div className="body-wrapper">
         <header id="nav" style={{backgroundColor: '#ffffff'}}>
-          <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
-            <ToolbarGroup firstChild={true}>
-              <AppBar
-                style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
-                onLeftIconButtonTouchTap={this.handleToggle}
-                id="navbar-appbar"
-                title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
-              />
-            </ToolbarGroup>
-            <ToolbarGroup>
-              <div className="hide-on-med-and-down">
-                {this.state.isAuth ? <Link to="/dashboard"><div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div></Link> : ''}
-
-              </div>
-            </ToolbarGroup>
-          </Toolbar>
-        </MuiThemeProvider>
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <Drawer
-              width={230}
-              open={this.state.open}
-              docked={false}
-              onRequestChange={(open) => this.setState({open})}
-            >
-              <div style={{height: 64, backgroundColor: '#212121'}}></div>
-              {drawerlinks}
-            </Drawer>
+          <div className="container">
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+              <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
+                <ToolbarGroup firstChild={true}>
+                  <AppBar
+                    style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
+                    onLeftIconButtonTouchTap={this.handleToggle}
+                    id="navbar-appbar"
+                    title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
+                  />
+                </ToolbarGroup>
+                <ToolbarGroup>
+                  <div className="hide-on-med-and-down">
+                    {this.state.isAuth ? <Link to="/dashboard"><div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div></Link> :
+                    <div>
+                      <SignupButton history={this.props.history}/><SigninButton history={this.props.history}/>
+                    </div>}
+                  </div>
+                </ToolbarGroup>
+              </Toolbar>
           </MuiThemeProvider>
+          <MuiThemeProvider muiTheme={getMuiTheme()}>
+              <Drawer
+                width={230}
+                open={this.state.open}
+                docked={false}
+                onRequestChange={(open) => this.setState({open})}
+              >
+                <div style={{height: 64, backgroundColor: '#212121'}}></div>
+                {drawerlinks}
+              </Drawer>
+            </MuiThemeProvider>
+          </div>
         </header>
         <main>
           <Switch>
@@ -142,7 +148,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <div className="footer-copyright" style={{backgroundColor: "#333"}}>
+          <div className="footer-copyright">
             <div className="container">
             © 2017 Frontier
             </div>

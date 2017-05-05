@@ -5,17 +5,17 @@ import { Row, Col } from 'react-materialize';
 
 class signinForm extends Component {
 
-  popupGoogleSignup(){
+  popupGoogleSignup = () => {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
+    firebase.auth().signInWithPopup(provider).then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         console.log(user);
         console.log(user.displayName + " is signed in!");
-        window.location.assign("/interests");
-
+        this.props.history.push('/dashboard');
+        console.log('after attempting to redirect...this shouldnt show');
     }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
