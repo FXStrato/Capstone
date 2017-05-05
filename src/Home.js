@@ -12,7 +12,7 @@ import ProjectForm from './adminComponents/projectSubmissionForm';
 class Home extends Component {
 
   componentDidMount = () => {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   render() {
@@ -42,7 +42,7 @@ class Home extends Component {
               <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/msft.png'} />
               </Col>
-              
+
               <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/nasa.png'} />
               </Col>
