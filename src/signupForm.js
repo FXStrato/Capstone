@@ -53,16 +53,9 @@ class signupForm extends Component {
 
   render() {
     return (
-    <div className="authModal" id="signUpModal">
-        <Row>
-          <Col s={6}>
-            <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="http://app.candidatezap.com/images/signUpGoogle.png" alt=""/>
-          </Col>
-          <Col s={6}>
-            <h2>Welcome to Frontier!</h2>
-          </Col>
-        </Row>      
-    </div>
+    <span>
+      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="http://app.candidatezap.com/images/signUpGoogle.png" alt=""/>      
+    </span>
     );
   }
 }

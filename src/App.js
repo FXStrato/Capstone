@@ -95,9 +95,17 @@ class App extends Component {
                 </ToolbarGroup>
                 <ToolbarGroup>
                   <div className="hide-on-med-and-down">
-                    {this.state.isAuth ? <Link to="/dashboard"><div><span>{this.state.userHandle}</span><img className="profilePic" src={this.state.userProfilePicLink}/></div></Link> :
+                    {this.state.isAuth ?
+                      <Link to="/dashboard">
+                          <div className="dashboardButton">
+                            Go To Dashboard
+                          </div>
+                          <span>
+                            <img className="profilePic" src={this.state.userProfilePicLink}/>
+                          </span>
+                      </Link> :
                     <div>
-                      <SignupButton history={this.props.history}/><SigninButton history={this.props.history}/>
+                      <SigninButton history={this.props.history}/> <SignupButton history={this.props.history}/>
                     </div>}
                   </div>
                 </ToolbarGroup>

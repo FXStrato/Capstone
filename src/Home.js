@@ -27,23 +27,23 @@ class Home extends Component {
           <div className="companyLogosList">
             <p>Work with these companies &#38; more</p>
             <Row>
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/google.png'} style={{height:"40px"}} />
               </Col>
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/hulu.png'} />
               </Col>
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/facebook.png'} />
               </Col>
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/sony.png'} style={{height:"27px"}} />
               </Col>
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/msft.png'} />
               </Col>
               
-              <Col s={2}>
+              <Col s={12} m={4} l={2}>
                 <img src={process.env.PUBLIC_URL + '/img/nasa.png'} />
               </Col>
             </Row>

@@ -1,6 +1,24 @@
+/*=============================================
+
+             Global Element Designs
+
+=============================================*/
+
 html, main {
     background-color: #ecf0f1;
 }
+
+.secondaryButton {
+    background-color: transparent;
+    border: solid black 2px;
+    padding: 7px 15px;
+}
+
+/*=============================================
+
+             Navigation Bar Style
+
+=============================================*/
 
 #nav .topLogo {
     height: 45px;
@@ -10,23 +28,54 @@ html, main {
         border-radius: 50%;
         height: 40px;
         width: 40px;
+        margin-top: 10px;
     }
 
-.banner {
-    background-color: white;
-    padding: 40px 0px;
-}
+    #nav .logInButton {
+        background: none;
+        border: none;
+        padding: 5px 10px;
+    }
 
-.banner h2 {
-    margin: 15px 0px;
-}
+    #nav .signUpButton {
+        background: none;
+        border: solid 1px black;
+        padding: 5px 20px;
+    }
 
-.banner h4 {
-    margin-top: 30px;
-    line-height: 2.2rem;
-    font-size: 1.5rem;
-    color: gray;
-}
+    #nav .dashboardButton {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #navbar-appbar>button>div>svg {
+        fill: black !important;
+    }
+
+    /*=============================================
+             Authentication Modal Style
+    =============================================*/
+
+    .googleAuthImg {
+        max-width: 260px;
+    }
+        .googleAuthImg:hover {
+            cursor: pointer;
+        }
+
+    .authModal {
+        text-align: center;
+    }
+        .authModal h2 {
+            font-size: 25pt;
+        }
+
+/*=============================================
+
+             Landing/Home Page Style
+
+=============================================*/
 
 #homePage {
     
@@ -36,7 +85,7 @@ html, main {
     }
     #homePage .heroBanner {
         text-align: center;
-        padding: 10vh;
+        padding: 10vh 0px;
     }
         #homePage .heroBanner h3 {
             font-size: 1.5em;
@@ -53,7 +102,8 @@ html, main {
         padding: 25px 0px;
     }   
         #homePage .companyLogosList img {
-            height: 30px;
+            max-height: 30px;
+            max-width: 85%;
         }
 
         #homePage .companyLogosList p {
@@ -61,26 +111,49 @@ html, main {
             font-style: italic;
         }
 
-.authModal {
+/*=============================================
 
+             Select Interest Style
+
+=============================================*/
+
+.selectInterestsSection {
+    text-align: center;
+    padding: 30px 0px;
 }
-    .authModal .googleAuthImg {
-        max-width: 260px;
+    .selectInterestsSection h2 {
+        font-size: 2em;
+        margin: 0;
+        padding: 25px 0px;
     }
 
-.card-title {
-  background: rgba(0,0,0, 0.5);
-  padding: 2px 8px 2px 8px !important;
-  width: 100%;
- }
-
-#listOfTopProjects {
-    padding: 25px 0px;
-}
-
-    #listOfTopProjects .row {
-        margin-bottom: 0px;
+    .selectInterestsSection a {
+        color: inherit;
     }
+
+    .selectInterestsSection .interestTile {
+        background-color: white;
+        padding: 20px;
+        width: 100%;
+        max-width: 200px;
+        display: inline-block;
+        font-size: 15pt;
+        border-bottom: solid white 5px;
+        margin-bottom: 10px;
+    }
+        .selectInterestsSection .interestTile i {
+            font-size: 20pt;
+        }
+
+        .selectInterestsSection .interestTile:hover {
+            border-bottom: solid gray 5px;
+        }
+
+/*=============================================
+
+             Project Preview Style
+
+=============================================*/
 
 #projectPage {
     margin: 50px 0px;
@@ -98,9 +171,11 @@ html, main {
         font-size: 2rem;
     }
 
-#navbar-appbar>button>div>svg {
-    fill: black !important;
-}
+/*=============================================
+
+             Loading Screen Style
+
+=============================================*/
 
 .loadingScreen {
 	background: rgba(0,0,0,0.5);
@@ -139,9 +214,21 @@ html, main {
         animation-delay: -1.0s;
     }
 
+/*=============================================
+
+             Footer Style
+
+=============================================*/
+
 .page-footer {
     padding: 10vh 0px !important;
 }
+
+/*=============================================
+
+             Misc Media Style
+
+=============================================*/
 
 @-webkit-keyframes sk-bounce {
   0%, 100% { -webkit-transform: scale(0.0) }

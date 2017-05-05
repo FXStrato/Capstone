@@ -7,6 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
 import SignUpForm from './signupForm';
+import SignInForm from './signinForm';
 import _ from 'lodash';
 import Loading from './loading.js';
 
@@ -181,18 +182,25 @@ class Project extends Component {
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
-            title={this.state.isAuth ? "Begin " + this.state.project.name: "Sign up to begin " + this.state.project.name}
+            title=""
             actions={this.state.isAuth ? actions : nonlogactions}
             modal={false}
             open={this.state.open}
             onRequestClose={() => {this.handleClose()}}
           >
             {this.state.isAuth ?
-              'Would you like to begin this project?'
+              <div>
+                <h3>Begin {this.state.project.name}</h3>
+                <p>Would you like to begin this project?</p>
+              </div>
             :
               <div>
-                It seems like you haven't logged in yet. Login now <br/>
+                <h3>Sign up to begin {this.state.project.name}</h3>
+                <p>Create an account to start this project!</p>
                 <SignUpForm/>
+                <p>Already have an account? Log in:</p>
+                <SignInForm/>
+                
               </div>
             }
           </Dialog>

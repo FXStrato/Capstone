@@ -30,16 +30,9 @@ class signinForm extends Component {
 
   render() {
     return (
-    <div className="authModal" id="signinModal">   
-        <Row>
-          <Col s={6}>
-            <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>
-          </Col>
-          <Col s={6}>
-            <h2>Welcome back!</h2>
-          </Col>
-        </Row>     
-    </div>
+    <span> 
+      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>    
+    </span>
     );
   }
 }

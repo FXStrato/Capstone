@@ -32,8 +32,8 @@ export default class signupButton extends React.Component {
     ];
 
     return (
-      <div>
-        <button label="Sign Up" onTouchTap={this.handleOpen}>Create an Account</button>
+      <span>
+        <button className="signUpButton" label="Sign Up" onTouchTap={this.handleOpen}>Create an Account</button>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           
           <Dialog
@@ -41,12 +41,17 @@ export default class signupButton extends React.Component {
             modal={true}
             open={this.state.open}
           >
-            <SignupForm history={this.props.history}/>
+            <div className="authModal" id="signUpModal">
+              <h2>Join the party!</h2>
+              <p>Having an account to Frontier gives you access to all Full Project Specifications and allows you to submit your project to interested companies.</p>
+              <SignupForm history={this.props.history}/>
+            </div>
+            
             
             
           </Dialog>
         </MuiThemeProvider>
-      </div>
+      </span>
     );
   }
 }
