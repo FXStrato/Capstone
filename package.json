@@ -1,7 +1,7 @@
 {
   "name": "index",
   "version": "0.1.0",
-  "homepage": "https://fxstrato.github.io/Capstone/build/",
+  "homepage": "https://fxstrato.github.io/projects/capstone/build/",
   "private": true,
   "dependencies": {
     "firebase": "^3.8.0",
