@@ -142,6 +142,7 @@ class SearchProjects extends Component {
             }
           }
           //If we have a search term, we also need to make sure that it fits whatever we are searching for on top of the filters.
+          //TODO: Issue here is that if no filters are selected, typing in anything doesn't bring up any results.
           if(this.state.searchTerm) {
             //Prob have some kind of regex here to ensure that we aren't getting something stupid from user, like / or space or some other weird characters
             //Otherwise, search by tag and also project title
