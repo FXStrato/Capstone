@@ -128,12 +128,10 @@ class SearchProjects extends Component {
   renderProjects = () => {
     if(this.state.allProjects && this.state.allCompanies) {
       let projectList = [];
-      if(!_.isEmpty(this.state.filters)) {
-        //Means we have filters
-        //For every filter selected, we need to check to see if it satisfies each filter.
-        for(let project in this.state.allProjects) {
-          let temp = this.state.allProjects[project];
-          let canAdd = true;
+      for(let project in this.state.allProjects) {
+        let canAdd = true;
+        let temp = this.state.allProjects[project];
+        if(!_.isEmpty(this.state.filters)) {
           for(let type in this.state.filters) {
             //Inside each filter, we can pull projects that satisfy it. But when we move to another filter, we then have to filter the projectsList again.
             if(_.indexOf(this.state.filters[type], temp[type]) === -1) {
@@ -141,37 +139,23 @@ class SearchProjects extends Component {
               canAdd = false;
             }
           }
-          //If we have a search term, we also need to make sure that it fits whatever we are searching for on top of the filters.
-          //TODO: Issue here is that if no filters are selected, typing in anything doesn't bring up any results.
-          if(this.state.searchTerm) {
-            //Prob have some kind of regex here to ensure that we aren't getting something stupid from user, like / or space or some other weird characters
-            //Otherwise, search by tag and also project title
-            let foundMatch = false;
-            for(let i = 0; i < temp.tags.length; i++) {
-              if(_.includes(temp.tags[i].toLowerCase(), this.state.searchTerm.toLowerCase())) foundMatch = true;
-            }
+        }
+        if(this.state.searchTerm) {
+          //Prob have some kind of regex here to ensure that we aren't getting something stupid from user, like / or space or some other weird characters
+          //Otherwise, search by tag and also project title
+          let foundMatch = false;
+          for(let i = 0; i < temp.tags.length; i++) {
+            if(_.includes(temp.tags[i].toLowerCase(), this.state.searchTerm.toLowerCase())) foundMatch = true;
+          }
 
-            if(_.includes(temp.name.toLowerCase(), this.state.searchTerm.toLowerCase())) foundMatch = true;
-            if(!foundMatch) canAdd = false;
-          }
-          if(canAdd) {
-            temp.projectID = project;
-            projectList.push(temp);
-          }
+          if(_.includes(temp.name.toLowerCase(), this.state.searchTerm.toLowerCase())) foundMatch = true;
+          if(!foundMatch) canAdd = false;
+        }
+        if(canAdd) {
+          temp.projectID = project;
+          projectList.push(temp);
         }
       }
-      // if(this.state.searchTerm) {
-      //   //Means we are searching. Pull all projects with that set of characters in tags, case insensitive, and then pass that in to result to generate.
-      //   for(let project in this.state.allProjects) {
-      //     let temp = this.state.allProjects[project];
-      //     for(let i = 0; i < temp.tags.length; i++) {
-      //       if(temp.tags[i].toLowerCase().includes(this.state.searchTerm.toLowerCase())) {
-      //         temp.projectID = project;
-      //         projectList.push(temp);
-      //       }
-      //     }
-      //   }
-      // }
       //Each project should display the name, one_liner, posting_company, estimated_duration, and tags
       let result = _.map(projectList, (elem, index) => {
         let company = this.state.allCompanies[elem.posting_company].name;
@@ -181,7 +165,7 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Col key={'project_'+index} s={12} m={9} l={10}>
+          <div key={'project_'+index}>
             <Link to={'/project/' + elem.projectID}>{elem.name} : {elem.one_liner}</Link>
               <ul>
                 <li>Posting Company: {company}</li>
@@ -189,12 +173,12 @@ class SearchProjects extends Component {
                 <li>Profession: {elem.profession_type}</li>
                 <li>Tags: {tags}</li>
               </ul>
-          </Col>
+          </div>
         )
       });
       console.log(this.state.filters);
       if(result.length > 0) return result;
-      else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not bring any results</div>;
+      else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not match any results</div>;
       else return <div></div>;
       // this.setState({renderedProjects: result})
     } else {
@@ -231,8 +215,10 @@ class SearchProjects extends Component {
             </form>
           </Col>
             <hr style={{marginBottom: 30}} className="hide-on-med-and-up"/>
-            <Col s={12} m={9} l={10}><h2 style={{fontSize: '2rem', marginTop: -6}}>Results</h2></Col>
-            {this.renderProjects()}
+            <Col s={12} m={9} l={10}>
+              <h2 style={{fontSize: '2rem', marginTop: -6}}>Results</h2>
+              {this.renderProjects()}
+            </Col>
         </Row>
       </div>
     );
