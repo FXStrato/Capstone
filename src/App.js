@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Link, withRouter } from 'react-router-dom';
+import { Route, Switch, Link, withRouter, Redirect } from 'react-router-dom';
 import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -113,7 +113,7 @@ class App extends Component {
         <main>
           <Switch>
             <Route exact path="/" render={()=><Home userEmail={this.state.userEmail}/>}/>
-            <Route path="/dashboard" render={(props)=><Dashboard {...props} userID={this.state.userID} isAuth={this.state.isAuth}/>}/>
+            <Route path="/dashboard" render={(props)=>(this.state.isAuth ? <Dashboard {...props} userID={this.state.userID} isAuth={this.state.isAuth}/> : <Redirect to="/"/>)}/>
             <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
             <Route path="/projectfull/:projectID" render={(props)=><ProjectFullSpec {...props} isAuth={this.state.isAuth} userEmail={this.state.userEmail}/>}/>
             <Route path="/admin" component={AdminPanel}/>

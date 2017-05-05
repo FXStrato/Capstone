@@ -20,7 +20,7 @@ class SearchProjects extends Component {
   }
 
   componentDidMount = () => {
-    if(this.props.location.state.professions) {
+    if(this.props.location.state !== undefined) {
       let temp = {};
       temp['profession_type'] = this.props.location.state.professions;
       this.setState({filters: temp});
@@ -180,8 +180,8 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Col key={'project_'+index} s={12}>
-            <Link to={'/project/' + elem.projectID}><p>{elem.name} : {elem.one_liner}</p></Link>
+          <Col key={'project_'+index} s={12} m={9} l={10}>
+            <Link to={'/project/' + elem.projectID}>{elem.name} : {elem.one_liner}</Link>
               <ul>
                 <li>Posting Company: {company}</li>
                 <li>Estimated Duration: {elem.estimated_duration}</li>
@@ -191,12 +191,13 @@ class SearchProjects extends Component {
           </Col>
         )
       });
+      console.log(this.state.filters);
       if(result.length > 0) return result;
       else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not bring any results</div>;
       else return <div></div>;
       // this.setState({renderedProjects: result})
     } else {
-        return <div>Projects not loaded</div>;
+        return <div></div>;
         // this.setState({renderedProjects: <div>Projects have not loaded</div>})
     }
   }
@@ -207,25 +208,30 @@ class SearchProjects extends Component {
     return (
       <div className="container">
         <Row>
+          <Col s={12}>
+            <h1 style={{fontSize: '2.5rem'}}>Browse Projects</h1>
+            <hr/>
+          </Col>
+        </Row>
+        <Row>
           <Col s={12} m={3} l={2}>
-            <h2 style={{fontSize: '1.5rem'}}>Filter By</h2>
+            <h2 style={{fontSize: '1.5rem', marginTop: 0}}>Filter By</h2>
             <h3 style={{fontSize: '1.2rem'}}>Duration</h3>
             {this.renderFilteredDurations()}
             <h3 style={{fontSize: '1.2rem'}}>Profession</h3>
             {this.renderFilteredProfessions()}
-          </Col>
-          <Col s={12} l={10}>
-            <p>This is the Search Projects Page</p>
             <form onSubmit={(e) => {this.passSearch(e)}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <TextField floatingLabelText="Search by Tag or Project Name" name="search" onChange={(e) => {this.handleChange(e)}} />
+                <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} />
               </MuiThemeProvider>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <RaisedButton type="submit" label="Search Projects" />
+                <RaisedButton style={{marginBottom: 30}} fullWidth={true} type="submit" label="Search" />
               </MuiThemeProvider>
             </form>
-            {this.renderProjects()}
           </Col>
+            <hr style={{marginBottom: 30}} className="hide-on-med-and-up"/>
+            <Col s={12} m={9} l={10}><h2 style={{fontSize: '2rem', marginTop: -6}}>Results</h2></Col>
+            {this.renderProjects()}
         </Row>
       </div>
     );
