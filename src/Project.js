@@ -34,12 +34,15 @@ class Project extends Component {
         isAuth: newProps.isAuth,
         userID: newProps.userID,
       });
+      firebase.database().ref('users/' + newProps.userID).once('value').then((snapshot) => {
+        if(_.indexOf(snapshot.val().activeProjects, this.state.projID) > -1) this.setState({isActiveProject: true});
+      })
     }
   }
 
 
-  componentWillMount = () => {
-    window.scrollTo(0, 0);
+  componentDidMount = () => {
+    window.scrollTo(0, 0)
     firebase.database().ref('/projects/' + this.props.match.params.projectID).once('value').then((snapshot) => {
       let project = snapshot.val();
       if(project) {
@@ -94,8 +97,6 @@ class Project extends Component {
     });
 
   }
-
-
 
   handleOpen = () => {
     this.setState({open: true})
@@ -169,9 +170,16 @@ class Project extends Component {
                   <div className="card-content">
                     <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
                     <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
+                    {this.state.isActiveProject ?
+                    <MuiThemeProvider muiTheme={getMuiTheme()}>
+                      <RaisedButton primary={true} fullWidth={true} onTouchTap={() => {this.props.history.push('/projectfull/' + this.state.projID);}} label="View Project Full Spec" />
+                    </MuiThemeProvider>
+                    :
                     <MuiThemeProvider muiTheme={getMuiTheme()}>
                       <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
                     </MuiThemeProvider>
+                    }
+
                   </div>
                 </div>
               </Col>
@@ -200,7 +208,7 @@ class Project extends Component {
                 <SignUpForm/>
                 <p>Already have an account? Log in:</p>
                 <SignInForm/>
-                
+
               </div>
             }
           </Dialog>

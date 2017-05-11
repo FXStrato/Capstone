@@ -14,6 +14,7 @@ import Dashboard from './Dashboard';
 import Contact from './Contact';
 import ProjectFullSpec from './ProjectFullSpec';
 import SearchProjects from './SearchProjects';
+import ProjectSubmission from './ProjectSubmission';
 import SignupButton from './signupButton';
 import SigninButton from './signinButton';
 import Project from './Project';
@@ -130,6 +131,7 @@ class App extends Component {
             <Route path="/dashboard" render={(props)=>(this.state.isAuth ? <Dashboard {...props} userID={this.state.userID} isAuth={this.state.isAuth}/> : <Redirect to="/"/>)}/>
             <Route path="/project/:projectID" render={(props)=><Project {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
             <Route path="/projectfull/:projectID" render={(props)=><ProjectFullSpec {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
+            <Route path="/submit/:projectID" render={(props)=><ProjectSubmission {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail}/>}/>
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>
             <Route path="/interests" component={Interests}/>
