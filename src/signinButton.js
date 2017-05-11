@@ -33,18 +33,20 @@ export default class signinButton extends React.Component {
 
     return (
       <span>
-        <button className="logInButton" label="Log In" onTouchTap={this.handleOpen}>Log In</button>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-          
+          <FlatButton label="Login" onTouchTap={this.handleOpen}/>
+        </MuiThemeProvider>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+
           <Dialog
-            
+
             actions={actions}
             modal={true}
             open={this.state.open}
           >
             <div className="authModal" id="signinModal">
               <h2>Welcome back friend!</h2>
-              <p>Let us help you continue to build the future.</p>   
+              <p>Let us help you continue to build the future.</p>
               <SignInForm history={this.props.history}/>
             </div>
           </Dialog>

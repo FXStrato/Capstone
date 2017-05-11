@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link, withRouter, Redirect } from 'react-router-dom';
-import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton} from 'material-ui';
+import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton, Popover, Menu} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
@@ -23,6 +23,7 @@ import AdminPanel from './AdminPanel';
 class App extends Component {
   state = {
     open: false,
+    popoverOpen: false,
     isAuth: false,
   }
 
@@ -43,6 +44,24 @@ class App extends Component {
     } else {
       return {color: '#000'};
     }
+  }
+
+  handleTouchTap = (event) => {
+    event.preventDefault();
+    this.setState({popoverOpen: true, anchorEl: event.currentTarget});
+  }
+
+  handlePopoverClose = () => {
+    this.setState({popoverOpen: false});
+  }
+
+  handleSignOut = () => {
+    firebase.auth().signOut().then(function() {
+        console.log('Signed Out!');
+        location.reload();
+    }).catch(function(error) {
+        console.log(error);
+    });
   }
 
   componentWillMount = () => {
@@ -97,14 +116,24 @@ class App extends Component {
                 <ToolbarGroup>
                   <div className="hide-on-med-and-down">
                     {this.state.isAuth ?
-                      <Link to="/dashboard">
-                          <div className="dashboardButton">
-                            Go To Dashboard
-                          </div>
-                          <span>
-                            <img className="profilePic" src={this.state.userProfilePicLink}/>
-                          </span>
-                      </Link> :
+                        <div>
+                          <Link style={{marginTop: '-80px !important', marginRight: 10}} to="/dashboard">GO TO DASHBOARD</Link>
+                          <img onTouchTap={this.handleTouchTap} className="profilePic" src={this.state.userProfilePicLink}/>
+                          <Popover
+                            open={this.state.popoverOpen}
+                            anchorEl={this.state.anchorEl}
+                            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                            onRequestClose={this.handlePopoverClose}
+                          >
+                            <Menu>
+                              <Link to="/projects" onTouchTap={this.handlePopoverClose}><MenuItem primaryText="Search Projects" /></Link>
+                              <MenuItem onTouchTap={this.handleSignOut} primaryText="Sign out" />
+                            </Menu>
+                          </Popover>
+
+                        </div>
+                          :
                     <div>
                       <SigninButton history={this.props.history}/> <SignupButton history={this.props.history}/>
                     </div>}
@@ -121,6 +150,15 @@ class App extends Component {
               >
                 <div style={{height: 64, backgroundColor: '#212121'}}></div>
                 {drawerlinks}
+                {this.state.isAuth ?
+                  <MenuItem onTouchTap={this.handleSignOut} primaryText="Sign out" />
+                :
+                <div>
+                  <span style={{marginLeft: -8, marginBottom: '10px !important'}}><SigninButton/></span>
+                  <span className="center-align" style={{marginLeft: 30, marginTop: 10}}><SignupButton/></span>
+                </div>
+                }
+
               </Drawer>
             </MuiThemeProvider>
           </div>
@@ -146,7 +184,6 @@ class App extends Component {
               <div className="col l6 s12">
                 <h5 className="white-text">About Frontier</h5>
                 <p className="grey-text text-lighten-4">Frontier is a platform that helps job seekers create amazing projects while connecting them to employers looking for incredible talent.</p>
-                <SignoutButton />
               </div>
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">Links</h5>
