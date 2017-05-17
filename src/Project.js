@@ -115,6 +115,9 @@ class Project extends Component {
     this.setState({open: false})
   };
 
+  handleReturn = () => {
+    this.props.history.goBack();
+  }
 
   render() {
     const actions = [
@@ -177,12 +180,6 @@ class Project extends Component {
                 <p>{this.state.project.short_description}</p>
                 <br/>
                 <div>
-                  <ul>
-                    Additional Resources:
-                    {this.state.project.additional_resources}
-                  </ul>
-                </div>
-                <div>
                   Tags:
                   {this.state.project.tags}
                 </div>
@@ -201,7 +198,7 @@ class Project extends Component {
               </Col>
             </Row>
             :
-            <div>That project doesn't exist</div>
+            <div>That project doesn't exist. <a href="" onTouchTap={this.handleReturn}>Click here to return to your previous location.</a></div>
           }
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -224,7 +221,6 @@ class Project extends Component {
                 <SignUpForm/>
                 <p>Already have an account? Log in:</p>
                 <SignInForm/>
-
               </div>
             }
           </Dialog>

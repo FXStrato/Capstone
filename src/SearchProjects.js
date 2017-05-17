@@ -17,6 +17,7 @@ class SearchProjects extends Component {
     durations: '',
     professions: '',
     filters: {},
+    filterButton: 'Hide Filters'
   }
 
   componentDidMount = () => {
@@ -176,7 +177,6 @@ class SearchProjects extends Component {
           </div>
         )
       });
-      console.log(this.state.filters);
       if(result.length > 0) return result;
       else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not match any results</div>;
       else return <div></div>;
@@ -184,6 +184,17 @@ class SearchProjects extends Component {
     } else {
         return <div></div>;
         // this.setState({renderedProjects: <div>Projects have not loaded</div>})
+    }
+  }
+
+  handleShowFilters = () => {
+    let temp = document.getElementById('filters');
+    if(this.state.filterButton === 'Hide Filters') {
+      temp.style.display = 'none';
+      this.setState({filterButton: 'Show Filters'})
+    } else {
+      temp.style.display = 'block';
+      this.setState({filterButton: 'Hide Filters'})
     }
   }
 
@@ -199,7 +210,12 @@ class SearchProjects extends Component {
           </Col>
         </Row>
         <Row>
-          <Col s={12} m={3} l={2}>
+          <Col className="center-align hide-on-med-and-up" style={{marginBottom: 20}} s={12} m={3} l={2}>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+              <RaisedButton backgroundColor="#B0BEC5" label={this.state.filterButton} onTouchTap={this.handleShowFilters}/>
+            </MuiThemeProvider>
+          </Col>
+          <Col id="filters" s={12} m={3} l={2}>
             <h2 style={{fontSize: '1.5rem', marginTop: 0}}>Filter By</h2>
             <h3 style={{fontSize: '1.2rem'}}>Duration</h3>
             {this.renderFilteredDurations()}
@@ -214,7 +230,9 @@ class SearchProjects extends Component {
               </MuiThemeProvider>
             </form>
           </Col>
-            <hr style={{marginBottom: 30}} className="hide-on-med-and-up"/>
+          <Col className="hide-on-med-and-up" s={12} m={3} l={2}>
+            <hr style={{marginBottom: 30}}/>
+          </Col>
             <Col s={12} m={9} l={10}>
               <h2 style={{fontSize: '2rem', marginTop: -6}}>Results</h2>
               {this.renderProjects()}

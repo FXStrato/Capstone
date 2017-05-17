@@ -18,6 +18,7 @@ import ProjectSubmission from './ProjectSubmission';
 import SignupButton from './signupButton';
 import SigninButton from './signinButton';
 import Project from './Project';
+import NotFound from './NotFound';
 import AdminPanel from './AdminPanel';
 
 class App extends Component {
@@ -117,8 +118,8 @@ class App extends Component {
                   <div className="hide-on-med-and-down">
                     {this.state.isAuth ?
                         <div>
-                          <Link style={{marginTop: '-80px !important', marginRight: 10}} to="/dashboard">GO TO DASHBOARD</Link>
-                          <img onTouchTap={this.handleTouchTap} className="profilePic" src={this.state.userProfilePicLink}/>
+                          <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>GO TO DASHBOARD</Link>
+                          <img style={{cursor: 'pointer'}} onTouchTap={this.handleTouchTap} className="profilePic hoverable" src={this.state.userProfilePicLink}/>
                           <Popover
                             open={this.state.popoverOpen}
                             anchorEl={this.state.anchorEl}
@@ -176,6 +177,7 @@ class App extends Component {
             <Route path="/projects/:searchTerm" component={SearchProjects}/>
             <Route path="/projects" component={SearchProjects}/>
             <Route path="/contact" component={Contact}/>
+            <Route component={NotFound}/>
           </Switch>
         </main>
         <footer className="page-footer" style={{backgroundColor: '#212121'}}>
