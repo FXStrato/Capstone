@@ -37,7 +37,7 @@ class Project extends Component {
       firebase.database().ref('users/' + newProps.userID).once('value').then((snapshot) => {
         if(_.indexOf(snapshot.val().activeProjects, this.state.projID) > -1) this.setState({isActiveProject: true});
         if(snapshot.val().completedProjects[this.state.projID]) {
-          this.setState({isCompletedProject: true});
+          this.setState({isCompletedProject: true, open: false});
         }
       })
     }
@@ -147,7 +147,7 @@ class Project extends Component {
       </MuiThemeProvider>;
     } else if(this.state.isCompletedProject) {
       showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <RaisedButton primary={true} fullWidth={true} disabled={true} label="You have completed this project" />
+        <RaisedButton primary={true} fullWidth={true} disabled={true} label="Submitted" />
       </MuiThemeProvider>
     } else {
       showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>

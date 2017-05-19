@@ -7,6 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
 import _ from 'lodash';
+import moment from 'moment';
 
 
 /*This page will display the full spec of the passed in project */
@@ -70,6 +71,11 @@ class ProjectFullSpec extends Component {
   }
 
   render() {
+    let disabled;
+    let now = moment();
+    let due = moment(this.state.project.due_date);
+    if(due.diff(now, 'days') >= 0) disabled = false;
+    else disabled = true;
 
     //Render the submission requirements here. Also, include some of the previous project stuff. We also need to add routing to Project.js, if they have it in active projects, just go to fullspec.
 
@@ -100,7 +106,7 @@ class ProjectFullSpec extends Component {
             <Row>
               <Col s={12}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <RaisedButton fullWidth={true} onTouchTap={() => {this.props.history.push('/submit/' + this.state.projID);}} label="Submit Project" />
+                  <RaisedButton disabled={disabled} fullWidth={true} onTouchTap={() => {this.props.history.push('/submit/' + this.state.projID);}} label={disabled ? 'Project Closed' : 'Submit Project'} />
                 </MuiThemeProvider>
               </Col>
             </Row>

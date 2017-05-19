@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { DatePicker } from 'material-ui';
+import moment from 'moment';
 
 class ProjectSubmissionForm extends Component {
   constructor(props) {
@@ -7,6 +11,10 @@ class ProjectSubmissionForm extends Component {
     this.state = {};
 
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  formatDate = (date) => {
+    return moment(date).format('ddd, MMMM D YYYY');
   }
 
   handleInputChange(event) {
@@ -17,6 +25,14 @@ class ProjectSubmissionForm extends Component {
     changes[inputName] = inputValue;
 
     this.setState(changes);
+  }
+
+  handleSubmissionDate = (subDate) => {
+    this.setState({dueDate: this.formatDate(subDate)});
+  }
+
+  handlePostDate = (subDate) => {
+    this.setState({postingDate: this.formatDate(subDate)});
   }
 
   handleSubmit = (event) => {
@@ -55,7 +71,7 @@ class ProjectSubmissionForm extends Component {
         additional_resources: additionalResources,
         submission_requirements: submissionRequirements,
         cover_image_link: coverImage
-    });     
+    });
   }
 
   render() {
@@ -101,15 +117,25 @@ class ProjectSubmissionForm extends Component {
           <input name="postingCompanyId" type="text" onChange={this.handleInputChange} />
         </label>
         <br />*/}
-        <label>
-          Posting Date:
-          <input name="postingDate" type="text" onChange={this.handleInputChange} />
-        </label>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <DatePicker
+            hintText="Posting Date"
+            firstDayOfWeek={0}
+            container="inline"
+            formatDate={this.formatDate}
+            onChange={(n, date) => {this.handlePostDate(date)}}
+          />
+        </MuiThemeProvider>
         <br />
-        <label>
-          Submission Due Date:
-          <input name="dueDate" type="text" onChange={this.handleInputChange} />
-        </label>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <DatePicker
+            hintText="Submission Due Date"
+            firstDayOfWeek={0}
+            container="inline"
+            formatDate={this.formatDate}
+            onChange={(n, date) => {this.handleSubmissionDate(date)}}
+          />
+        </MuiThemeProvider>
         <br />
         {/*<label>
           Submission Requirements:

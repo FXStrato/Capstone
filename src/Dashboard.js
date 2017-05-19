@@ -4,15 +4,23 @@ import { Row, Col } from 'react-materialize';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import moment from 'moment';
+import { Dialog, FlatButton } from 'material-ui';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 
 
 /* Home will be the landing page for the application. */
 
 class Dashboard extends React.PureComponent {
   state = {
+    open: false,
     userID: this.props.userID,
     isAuth: this.props.isAuth,
     activeProjects: null,
+    removeProjID: '',
+    removeProjName: '',
   };
 
   // This listens for when the new props change
@@ -38,6 +46,14 @@ class Dashboard extends React.PureComponent {
     }
   }
 
+  handleOpen = (projectID, projectName) => {
+    this.setState({open: true, removeProjID: projectID, removeProjName: projectName})
+  };
+
+  handleClose = () => {
+    this.setState({open: false})
+  };
+
   // Gets the active/completed projects of the user from firebase and saves them locally
   getUserProjects = () => {
     firebase.database().ref('users/' + this.props.userID + "/activeProjects").once('value', (snapshot) => {
@@ -52,6 +68,22 @@ class Dashboard extends React.PureComponent {
     });
   }
 
+  //Removes active project from active list
+  removeActiveProject = () => {
+    let actProjects = this.state.activeProjects;
+    _.remove(actProjects, (n) => {
+      return n === this.state.removeProjID;
+    });
+    firebase.database().ref('users/' + this.props.userID).update({
+      activeProjects: actProjects
+    }).then(() => {
+      this.setState({open: false})
+      this.getUserProjects();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   // Renders all active projects
   renderActiveProjects = () => {
     // If the user is not authenticated
@@ -61,8 +93,18 @@ class Dashboard extends React.PureComponent {
       // Build each project
       let result = _.map(this.state.activeProjects, (projectID, index) => {
         var targetProject = this.state.allProjects[this.state.activeProjects[index]];
+        let now = moment();
+        let dueDate = moment(targetProject.due_date);
+        let timeLeft;
+        if(dueDate.diff(now, 'days') >= 0) {
+          //Means they still have time
+          timeLeft = <span style={{color: '#4CAF50'}}>{dueDate.diff(now, 'days')} days left for submission</span>
+        } else {
+          //Project is over due date.
+          timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
+        }
         return (
-          <li key={'activeProject-'+index}><Link to={'/projectfull/' + projectID}>{targetProject.name}</Link></li>
+          <li key={'activeProject-'+index}><Link to={'/projectfull/' + projectID}>{targetProject.name}</Link> - {timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></li>
         )
       });
 
@@ -80,7 +122,7 @@ class Dashboard extends React.PureComponent {
     if(this.state.userID) {
       let result = _.map(this.state.completedProjects, (elem, index) => {
         return (
-          <li key={'completedProject-'+index}>{this.state.allProjects[index].name}</li>
+          <li key={'completedProject-'+index}><Link to={'/project/' + index}>{this.state.allProjects[index].name}</Link></li>
         )
       });
       if(result.length > 0) return result;
@@ -92,6 +134,18 @@ class Dashboard extends React.PureComponent {
   }
 
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Remove Project"
+        primary={true}
+        onTouchTap={this.removeActiveProject}
+      />,
+    ];
     return (
       <div className="container">
         <Row>
@@ -153,6 +207,17 @@ class Dashboard extends React.PureComponent {
         </Row>
        <Link to="/projects/"><button className="secondaryButton">See All Projects</button></Link>
       </div>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Dialog
+          title="Confirm Project Deletion"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={() => {this.handleClose()}}
+        >
+          Are you sure you want to remove "{this.state.removeProjName}" from your active projects?
+        </Dialog>
+      </MuiThemeProvider>
       </div>
     );
   }
