@@ -5,7 +5,8 @@
 =============================================*/
 
 html, main {
-    background-color: #ecf0f1;
+    background-color: white;
+    font-family: 'Roboto','Helvetica Neue',Arial,sans-serif;
 }
 
 .secondaryButton {
@@ -14,11 +15,42 @@ html, main {
     padding: 7px 15px;
 }
 
+h1, h2 {
+    font-family: 'Quicksand','Helvetica Neue',Arial,sans-serif;
+}
+
+h1 {
+    font-size: 36pt !important;
+}
+
+h2 {
+    font-size: 25pt !important;
+}
+
+h3 {
+    font-size: 17pt !important;
+}
+
+h4 {
+    font-size: 14pt !important;
+}
+
 /*=============================================
 
              Navigation Bar Style
 
 =============================================*/
+
+#nav {
+    z-index: 10000;
+    height: 64px;
+    position: relative;
+}
+    #nav .navStyle {
+        width: 100%;
+        position: fixed;
+        background-color: #ecf0f1;
+    }
 
 #nav .topLogo {
     height: 45px;
@@ -78,17 +110,49 @@ html, main {
 =============================================*/
 
 #homePage {
-
+    margin-top: -64px;
+    z-index: 1;
 }
     #homePage a {
         color: initial;
     }
-    #homePage .heroBanner {
-        text-align: center;
-        padding: 10vh 0px;
+
+    #homePage h2 {
+        margin-top: 4vh;
     }
+
+    #homePage .numberCircle {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        padding: 5px;
+        background: transparent;
+        border: 2px solid #666;
+        color: #666;
+        text-align: center;
+        font-size: 25px;
+        display: inline-block;
+        margin-top: 2vh;
+    }
+
+    #homePage .heroBanner {
+        text-align: left;
+        padding-top: 64px;
+        
+        background-color: #ecf0f1;
+    }
+        #homePage .heroBanner .content {
+            padding: 10vh 0px;    
+        }
+
+        #homePage .heroBanner h1 {
+            margin: 0;
+            margin-bottom: 5vh;
+        }
+
         #homePage .heroBanner h3 {
-            font-size: 1.5em;
+            margin: 0;
+            margin-bottom: 10px;
         }
 
         #homePage .heroBanner .primaryCTA {
@@ -96,11 +160,31 @@ html, main {
             border: solid black 2px;
             padding: 10px 20px;
         }
+    
+    #homePage .browseTileSection {
+
+    }
+        #homePage .browseTileSection img {
+            width: 100%;
+        }
+
+    #homePage .createProjectSection {
+        margin-top: -100px;
+        padding: 15vh 0px;
+        background-color: #E9E9E9;
+        text-align: center;
+    }
 
     #homePage .companyLogosList {
         text-align: center;
-        padding: 25px 0px;
+        padding: 10vh 0px;
     }
+        #homePage .companyLogosList .imageHolder {
+            width: 100%;
+            padding: 30px 0px;
+            text-align: center;
+        }
+
         #homePage .companyLogosList img {
             max-height: 30px;
             max-width: 85%;
@@ -126,27 +210,39 @@ html, main {
         margin: 0;
         padding: 25px 0px;
     }
+    
+    .selectInterestsSection h4 {
+        color: #939393;
+        font-size: 5pt;
+    }
 
     .selectInterestsSection a {
         color: inherit;
     }
 
     .selectInterestsSection .interestTile {
-        background-color: white;
-        padding: 20px;
-        width: 100%;
-        max-width: 200px;
+        text-align: center;
+        font-family: 'Quicksand';
+        background-color: #C4C4C4;
+        padding: 25px 0px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
         display: inline-block;
         font-size: 15pt;
-        border-bottom: solid white 5px;
         margin-bottom: 10px;
+        color: white;
+        border: solid 4px #C4C4C4;
     }
+        .selectInterestsSection .interestTile img {
+            height: 100px;
+        }
         .selectInterestsSection .interestTile i {
             font-size: 20pt;
         }
 
         .selectInterestsSection .interestTile:hover {
-            border-bottom: solid gray 5px;
+            border: solid 4px #F7BF59;
         }
 
 /*=============================================

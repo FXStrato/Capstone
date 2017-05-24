@@ -102,13 +102,14 @@ class App extends Component {
 
     return (
       <div className="body-wrapper">
-        <header id="nav" style={{backgroundColor: '#ffffff'}}>
+        <header id="nav">
+          <div className="navStyle">
           <div className="container">
             <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
+              <Toolbar style={{height: '64px', backgroundColor: 'transperant'}}>
                 <ToolbarGroup firstChild={true}>
                   <AppBar
-                    style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
+                    style={{backgroundColor: 'transperant', boxShadow: 'none'}}
                     onLeftIconButtonTouchTap={this.handleToggle}
                     id="navbar-appbar"
                     title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
@@ -162,6 +163,7 @@ class App extends Component {
 
               </Drawer>
             </MuiThemeProvider>
+          </div>
           </div>
         </header>
         <main>
