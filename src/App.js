@@ -103,13 +103,14 @@ class App extends Component {
 
     return (
       <div className="body-wrapper">
-        <header id="nav" style={{backgroundColor: '#ffffff'}}>
+        <header id="nav">
+          <div className="navStyle">
           <div className="container">
             <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Toolbar style={{height: '64px', backgroundColor: '#ffffff'}}>
+              <Toolbar style={{height: '64px', backgroundColor: 'transperant'}}>
                 <ToolbarGroup firstChild={true}>
                   <AppBar
-                    style={{backgroundColor: '#ffffff', boxShadow: 'none'}}
+                    style={{backgroundColor: 'transperant', boxShadow: 'none'}}
                     onLeftIconButtonTouchTap={this.handleToggle}
                     id="navbar-appbar"
                     title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
@@ -164,6 +165,7 @@ class App extends Component {
               </Drawer>
             </MuiThemeProvider>
           </div>
+          </div>
         </header>
         <main>
           <Switch>
@@ -177,7 +179,7 @@ class App extends Component {
             <Route path="/interests" component={Interests}/>
             {/* <Route path="/projects/:searchTerm" component={SearchProjects}/>
             <Route path="/projects" component={SearchProjects}/> */}
-            <Route path="/browse" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
+            <Route path="/browse/:type" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
             <Route path="/contact" component={Contact}/>
             <Route component={NotFound}/>
           </Switch>
