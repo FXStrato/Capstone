@@ -20,6 +20,7 @@ import SigninButton from './signinButton';
 import Project from './Project';
 import NotFound from './NotFound';
 import AdminPanel from './AdminPanel';
+import Browse from './Browse';
 
 class App extends Component {
   state = {
@@ -71,7 +72,7 @@ class App extends Component {
        console.log('Auth state changed: logged in as', user.email);
        this.setState({userID:user.uid});
        this.setState({userEmail:user.email});
-       this.setState({isAuth: true});
+       this.setState({isAuth: true, onboard: user.onboard});
        firebase.database().ref('users/' + user.uid).once('value').then(snapshot=> {
          if(snapshot.val()) {
            this.setState({
@@ -174,8 +175,9 @@ class App extends Component {
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>
             <Route path="/interests" component={Interests}/>
-            <Route path="/projects/:searchTerm" component={SearchProjects}/>
-            <Route path="/projects" component={SearchProjects}/>
+            {/* <Route path="/projects/:searchTerm" component={SearchProjects}/>
+            <Route path="/projects" component={SearchProjects}/> */}
+            <Route path="/browse" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
             <Route path="/contact" component={Contact}/>
             <Route component={NotFound}/>
           </Switch>

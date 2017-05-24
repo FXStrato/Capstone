@@ -22,7 +22,7 @@ class Home extends Component {
           <div className="heroBanner">
             <h1>Portfolio Building,<br/><b>Reimagined</b>.</h1>
             <h3>Create brilliant projects, get jobs with brilliant companies.</h3>
-            <Link to="/interests"><button className="primaryCTA">Start Browsing Projects</button></Link>
+            <Link to="/browse"><button className="primaryCTA">Start Browsing Projects</button></Link>
           </div>
           <div className="companyLogosList">
             <p>Work with these companies &#38; more</p>

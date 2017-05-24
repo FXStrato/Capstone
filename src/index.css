@@ -230,6 +230,11 @@ html, main {
 
 =============================================*/
 
+
+.reduce-bot-margin {
+    margin-bottom: 0 !important;
+}
+
 @-webkit-keyframes sk-bounce {
   0%, 100% { -webkit-transform: scale(0.0) }
   50% { -webkit-transform: scale(1.0) }
