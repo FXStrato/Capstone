@@ -119,7 +119,7 @@ class App extends Component {
                   <div className="hide-on-med-and-down">
                     {this.state.isAuth ?
                         <div>
-                          <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>GO TO DASHBOARD</Link>
+                          <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>YOUR PROJECTS</Link>
                           <img style={{cursor: 'pointer'}} onTouchTap={this.handleTouchTap} className="profilePic hoverable" src={this.state.userProfilePicLink}/>
                           <Popover
                             open={this.state.popoverOpen}

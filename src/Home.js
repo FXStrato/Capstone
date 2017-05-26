@@ -22,7 +22,7 @@ class Home extends Component {
           <div className="heroBanner">
             <div className="container">
               <div className="content">
-                <h1>Land jobs by creating <br/>relavent portfolio projects</h1>
+                <h1>Land jobs by creating <br/>relevant portfolio projects</h1>
                 <h3>Increase your chances of getting a job offer by 40% by creating</h3>
                 <h3>portfolio projects that employers <b>actually want to see</b>.</h3>
               </div>
