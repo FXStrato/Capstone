@@ -12,25 +12,25 @@ class Interests extends Component {
         <h4>Choose your career interests</h4>
         <Row className="center-align">
           <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['Software Developer']}}}>
+            <Link to="/browse/software">
               <div className="interestTile">
                 <img src={process.env.PUBLIC_URL + '/img/SoftwareGuy.png'}/><br/>
                 Software
               </div>
             </Link>
           </Col>
-          
+
           <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['UX Designer','Visual Communication Designer']}}}>
+            <Link to="/browse/design">
               <div className="interestTile">
                 <img src={process.env.PUBLIC_URL + '/img/DesignGuy.png'}/><br/>
                 <span>Design</span>
               </div>
             </Link>
           </Col>
-          
+
           <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['Project Manager']}}}>
+            <Link to="/browse/pm">
               <div className="interestTile">
                 <img src={process.env.PUBLIC_URL + '/img/pmGuy.png'}/><br/>
                 <span>PM</span>

@@ -51,7 +51,7 @@ class Home extends Component {
             <p>Use your skills and our tools to help craft some of your proudest work.</p>
           </div>
           <div className="container">
-            
+
             <div className="companyLogosList">
               <Row>
                 <Col s={12} m={5} l={5} style={{textAlign:"left"}}>
@@ -84,7 +84,7 @@ class Home extends Component {
                     </Col>
                     <Col s={12} m={4} l={4}>
                       <div className="imageHolder">
-                        <img src={process.env.PUBLIC_URL + '/img/msft.png'} />
+                        <img src={process.env.PUBLIC_URL + '/img/microsoft.png'} />
                       </div>
                     </Col>
                     <Col s={12} m={4} l={4}>
@@ -93,7 +93,7 @@ class Home extends Component {
                       </div>
                     </Col>
                   </Row>
-                </Col>        
+                </Col>
               </Row>
             </div>
         </div>
