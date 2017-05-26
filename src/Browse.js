@@ -8,12 +8,14 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
+import SearchProjects from './SearchProjects';
 
 /*New search projects. Contains onboarding and manual searching of available projects*/
 
 class Browse extends Component {
   state = {
     isAuth: undefined,
+    type: this.props.match.params.type,
     value: 'b',
     finished: false,
     stepIndex: 0,
@@ -35,21 +37,22 @@ class Browse extends Component {
   }
 
   //Upon mounting component, pick up all available projects
+  //TODO: Change the durations to difficulties
   componentDidMount = () => {
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
-      let durations = [];
+      let difficulties = [];
       let professions = [];
       //Obtain all the necessary data from each project, getting the unique ones
       for(let project in snapshot.val()) {
-        if(_.indexOf(durations, snapshot.val()[project].estimated_duration) === -1) {
-          durations.push(snapshot.val()[project].estimated_duration);
+        if(_.indexOf(difficulties, snapshot.val()[project].difficulty) === -1) {
+          difficulties.push(snapshot.val()[project].difficulty);
         }
         if(_.indexOf(professions, snapshot.val()[project].profession_type) === -1) {
           professions.push(snapshot.val()[project].profession_type);
         }
       }
-      this.setState({durations: durations, professions: professions});
+      this.setState({difficulties: difficulties, professions: professions});
     });
     firebase.database().ref('/companies/').once('value').then((snapshot) => {
       this.setState({allCompanies: snapshot.val()})
@@ -62,7 +65,7 @@ class Browse extends Component {
     if(value === 'e') {
       setTimeout(() => {
         this.setState({finished: true});
-      }, 3000);
+      }, 500);
     }
     this.handleNext();
     this.setState({value: value});
@@ -129,11 +132,11 @@ class Browse extends Component {
 
     let onboardCompanies = _.map(this.state.allCompanies, (elem, index) => {
       let bg;
-      if(_.indexOf(this.state.onboardCompanies, elem.name) !== -1) bg = {height: 80, marginTop: 15, border: '#FF7043 solid 2px', backgroundColor: '#fff'}
+      if(_.indexOf(this.state.onboardCompanies, index) !== -1) bg = {height: 80, marginTop: 15, border: '#FF7043 solid 2px', backgroundColor: '#fff'}
       else bg = {height: 80, marginTop: 15, backgroundColor: '#fff'}
       return (
         <Col key={'onboardCompanies-'+elem.name} className="center-align" s={12} m={3}>
-          <FlatButton fullWidth={true} onTouchTap={() => this.handleOnboardCompanies(elem.name)} style={bg} label={<img src={process.env.PUBLIC_URL + '/img/' + elem.name.toLowerCase() + '.png'} style={{maxHeight: 50, maxWidth: '85%', paddingTop: 10}} alt={elem.name + ' Banner'}/>}/>
+          <FlatButton fullWidth={true} onTouchTap={() => this.handleOnboardCompanies(index)} style={bg} label={<img src={process.env.PUBLIC_URL + '/img/' + elem.name.toLowerCase() + '.png'} style={{maxHeight: 50, maxWidth: '85%', paddingTop: 10}} alt={elem.name + ' Banner'}/>}/>
         </Col>
       )
     })
@@ -148,7 +151,6 @@ class Browse extends Component {
         </MuiThemeProvider>
       )
     })
-
     return (
       <div className="container">
         {!this.state.finished ?
@@ -171,7 +173,7 @@ class Browse extends Component {
                   onChange={this.handleChange}
                   inkBarStyle={{zIndex: '10', backgroundColor: '#000'}}
                 >
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="Design" value="a">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={this.state.type} value="a">
                   </Tab>
                   <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="Select Profession" value="b">
                     <Row className="reduced-bot-margin">
@@ -229,7 +231,7 @@ class Browse extends Component {
             </Col>
           </Row>
         :
-          <div>Real browse project will go here</div>
+          <SearchProjects onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
         }
 
       </div>
