@@ -1,7 +1,7 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import {Row, Col} from 'react-materialize';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { RaisedButton, Dialog, FlatButton, TextField } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -159,6 +159,7 @@ class Project extends Component {
       <section id="projectPage">
         {this.state.showLoading ? <Loading /> : ""}
         <div className="container">
+          <div style={{marginBottom: 20}}><Link to="/browse">Go Back to All Projects</Link></div>
           {Object.keys(this.state.project).length > 0 ?
             <Row>
               <Col s={12} m={12} l={8}>

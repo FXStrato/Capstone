@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
 import { Link } from 'react-router-dom';
-import { TextField, RaisedButton, Checkbox, Dialog, FlatButton} from 'material-ui';
+import { TextField, RaisedButton, Checkbox, Dialog, FlatButton, Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui';
 import firebase from 'firebase';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -13,7 +13,7 @@ import _ from 'lodash';
 class SearchProjects extends Component {
   state = {
     search: '',
-    searchTerm: '',
+    searchTerm: this.props.param || '',
     open: false,
     selectDifficulty: '',
     selectProfession: '',
@@ -58,34 +58,26 @@ class SearchProjects extends Component {
       filterTemp['posting_company'] = this.state.onboardCompanies;
       this.setState({selectCompany: temp, filters: filterTemp})
     }
-    // if(this.props.location.state !== undefined) {
-    //   let temp = {};
-    //   temp['profession_type'] = this.props.location.state.professions;
-    //   this.setState({filters: temp});
-    // }
-    // // let search = this.props.location.search; // could be '?foo=bar'
-    // // let params = new URLSearchParams(search);
-    // // let filterResults = params.get('_filter');
-    // // console.log(filterResults);
-    // //Pull all projects from firebase, and store in state.
-    // firebase.database().ref('/projects/').once('value').then((snapshot) => {
-    //   this.setState({allProjects: snapshot.val()})
-    //   let durations = [];
-    //   let professions = [];
-    //   //Obtain all the necessary data from each project, getting the unique ones
-    //   for(let project in snapshot.val()) {
-    //     if(_.indexOf(durations, snapshot.val()[project].estimated_duration) === -1) {
-    //       durations.push(snapshot.val()[project].estimated_duration);
-    //     }
-    //     if(_.indexOf(professions, snapshot.val()[project].profession_type) === -1) {
-    //       professions.push(snapshot.val()[project].profession_type);
-    //     }
-    //   }
-    //   this.setState({durations: durations, professions: professions});
-    // });
-    // firebase.database().ref('/companies/').once('value').then((snapshot) => {
-    //   this.setState({allCompanies: snapshot.val()})
-    // });
+    if(!this.state.allProjects || !this.state.allCompanies) {
+      firebase.database().ref('/projects/').once('value').then((snapshot) => {
+        this.setState({allProjects: snapshot.val()})
+        let difficulties = [];
+        let professions = [];
+        //Obtain all the necessary data from each project, getting the unique ones
+        for(let project in snapshot.val()) {
+          if(_.indexOf(difficulties, snapshot.val()[project].difficulty) === -1) {
+            difficulties.push(snapshot.val()[project].difficulty);
+          }
+          if(_.indexOf(professions, snapshot.val()[project].profession_type) === -1) {
+            professions.push(snapshot.val()[project].profession_type);
+          }
+        }
+        this.setState({difficulties: difficulties, professions: professions});
+      });
+      firebase.database().ref('/companies/').once('value').then((snapshot) => {
+        this.setState({allCompanies: snapshot.val()})
+      });
+    }
   }
 
   //Since multiple check boxes can be selected
@@ -212,7 +204,10 @@ class SearchProjects extends Component {
 
     this.setState({selectCompany: temp, filters: filterTemp})
   }
-
+  //helper function
+  capFirst = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   //Function will get the necessary data from allProjects and generate a display for it
   renderProjects = () => {
@@ -255,20 +250,30 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <div key={'project_'+index}>
-            <Link to={'/project/' + elem.projectID}>{elem.name} : {elem.one_liner}</Link>
-              <ul>
-                <li>Posting Company: {company}</li>
-                <li>Estimated Duration: {elem.difficulty}</li>
-                <li>Profession: {elem.profession_type}</li>
-                <li>Tags: {tags}</li>
-              </ul>
-          </div>
+          <Col s={12} m={6} key={'project-'+index} style={{marginBottom: 20}}>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+              <Card>
+               <CardHeader
+                 title={elem.name}
+                 subtitle="List of sponsors can go here"
+                 avatar={elem.cover_image_link}
+               />
+               <CardText className="truncate">
+                 {elem.one_liner} <br/>
+                 {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/>
+                 <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
+               </CardText>
+               <CardActions>
+                 <Link style={{marginLeft: 10}} to={'/project/' + elem.projectID}>Check It Out</Link>
+               </CardActions>
+             </Card>
+            </MuiThemeProvider>
+          </Col>
         )
       });
       if(result.length > 0) return result;
       else if(this.state.searchTerm) return <div>"{this.state.searchTerm}" did not match any results</div>;
-      else return <div></div>;
+      else return <div>There were no projects matching the filters given</div>;
       // this.setState({renderedProjects: result})
     } else {
         return <div></div>;
@@ -333,13 +338,19 @@ class SearchProjects extends Component {
 
     return (
       <div className="container">
-        <Row>
-          <Col s={12}>
-            <h1 style={{fontSize: '2.5rem'}}>Browse Projects</h1>
-            <hr/>
+        <Row className="reduce-bot-margin">
+          <Col s={6}>
+            <h1 className="flow-text" style={{fontSize: '2.5rem'}}>Browse Projects</h1>
+          </Col>
+          <Col s={6}>
+            <form onSubmit={(e) => {this.passSearch(e)}}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <TextField fullWidth={true} value={this.state.searchTerm} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} />
+              </MuiThemeProvider>
+            </form>
           </Col>
         </Row>
-        <Row>
+        <Row style={{marginTop: -10}}>
           <Col s={12} m={12} l={4}>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
               <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Difficulty', e)} className="truncate" value={this.state.selectDifficulty} floatingLabelText="Difficulty"/>
@@ -355,11 +366,10 @@ class SearchProjects extends Component {
               <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
             </MuiThemeProvider>
           </Col>
+          <Col s={12}><hr/></Col>
         </Row>
         <Row>
-          <Col s={12}>
-            {this.renderProjects()}
-          </Col>
+          {this.renderProjects()}
         </Row>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog

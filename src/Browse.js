@@ -17,7 +17,7 @@ class Browse extends Component {
     isAuth: undefined,
     type: this.props.match.params.type,
     value: 'b',
-    finished: false,
+    finished: this.props.onboard,
     stepIndex: 0,
     completedSteps: [0],
     onboardProfessions: [],
@@ -31,8 +31,10 @@ class Browse extends Component {
       this.setState({
         isAuth: newProps.isAuth,
         userID: newProps.userID,
-        onboard: newProps.onboard
       });
+    }
+    if(this.state.onboard !== newProps.onboard) {
+      this.setState({finished: newProps.onboard})
     }
   }
 
@@ -61,8 +63,17 @@ class Browse extends Component {
 
   //Handles changing tab view
   handleChange = value => {
+    window.scrollTo(0,0);
     //We reached the end. Show last tab for a few seconds, then transition into regular browse page.
     if(value === 'e') {
+      firebase.database().ref('users/' + this.props.userID + "/onboard").once('value', (snapshot) => {
+        if(!snapshot.val()) {
+          //Set onboard to true so that they don't need to go through onboarding process again
+          firebase.database().ref('users/' + this.props.userID).update({
+            onboard: true
+          })
+        }
+      });
       setTimeout(() => {
         this.setState({finished: true});
       }, 500);
@@ -173,26 +184,23 @@ class Browse extends Component {
                   onChange={this.handleChange}
                   inkBarStyle={{zIndex: '10', backgroundColor: '#000'}}
                 >
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={this.state.type} value="a">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">{this.state.type}</span><span className="hide-on-large-only">1</span></div>} value="a">
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="Select Profession" value="b">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Profession</span><span className="hide-on-large-only">2</span></div>} value="b">
                     <Row className="reduced-bot-margin">
                       <Col s={12}>
                         <h2 style={{fontSize: '1.5rem'}}>Let's find you the perfect project for your design portfolio</h2>
                       </Col>
                     </Row>
                     <Row>
-                      <Col s={6}>
+                      <Col s={12} m={6}>
                         <p style={{marginTop: -10}}>What professions are you interested in?</p>
                         {onboardProfessions}
                         <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                       </Col>
-                      <Col s={6}>
-                        {this.state.onboardProfessions}
-                      </Col>
                     </Row>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="Select Companies" value="c">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Companies</span><span className="hide-on-large-only">3</span></div>} value="c">
                     <Row>
                       <Col s={12} className="center-align">
                         <h2 style={{fontSize: '1.5rem'}}>Great! Now what companies are you interested in?</h2>
@@ -206,19 +214,16 @@ class Browse extends Component {
                       </Col>
                     </Row>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="Select Difficulty" value="d">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Difficulty</span><span className="hide-on-large-only">4</span></div>} value="d">
                     <Row>
                       <Col s={12}><h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2></Col>
                       <Col s={6}>
                         {onboardDifficulties}
                         <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                       </Col>
-                      <Col s={6}>
-                        {this.state.onboardDifficulties}
-                      </Col>
                     </Row>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label="See Projects" value="e">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">See Projects</span><span className="hide-on-large-only">5</span></div>} value="e">
                     <Row>
                       <Col className="center-align" offset={'s3'} s={6} style={{marginTop: 40, paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.7)'}}>
                         <h2 style={{fontSize: '1.5rem', color: '#fff'}}>Searching for the best projects for you...</h2>
@@ -231,7 +236,7 @@ class Browse extends Component {
             </Col>
           </Row>
         :
-          <SearchProjects onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
+          <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
         }
 
       </div>
