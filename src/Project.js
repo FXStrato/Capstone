@@ -21,6 +21,7 @@ class Project extends Component {
     isAuth: this.props.isAuth,
     userID: this.props.userID,
     showLoading: false,
+    view: 'a',
   }
 
 //Temp: -Kh4diidw7jpXDbKz-go
@@ -155,11 +156,44 @@ class Project extends Component {
       </MuiThemeProvider>
     }
 
+    let result;
+    switch (this.state.view) {
+      case 'a':
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+        <p style={{padding: '10px'}}>{this.state.project.submission_requirements}</p>
+      </div>
+      break;
+      case 'b':
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+        <p style={{padding: '10px'}}>{this.state.project.one_liner}</p>
+      </div>
+      break;
+    }
+
     return (
       <section id="projectPage">
         {this.state.showLoading ? <Loading /> : ""}
         <div className="container">
           <div style={{marginBottom: 20}}><Link to="/browse">Go Back to All Projects</Link></div>
+          <Row>
+            <Col s={12} m={4} l={2}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton fullWidth={true} label="Summary" onTouchTap={() => this.setState({view: 'a'})} />
+              </MuiThemeProvider>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton fullWidth={true} label="Requirements" onTouchTap={() => this.setState({view: 'b'})} />
+              </MuiThemeProvider>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
+              </MuiThemeProvider>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton fullWidth={true} label="Additional Resources" onTouchTap={() => this.setState({view: 'd'})} />
+              </MuiThemeProvider>
+            </Col>
+            <Col s={12} m={8} l={10}>
+                {result}
+            </Col>
+          </Row>
           {Object.keys(this.state.project).length > 0 ?
             <Row>
               <Col s={12} m={12} l={8}>

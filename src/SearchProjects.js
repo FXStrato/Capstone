@@ -337,7 +337,7 @@ class SearchProjects extends Component {
     })
 
     return (
-      <div className="container">
+      <div>
         <Row className="reduce-bot-margin">
           <Col s={6}>
             <h1 className="flow-text" style={{fontSize: '2.5rem'}}>Browse Projects</h1>
