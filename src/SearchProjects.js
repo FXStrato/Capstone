@@ -264,7 +264,7 @@ class SearchProjects extends Component {
                  <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
                </CardText>
                <CardActions>
-                 <Link style={{marginLeft: 10}} to={'/project/' + elem.projectID}>Check It Out</Link>
+                 <Link target="_blank" style={{marginLeft: 10}} to={'/project/' + elem.projectID}>Check It Out</Link>
                </CardActions>
              </Card>
             </MuiThemeProvider>
@@ -345,7 +345,7 @@ class SearchProjects extends Component {
           <Col s={6}>
             <form onSubmit={(e) => {this.passSearch(e)}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <TextField fullWidth={true} value={this.state.searchTerm} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} />
+                <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} />
               </MuiThemeProvider>
             </form>
           </Col>

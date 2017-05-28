@@ -62,23 +62,26 @@ class Browse extends Component {
   }
 
   //Handles changing tab view
-  handleChange = value => {
+  handleChange = (value, step) => {
     window.scrollTo(0,0);
     //We reached the end. Show last tab for a few seconds, then transition into regular browse page.
     if(value === 'e') {
-      firebase.database().ref('users/' + this.props.userID + "/onboard").once('value', (snapshot) => {
-        if(!snapshot.val()) {
-          //Set onboard to true so that they don't need to go through onboarding process again
-          firebase.database().ref('users/' + this.props.userID).update({
-            onboard: true
-          })
-        }
-      });
+      if(this.state.isAuth) {
+        firebase.database().ref('users/' + this.props.userID + "/onboard").once('value', (snapshot) => {
+          if(!snapshot.val()) {
+            //Set onboard to true so that they don't need to go through onboarding process again
+            firebase.database().ref('users/' + this.props.userID).update({
+              onboard: true
+            })
+          }
+        });
+      }
       setTimeout(() => {
         this.setState({finished: true});
       }, 500);
     }
-    this.handleNext();
+    if(_.indexOf(this.state.completedSteps, step) !== -1) this.handlePrev();
+    else this.handleNext();
     this.setState({value: value});
   }
 
@@ -91,6 +94,13 @@ class Browse extends Component {
       completedSteps: completedSteps.concat(stepIndex + 1)
     });
   };
+
+  handlePrev = () => {
+    const {stepIndex} = this.state;
+    let temp = this.state.completedSteps;
+    temp.pop();
+    this.setState({stepIndex: stepIndex - 1, completedSteps: temp});
+  }
 
   handleOnboardProfessions = (profession) => {
     if(_.indexOf(this.state.onboardProfessions, profession) === -1) {
