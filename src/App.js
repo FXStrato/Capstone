@@ -72,12 +72,13 @@ class App extends Component {
        console.log('Auth state changed: logged in as', user.email);
        this.setState({userID:user.uid});
        this.setState({userEmail:user.email});
-       this.setState({isAuth: true, onboard: user.onboard});
+       this.setState({isAuth: true});
        firebase.database().ref('users/' + user.uid).once('value').then(snapshot=> {
          if(snapshot.val()) {
            this.setState({
              userHandle: snapshot.val().firstName,
-             userProfilePicLink: snapshot.val().photoURL
+             userProfilePicLink: snapshot.val().photoURL,
+             onboard: snapshot.val().onboard
             });
          }
        });
@@ -85,7 +86,8 @@ class App extends Component {
      else{
        console.log('Auth state changed: logged out');
        this.setState({userID: null}); //null out the saved state
-       this.setState({userEmail: null})
+       this.setState({userEmail: null});
+       this.setState({onboard: null});
        this.setState({userHandle: ''});
        this.setState({isAuth: false})
      }
@@ -180,6 +182,7 @@ class App extends Component {
             {/* <Route path="/projects/:searchTerm" component={SearchProjects}/>
             <Route path="/projects" component={SearchProjects}/> */}
             <Route path="/browse/:type" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
+            <Route path="/browse" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
             <Route path="/contact" component={Contact}/>
             <Route component={NotFound}/>
           </Switch>
