@@ -163,78 +163,80 @@ class Browse extends Component {
       )
     })
     return (
-      <div className="container">
+      <div>
         {!this.state.finished ?
-          <Row>
-            <Col s={12}>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <Stepper activeStep={this.state.stepIndex} style={{width: '85%', marginLeft: '7%'}}>
-                  <Step completed={true}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(1) !== -1}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(2) !== -1}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(3) !== -1}><StepLabel/></Step>
-                  <Step><StepLabel/></Step>
-                </Stepper>
-              </MuiThemeProvider>
-            </Col>
-            <Col s={12}>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <Tabs
-                  value={this.state.value}
-                  onChange={this.handleChange}
-                  inkBarStyle={{zIndex: '10', backgroundColor: '#000'}}
-                >
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">{this.state.type}</span><span className="hide-on-large-only">1</span></div>} value="a">
-                  </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Profession</span><span className="hide-on-large-only">2</span></div>} value="b">
-                    <Row className="reduced-bot-margin">
-                      <Col s={12}>
-                        <h2 style={{fontSize: '1.5rem'}}>Let's find you the perfect project for your design portfolio</h2>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col s={12} m={6}>
-                        <p style={{marginTop: -10}}>What professions are you interested in?</p>
-                        {onboardProfessions}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                      </Col>
-                    </Row>
-                  </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Companies</span><span className="hide-on-large-only">3</span></div>} value="c">
-                    <Row>
-                      <Col s={12} className="center-align">
-                        <h2 style={{fontSize: '1.5rem'}}>Great! Now what companies are you interested in?</h2>
-                        <p>Select all that apply</p>
-                      </Col>
-                      {onboardCompanies}
-                    </Row>
-                    <Row>
-                      <Col s={6} offset={'s3'}>
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                      </Col>
-                    </Row>
-                  </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Difficulty</span><span className="hide-on-large-only">4</span></div>} value="d">
-                    <Row>
-                      <Col s={12}><h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2></Col>
-                      <Col s={6}>
-                        {onboardDifficulties}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                      </Col>
-                    </Row>
-                  </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">See Projects</span><span className="hide-on-large-only">5</span></div>} value="e">
-                    <Row>
-                      <Col className="center-align" offset={'s3'} s={6} style={{marginTop: 40, paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.7)'}}>
-                        <h2 style={{fontSize: '1.5rem', color: '#fff'}}>Searching for the best projects for you...</h2>
-                        <CircularProgress size={100} thickness={5}/>
-                      </Col>
-                    </Row>
-                  </Tab>
-                </Tabs>
-              </MuiThemeProvider>
-            </Col>
-          </Row>
+          <div className="container">
+            <Row>
+              <Col s={12}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <Stepper activeStep={this.state.stepIndex} style={{width: '85%', marginLeft: '7%'}}>
+                    <Step completed={true}><StepLabel/></Step>
+                    <Step completed={this.state.completedSteps.indexOf(1) !== -1}><StepLabel/></Step>
+                    <Step completed={this.state.completedSteps.indexOf(2) !== -1}><StepLabel/></Step>
+                    <Step completed={this.state.completedSteps.indexOf(3) !== -1}><StepLabel/></Step>
+                    <Step><StepLabel/></Step>
+                  </Stepper>
+                </MuiThemeProvider>
+              </Col>
+              <Col s={12}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <Tabs
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    inkBarStyle={{zIndex: '10', backgroundColor: '#000'}}
+                  >
+                    <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">{this.state.type}</span><span className="hide-on-large-only">1</span></div>} value="a">
+                    </Tab>
+                    <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Profession</span><span className="hide-on-large-only">2</span></div>} value="b">
+                      <Row className="reduced-bot-margin">
+                        <Col s={12}>
+                          <h2 style={{fontSize: '1.5rem'}}>Let's find you the perfect project for your design portfolio</h2>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col s={12} m={6}>
+                          <p style={{marginTop: -10}}>What professions are you interested in?</p>
+                          {onboardProfessions}
+                          <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        </Col>
+                      </Row>
+                    </Tab>
+                    <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Companies</span><span className="hide-on-large-only">3</span></div>} value="c">
+                      <Row>
+                        <Col s={12} className="center-align">
+                          <h2 style={{fontSize: '1.5rem'}}>Great! Now what companies are you interested in?</h2>
+                          <p>Select all that apply</p>
+                        </Col>
+                        {onboardCompanies}
+                      </Row>
+                      <Row>
+                        <Col s={6} offset={'s3'}>
+                          <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        </Col>
+                      </Row>
+                    </Tab>
+                    <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Difficulty</span><span className="hide-on-large-only">4</span></div>} value="d">
+                      <Row>
+                        <Col s={12}><h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2></Col>
+                        <Col s={6}>
+                          {onboardDifficulties}
+                          <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        </Col>
+                      </Row>
+                    </Tab>
+                    <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">See Projects</span><span className="hide-on-large-only">5</span></div>} value="e">
+                      <Row>
+                        <Col className="center-align" offset={'s3'} s={6} style={{marginTop: 40, paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.7)'}}>
+                          <h2 style={{fontSize: '1.5rem', color: '#fff'}}>Searching for the best projects for you...</h2>
+                          <CircularProgress size={100} thickness={5}/>
+                        </Col>
+                      </Row>
+                    </Tab>
+                  </Tabs>
+                </MuiThemeProvider>
+              </Col>
+            </Row>
+          </div>
         :
           <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
         }
