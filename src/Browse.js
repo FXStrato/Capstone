@@ -62,23 +62,26 @@ class Browse extends Component {
   }
 
   //Handles changing tab view
-  handleChange = value => {
+  handleChange = (value, step) => {
     window.scrollTo(0,0);
     //We reached the end. Show last tab for a few seconds, then transition into regular browse page.
     if(value === 'e') {
-      firebase.database().ref('users/' + this.props.userID + "/onboard").once('value', (snapshot) => {
-        if(!snapshot.val()) {
-          //Set onboard to true so that they don't need to go through onboarding process again
-          firebase.database().ref('users/' + this.props.userID).update({
-            onboard: true
-          })
-        }
-      });
+      if(this.state.isAuth) {
+        firebase.database().ref('users/' + this.props.userID + "/onboard").once('value', (snapshot) => {
+          if(!snapshot.val()) {
+            //Set onboard to true so that they don't need to go through onboarding process again
+            firebase.database().ref('users/' + this.props.userID).update({
+              onboard: true
+            })
+          }
+        });
+      }
       setTimeout(() => {
         this.setState({finished: true});
       }, 500);
     }
-    this.handleNext();
+    if(_.indexOf(this.state.completedSteps, step) !== -1) this.handlePrev();
+    else this.handleNext();
     this.setState({value: value});
   }
 
@@ -91,6 +94,13 @@ class Browse extends Component {
       completedSteps: completedSteps.concat(stepIndex + 1)
     });
   };
+
+  handlePrev = () => {
+    const {stepIndex} = this.state;
+    let temp = this.state.completedSteps;
+    temp.pop();
+    this.setState({stepIndex: stepIndex - 1, completedSteps: temp});
+  }
 
   handleOnboardProfessions = (profession) => {
     if(_.indexOf(this.state.onboardProfessions, profession) === -1) {
@@ -170,9 +180,9 @@ class Browse extends Component {
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <Stepper activeStep={this.state.stepIndex} style={{width: '85%', marginLeft: '7%'}}>
                   <Step completed={true}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(1) !== -1}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(2) !== -1}><StepLabel/></Step>
-                  <Step completed={this.state.completedSteps.indexOf(3) !== -1}><StepLabel/></Step>
+                  <Step completed={_.indexOf(this.state.completedSteps, 1) !== -1}><StepLabel/></Step>
+                  <Step completed={_.indexOf(this.state.completedSteps, 2) !== -1}><StepLabel/></Step>
+                  <Step completed={_.indexOf(this.state.completedSteps, 3)!== -1}><StepLabel/></Step>
                   <Step><StepLabel/></Step>
                 </Stepper>
               </MuiThemeProvider>
@@ -196,7 +206,7 @@ class Browse extends Component {
                       <Col s={12} m={6}>
                         <p style={{marginTop: -10}}>What professions are you interested in?</p>
                         {onboardProfessions}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c', 2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                       </Col>
                     </Row>
                   </Tab>
@@ -210,7 +220,8 @@ class Browse extends Component {
                     </Row>
                     <Row>
                       <Col s={6} offset={'s3'}>
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d',3)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        <FlatButton style={{marginTop: 10, backgroundColor: '#E0E0E0'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('b', 1)}/>
                       </Col>
                     </Row>
                   </Tab>
@@ -219,7 +230,8 @@ class Browse extends Component {
                       <Col s={12}><h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2></Col>
                       <Col s={6}>
                         {onboardDifficulties}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e')} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e',4)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        <FlatButton style={{marginTop: 10, backgroundColor: '#E0E0E0'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('c', 2)}/>
                       </Col>
                     </Row>
                   </Tab>
