@@ -165,7 +165,17 @@ class Project extends Component {
       break;
       case 'b':
       result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+        <p style={{padding: '10px'}}>{this.state.project.short_description}</p>
+      </div>
+      break;
+      case 'c':
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
         <p style={{padding: '10px'}}>{this.state.project.one_liner}</p>
+      </div>
+      break;
+      case 'd':
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+        <p style={{padding: '10px'}}>{this.state.project.posting_company}</p>
       </div>
       break;
     }
