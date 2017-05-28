@@ -301,6 +301,10 @@ class SearchProjects extends Component {
     this.setState({open: false})
   }
 
+  viewAll = () => {
+    this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:''})
+  }
+
   render() {
 
     let onboardProfessions = _.map(this.state.allProfessions, (elem,index) => {
@@ -341,6 +345,11 @@ class SearchProjects extends Component {
         <Row className="reduce-bot-margin">
           <Col s={6}>
             <h1 className="flow-text" style={{fontSize: '2.5rem'}}>Browse Projects</h1>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton label="View All Projects" fullWidth={true} secondary={true} onTouchTap={this.viewAll}/>
+              </MuiThemeProvider>
+            </MuiThemeProvider>
           </Col>
           <Col s={6}>
             <form onSubmit={(e) => {this.passSearch(e)}}>
