@@ -103,6 +103,33 @@ class App extends Component {
       )
     });
 
+    let navigation;
+    if(this.state.userID === undefined) {
+      navigation = <div></div>
+    } else if(this.state.userID === null) {
+      navigation = <div><SigninButton history={this.props.history}/> <SignupButton history={this.props.history}/></div>
+    } else {
+      navigation = (
+        <div>
+          <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>YOUR PROJECTS</Link>
+          <img style={{cursor: 'pointer'}} onTouchTap={this.handleTouchTap} className="profilePic hoverable" src={this.state.userProfilePicLink}/>
+          <Popover
+            open={this.state.popoverOpen}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.handlePopoverClose}
+          >
+            <Menu>
+              <Link to="/projects" onTouchTap={this.handlePopoverClose}><MenuItem primaryText="Search Projects" /></Link>
+              <MenuItem onTouchTap={this.handleSignOut} primaryText="Sign out" />
+            </Menu>
+          </Popover>
+
+        </div>
+      )
+    }
+
     return (
       <div className="body-wrapper">
         <header id="nav">
@@ -120,28 +147,7 @@ class App extends Component {
                 </ToolbarGroup>
                 <ToolbarGroup>
                   <div className="hide-on-med-and-down">
-                    {this.state.isAuth ?
-                        <div>
-                          <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>YOUR PROJECTS</Link>
-                          <img style={{cursor: 'pointer'}} onTouchTap={this.handleTouchTap} className="profilePic hoverable" src={this.state.userProfilePicLink}/>
-                          <Popover
-                            open={this.state.popoverOpen}
-                            anchorEl={this.state.anchorEl}
-                            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                            onRequestClose={this.handlePopoverClose}
-                          >
-                            <Menu>
-                              <Link to="/projects" onTouchTap={this.handlePopoverClose}><MenuItem primaryText="Search Projects" /></Link>
-                              <MenuItem onTouchTap={this.handleSignOut} primaryText="Sign out" />
-                            </Menu>
-                          </Popover>
-
-                        </div>
-                          :
-                    <div>
-                      <SigninButton history={this.props.history}/> <SignupButton history={this.props.history}/>
-                    </div>}
+                    {navigation}
                   </div>
                 </ToolbarGroup>
               </Toolbar>

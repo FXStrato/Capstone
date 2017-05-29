@@ -35,6 +35,7 @@ class Dashboard extends React.PureComponent {
   }
 
   componentDidMount = () => {
+    window.scrollTo(0,0);
     //Pull all projects from firebase, and store in state.
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})

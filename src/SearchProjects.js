@@ -80,28 +80,6 @@ class SearchProjects extends Component {
     }
   }
 
-  //Since multiple check boxes can be selected
-  handleFilter = (name, isChecked, type) => {
-    let temp = this.state.filters;
-    //If isChecked is true, add it to array. Otherwise, remove it.
-    if(isChecked) {
-      //If filter doesn't already exist in list and ischecked is true, add it to filter list
-      if(_.indexOf(temp[type], name) === -1){
-        if(!temp[type]) temp[type] = [];
-        temp[type].push(name);
-      }
-    } else {
-      //If isChecked is false, remove it from filter list
-      if(_.indexOf(temp[type], name) !== -1) {
-        temp[type] = _.remove(temp[type], (n) => {
-          return n !== name
-        });
-        if(temp[type].length < 1) delete temp[type];
-      }
-    }
-    this.setState({filters: temp});
-  }
-
   handleChange(event) {
     var field = event.target.name;
     var value = event.target.value;
@@ -250,25 +228,24 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Col s={12} m={6} key={'project-'+index} style={{marginBottom: 20}}>
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <Card>
-               <CardHeader
-                 title={elem.name}
-                 subtitle="List of sponsors can go here"
-                 avatar={elem.cover_image_link}
-               />
-               <CardText className="truncate">
-                 {elem.one_liner} <br/>
-                 {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/>
-                 <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
-               </CardText>
-               <CardActions>
-                 <Link target="_blank" style={{marginLeft: 10}} to={'/project/' + elem.projectID}>Check It Out</Link>
-               </CardActions>
-             </Card>
-            </MuiThemeProvider>
-          </Col>
+          <Link key={'project-'+index} target="_blank" to={'/project/' + elem.projectID}>
+            <Col s={12} m={6} style={{marginBottom: 20}}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <Card>
+                   <CardHeader
+                     title={elem.name}
+                     subtitle="List of sponsors can go here"
+                     avatar={elem.cover_image_link}
+                   />
+                   <CardText className="truncate">
+                     {elem.one_liner} <br/>
+                     {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/>
+                     <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
+                   </CardText>
+                 </Card>
+              </MuiThemeProvider>
+            </Col>
+          </Link>
         )
       });
       if(result.length > 0) return result;
@@ -281,16 +258,6 @@ class SearchProjects extends Component {
     }
   }
 
-  handleShowFilters = () => {
-    let temp = document.getElementById('filters');
-    if(this.state.filterButton === 'Hide Filters') {
-      temp.style.display = 'none';
-      this.setState({filterButton: 'Show Filters'})
-    } else {
-      temp.style.display = 'block';
-      this.setState({filterButton: 'Hide Filters'})
-    }
-  }
   //option parameter should be either 'difficulty', 'company', or 'profession'
   handleOpen = (option, event) => {
     event.preventDefault();
@@ -303,6 +270,34 @@ class SearchProjects extends Component {
 
   viewAll = () => {
     this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:''})
+  }
+
+  selectAll = filter => {
+    let temp = this.state.filters;
+    if(filter === 'difficulty') {
+      temp['difficulty'] = this.state.allDifficulties;
+      this.setState({filters: temp, onboardDifficulties: this.state.allDifficulties, selectDifficulty: 'All'});
+    } else if (filter === 'company') {
+      temp['posting_company'] = this.state.allCompanies;
+      this.setState({filters: temp, onboardCompanies: this.state.allCompanies, selectCompany: 'All'});
+    } else if (filter === 'profession') {
+      temp['profession_type'] = this.state.allProfessions;
+      this.setState({filters: temp, onboardProfessions: this.state.allProfessions, selectProfession: 'All'});
+    }
+  }
+
+  removeAll = filter => {
+    let temp = this.state.filters;
+    if(filter === 'difficulty') {
+      delete temp['difficulty'];
+      this.setState({filters: temp, selectDifficulty: '', onboardDifficulties: []});
+    } else if (filter === 'company') {
+      delete temp['posting_company'];
+      this.setState({filters: temp, selectCompany: '', onboardCompanies: []});
+    } else if (filter === 'profession') {
+      delete temp['profession_type'];
+      this.setState({filters: temp, selectProfession: '', onboardProfessions: []});
+    }
   }
 
   render() {
@@ -388,13 +383,25 @@ class SearchProjects extends Component {
             onRequestClose={this.handleClose}
           >
             {this.state.dialogChoice === 'Difficulty' &&
-              onboardDifficulties
+              <div>
+                <FlatButton label="Select All" onTouchTap={() => this.selectAll('difficulty')}/>
+                <FlatButton label="Clear All" onTouchTap={() => this.removeAll('difficulty')}/>
+                {onboardDifficulties}
+              </div>
             }
             {this.state.dialogChoice === 'Profession' &&
-              onboardProfessions
+            <div>
+              <FlatButton label="Select All" onTouchTap={() => this.selectAll('profession')}/>
+              <FlatButton label="Clear All" onTouchTap={() => this.removeAll('profession')}/>
+              {onboardProfessions}
+            </div>
             }
             {this.state.dialogChoice === 'Company' &&
-              onboardCompanies
+            <div>
+              <FlatButton label="Select All" onTouchTap={() => this.selectAll('company')}/>
+              <FlatButton label="Clear All" onTouchTap={() => this.removeAll('company')}/>
+              {onboardCompanies}
+            </div>
             }
           </Dialog>
         </MuiThemeProvider>
