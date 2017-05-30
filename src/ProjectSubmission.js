@@ -1,7 +1,9 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
-import { TextField, RaisedButton, Dialog, FlatButton, CircularProgress, Snackbar } from 'material-ui';
+import { Link } from 'react-router-dom';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import { TextField, RaisedButton, Dialog, FlatButton, CircularProgress, Checkbox, SelectField, MenuItem } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
@@ -16,8 +18,11 @@ class ProjectSubmission extends Component {
     isAuth: this.props.isAuth,
     userID: this.props.userID,
     open: false,
-    snackbarOpen: false,
-    disableSubmit: false,
+    surveyOpen: false,
+    ack: false,
+    giveCompanies: [],
+    value: null,
+    showSuccess: false
   }
 
   componentWillReceiveProps = (newProps) => {
@@ -31,10 +36,13 @@ class ProjectSubmission extends Component {
     }
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     window.scrollTo(0, 0);
     firebase.database().ref('/projects/' + this.props.match.params.projectID).once('value').then((snapshot) => {
         this.setState({project: snapshot.val()});
+    });
+    firebase.database().ref('/companies/').once('value').then((snapshot) => {
+      this.setState({allCompanies: snapshot.val()})
     });
   }
 
@@ -47,8 +55,25 @@ class ProjectSubmission extends Component {
     if(this.state.repoErrorText) this.setState({repoErrorText: ''})
   }
 
+  handleValueChange = (event, index, value) =>  {
+    this.setState({value});
+  }
+
   handleOpen = () => {
     this.setState({open: true})
+  };
+
+  handleSurveyOpen = () => {
+    let urlRe = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
+    if(!this.state.submission_repo || urlRe.exec(this.state.submission_repo) === null) {
+      this.setState({repoErrorText: 'Please enter a valid link'})
+    } else {
+      this.setState({surveyOpen: true})
+    }
+  };
+
+  handleSurveyClose = () => {
+    this.setState({surveyOpen: false})
   };
 
   handleClose = () => {
@@ -64,6 +89,22 @@ class ProjectSubmission extends Component {
     this.setState({snackbarOpen: true})
   }
 
+  onCheck = (e, isChecked) => {
+    if(isChecked) {
+      if(_.indexOf(this.state.giveCompanies, e.target.name) === -1) {
+        let temp = this.state.giveCompanies;
+        temp.push(e.target.name);
+        this.setState({giveCompanies: temp})
+      }
+    } else {
+      let temp = this.state.giveCompanies;
+      temp = _.remove(temp, (n) => {
+        return n === e.target.name
+      })
+      this.setState({giveCompanies: temp})
+    }
+  }
+
   handleSubmission = () => {
     let urlRe = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm;
     if(!this.state.submission_repo || urlRe.exec(this.state.submission_repo) === null) {
@@ -75,8 +116,9 @@ class ProjectSubmission extends Component {
         if(comProjects === null){
           comProjects = {};
           comProjects['repolink'] = this.state.submission_repo;
-          comProjects['demo'] = this.state.submission_demo;
-          comProjects['comments'] = this.state.submission_text;
+          comProjects['otherCompanies'] = this.state.giveCompanies;
+          comProjects['expected_work'] = this.state.value;
+          comProjects['hours_spent'] = this.state.time_spent;
           firebase.database().ref('users/' + this.state.userID + "/completedProjects/").update({
             [this.props.match.params.projectID]: comProjects
           }).then(() => {
@@ -86,8 +128,8 @@ class ProjectSubmission extends Component {
               firebase.database().ref('users/' + this.state.userID).update({
                 activeProjects: temp
               }).then(() => {
-                // After project is uploaded, sends user to the full specification of the page
-                this.setState({snackbarOpen: true, open: false, disableSubmit: true});
+                // After project is uploaded, show successful project page
+                this.setState({open: false, showSuccess: true});
               }).catch(() => {
                 console.log('Unable to remove from active projects');
               });
@@ -105,82 +147,150 @@ class ProjectSubmission extends Component {
   render() {
     const actions = [
       <FlatButton
-        label="Cancel"
+        label="Close Window"
         primary={true}
         onTouchTap={() => {this.handleClose()}}
       />,
-      <FlatButton
-        label="Confirm Submission"
-        primary={true}
-        onTouchTap={() => {this.handleSubmission()}}
-      />,
     ];
+
+    let companies = _.map(this.state.allCompanies, (elem, index) => {
+      return (
+        <MuiThemeProvider muiTheme={getMuiTheme()} key={'company-'+elem.name}>
+          <Checkbox
+            label={elem.name}
+            name={elem.name}
+            onCheck={this.onCheck}
+          />
+        </MuiThemeProvider>
+      )
+    })
 
     return (
       <div className="container">
-        {Object.keys(this.state.project).length > 0 ?
-          <div>
-            <Row>
-              <Col s={12}>
-                <h2 style={{fontSize: '2rem'}}>Submission for {this.state.project.name}</h2>
-                <p style={{fontSize: '1.3rem'}}>Finished with your project? Now it's time to submit it!</p>
-              </Col>
-            </Row>
-            <Row>
-              <Col s={12} m={7} l={8}>
-                <div style={{marginBottom: -10, fontSize: '1.1rem'}}>What is the link to your code repository?*</div>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField fullWidth={true} name="submission_repo" errorText={this.state.repoErrorText} floatingLabelText="Link to Project (Github/Bitbucket)" onChange={(e) => {this.handleChange(e)}}/>
-                </MuiThemeProvider>
-              </Col>
-              <Col s={12} m={7} l={8}>
-                <div style={{marginTop: 20, marginBottom: -10, fontSize: '1.1rem'}}>Do you have an online demo or prototype?</div>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField fullWidth={true} name="submission_demo" floatingLabelText="Link to prototype" onChange={(e) => {this.handleChange(e)}}/>
-                </MuiThemeProvider>
-              </Col>
-              <Col s={12} m={7} l={8}>
-                <div style={{marginTop: 20, marginBottom: -10, fontSize: '1.1rem'}}>What were your thoughts about this project? Was it challenging? Was there something that could have been better?</div>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField fullWidth={true} name="submission_text" multiLine={true} rowsMax={5} floatingLabelText="Type response here" onChange={(e) => {this.handleChange(e)}}/>
-                </MuiThemeProvider>
-                <p>* Response is required</p>
-              </Col>
-            </Row>
-            <Row>
-              <Col s={12} m={7} l={8} className="center-align">
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <RaisedButton fullWidth={true} disabled={this.state.disableSubmit} onTouchTap={this.handleOpen} label="Submit Project"/>
-                </MuiThemeProvider>
-              </Col>
-            </Row>
-          </div>
-          :
+        {Object.keys(this.state.project).length === 0 &&
           <div className="center-align" style={{marginTop: 20, marginBottom: 20}}>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
               <CircularProgress/>
             </MuiThemeProvider>
           </div>
         }
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Dialog
-            title={this.state.project.name}
-            actions={actions}
-            modal={false}
-            open={this.state.open}
-            onRequestClose={() => {this.handleClose()}}
-          >
-          Make sure all your information is correct before submitting! If so, go ahead and click Confirm Submission, and give yourself a high five. You deserve it!
-          </Dialog>
-        </MuiThemeProvider>
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Snackbar
-          open={this.state.snackbarOpen}
-          message={'Project - ' + this.state.project.name + ' successfully completed!'}
-          autoHideDuration={3000}
-          onRequestClose={this.handleSnackbarClose}
-          />
-        </MuiThemeProvider>
+        {!this.state.showSuccess ?
+            <div>
+              <Row className="center-align">
+                <Col s={12}>
+                  <h2 style={{fontSize: '2rem'}}>Submission for {this.state.project.name}</h2>
+                  <p style={{fontSize: '1.3rem'}}>Finished with your project? Now it's time to submit it!</p>
+                </Col>
+              </Row>
+              <Row>
+                <Col s={12} m={6} l={8} offset={'m3, l2'} style={{marginBottom: 20}}>
+                  <div style={{fontSize: '1.1rem', marginBottom: 10}}>What other companies would you like to be able to view your project?</div>
+                  {companies}
+                </Col>
+                <Col s={12} m={6} l={8} offset={'m3, l2'}>
+                  <div style={{marginBottom: -20, fontSize: '1.1rem'}}>What is the link to your code repository?</div>
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <TextField fullWidth={true} name="submission_repo" errorText={this.state.repoErrorText} floatingLabelText="Link to Project (Github/Bitbucket)" onChange={(e) => {this.handleChange(e)}}/>
+                  </MuiThemeProvider>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col s={12} m={7} l={8} offset={'m3, l2'} className="center-align">
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <Checkbox
+                      label="I acknowledge that Frontier is not liable to legal action if user's intellectual property is improperly handled by the 3rd party employer."
+                      onCheck={(e, isChecked) => this.setState({ack: isChecked})}
+                    />
+                  </MuiThemeProvider> <br/>
+                  <small>Read more about intellectual property <span style={{color: '#039be5', cursor: 'pointer'}}  onTouchTap={this.handleOpen}>here</span></small>
+                </Col>
+              </Row>
+              <Row>
+                <Col s={12} m={7} l={8} offset={'m3, l2'}>
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <RaisedButton fullWidth={true} disabled={!this.state.ack || !this.state.submission_repo ? true: false} onTouchTap={this.handleSurveyOpen} label="Continue"/>
+                  </MuiThemeProvider>
+                </Col>
+              </Row>
+          <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <Dialog
+              title="Intellectual Property Rights"
+              modal={false}
+              actions={actions}
+              open={this.state.open}
+              onRequestClose={() => {this.handleClose()}}
+            >
+            lorem ipsum about the intellectual Property Rights
+            </Dialog>
+          </MuiThemeProvider>
+          <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <Dialog
+              title="Almost there!"
+              modal={false}
+              open={this.state.surveyOpen}
+              onRequestClose={this.handleSurveyClose}
+            >
+            <div className="center-align">
+              <h2 style={{fontSize: '1.6rem'}}>Just one last step!</h2>
+              <p>Before you submit your project, please fill out this 2 question survey. The information you provide is meant to improve your experience using Frontier.</p>
+              <p style={{color: '#E53935'}}>This information will not be sent to the employer</p>
+              <p>Please answer as truthfully as you can. Thank you!</p>
+            </div>
+            <Row>
+              <Col s={12} className="center-align">
+                <div>How long would you say it took you to complete the project?</div>
+              </Col>
+              <Col s={6} offset={'s3'}>
+                <TextField name="time_spent" fullWidth={true} floatingLabelText="Number of hours spent" onChange={(e) => {this.handleChange(e)}}/>
+              </Col>
+              <Col s={12} className="center-align" style={{marginTop: 20}}>
+                <div>Did the project require more or less work than you expected?</div>
+              </Col>
+              <Col s={6} offset={'s3'}>
+                <SelectField
+                  floatingLabelText="Actual work"
+                  value={this.state.value}
+                  onChange={this.handleValueChange}
+                  fullWidth={true}
+                >
+                  <MenuItem value={0} primaryText="" />
+                  <MenuItem value={"Much Less"} primaryText="Much Less" />
+                  <MenuItem value={"Less"} primaryText="Less" />
+                  <MenuItem value={"Just Right"} primaryText="Just Right" />
+                  <MenuItem value={"More"} primaryText="More" />
+                  <MenuItem value={"Much More"} primaryText="Much More" />
+                </SelectField>
+              </Col>
+            </Row>
+            <Row>
+              <Col s={6} offset={'s3'}>
+                <RaisedButton fullWidth={true} secondary={true} labelStyle={{color: '#fff'}} disabled={!this.state.value || !this.state.time_spent ? true: false} label="Finish" onTouchTap={this.handleSubmission}/>
+              </Col>
+              <Col s={12} className="center-align" style={{marginTop: 10}}>
+                <div style={{fontSize: '0.9rem'}}>Once you hit finish your project will be officially submitted!</div>
+              </Col>
+            </Row>
+            </Dialog>
+          </MuiThemeProvider>
+        </div>
+        :
+        <div>
+          <Row>
+            <Col s={12} className="center-align">
+              <h2 style={{fontSize: '1.8rem'}}>You're all done!</h2>
+              <div className="selectInterestsSection" style={{marginBottom: 0}}>
+                <div className="interestTile">
+                  <img src={process.env.PUBLIC_URL + '/img/DesignGuy.png'} alt="Design Guy"/><br/>
+                </div>
+              </div>
+              <p>We'll keep you updated on your submission through the dashboard</p>
+              <Link to="/dashboard"><MuiThemeProvider muiTheme={getMuiTheme()}><RaisedButton label="Back to Dashboard"/></MuiThemeProvider></Link>
+            </Col>
+          </Row>
+        </div>
+        }
+
       </div>
     );
   }

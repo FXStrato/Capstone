@@ -228,7 +228,7 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Link key={'project-'+index} target="_blank" to={'/project/' + elem.projectID}>
+          <Link key={'project-'+index} to={'/project/' + elem.projectID}>
             <Col s={12} m={6} style={{marginBottom: 20}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <Card>
@@ -239,7 +239,7 @@ class SearchProjects extends Component {
                    />
                    <CardText className="truncate">
                      {elem.one_liner} <br/>
-                     {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/>
+                     {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/> <br/>
                      <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
                    </CardText>
                  </Card>
@@ -338,7 +338,7 @@ class SearchProjects extends Component {
     return (
       <div>
         <Row className="reduce-bot-margin">
-          <Col s={6}>
+          <Col s={6} className="center-align">
             <h1 className="flow-text" style={{fontSize: '2.5rem'}}>Browse Projects</h1>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>

@@ -95,7 +95,7 @@ class App extends Component {
   }
 
   render() {
-    let links = [{link: '/', body: 'Home'}, {link: '/interests', body: 'Interests'}, {link: '/projects', body: 'Search Projects'}, {link: '/about', body: 'About'},];
+    let links = [{link: '/', body: 'Home'}, {link: '/interests', body: 'Interests'}, {link: '/browse', body: 'Browse Projects'}, {link: '/about', body: 'About'},];
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (
@@ -121,7 +121,7 @@ class App extends Component {
             onRequestClose={this.handlePopoverClose}
           >
             <Menu>
-              <Link to="/projects" onTouchTap={this.handlePopoverClose}><MenuItem primaryText="Search Projects" /></Link>
+              <Link to="/browse" onTouchTap={this.handlePopoverClose}><MenuItem primaryText="Browse Projects" /></Link>
               <MenuItem onTouchTap={this.handleSignOut} primaryText="Sign out" />
             </Menu>
           </Popover>
