@@ -44,7 +44,7 @@ h4 {
     font-size: 14pt !important;
 }
 
-.zeroBottMargin {
+.zeroBotMargin {
     margin-bottom: 0px !important;
 }
 
@@ -290,7 +290,7 @@ h4 {
     .darkBlueBg {
         background-color: #2F9CAA;
     }
-    
+
     .onboardSection .row {
         margin-bottom: 0px !important;
     }

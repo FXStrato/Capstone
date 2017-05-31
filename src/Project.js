@@ -123,6 +123,12 @@ class Project extends Component {
     this.props.history.goBack();
   }
 
+  //helper function
+  capFirst = (string) => {
+    if(string) return string.charAt(0).toUpperCase() + string.slice(1);
+    else return '';
+  }
+
   getProjectHeader = (imgLink,title,profession,diff,dueDate) => {
     let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
     return (
@@ -132,17 +138,17 @@ class Project extends Component {
             <Link to="/browse" style={{color:"white"}}> <FA name="angle-double-left"></FA> Back To Projects</Link>
           </div>
         </div>*/}
-        
+
         <div className="projectHeaderSection">
           <div className="container">
             <p className="howmightyouTagline">How might you...</p>
             <h1>{title}</h1>
             <div className="chip">{profession}</div>
-            <div className="chip">Difficulty: {diff}</div>
+            <div className="chip">Difficulty: {this.capFirst(diff)}</div>
             <div className="chip">Project Ends: {dueDate}</div>
-          </div> 
+          </div>
         </div>
-               
+
       </div>
     );
   }
@@ -187,8 +193,8 @@ class Project extends Component {
     let result;
     switch (this.state.view) {
 
-      
-      
+
+
       // Summary Page Content
       case 'a':
       let tags = _.map(this.state.project.tags, (elem2, index2) => {
@@ -202,7 +208,7 @@ class Project extends Component {
         return (
           <div key={index2} style={{textAlign:"center"}}>
               <img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + elem2.props.children.toLowerCase() + '.png'}/>
-          </div> 
+          </div>
         )
       });
 
@@ -219,7 +225,7 @@ class Project extends Component {
             {companies}
           </Col>
         </Row>
-        
+
       </div>
       break;
 
@@ -249,7 +255,7 @@ class Project extends Component {
             <h3>Optional Project Scope</h3>
             <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
             <div className="lockedContent">
-              <h3>You must begin the project in order to see the scope</h3>              
+              <h3>You must begin the project in order to see the scope</h3>
             </div>
           </div>
         }
@@ -268,7 +274,7 @@ class Project extends Component {
             <h3>Helpful Resources</h3>
             <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
             <div className="lockedContent">
-              <h3>You must begin the project in order to see the helpful resources</h3>              
+              <h3>You must begin the project in order to see the helpful resources</h3>
             </div>
           </div>
         }
@@ -287,7 +293,7 @@ class Project extends Component {
             <h3>Inspiration</h3>
             <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
             <div className="lockedContent">
-              <h3>You must begin the project in order to see the project's inspiration</h3>              
+              <h3>You must begin the project in order to see the project's inspiration</h3>
             </div>
           </div>
         }
@@ -308,8 +314,8 @@ class Project extends Component {
         {this.getProjectHeader(this.state.project.cover_image_link,this.state.project.name,this.state.project.profession_type,this.state.project.difficulty,this.state.project.due_date)}
 
         <div className="container">
-          <Row className="zeroBottMargin">
-            
+          <Row className="zeroBotMargin">
+
               <Col s={12} m={4} l={2}>
                 <div className="projectPartButtons">
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -327,16 +333,18 @@ class Project extends Component {
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <FlatButton fullWidth={true} style={{marginBottom: 20, textAlign:"right"}} label="Inspiration" onTouchTap={() => this.setState({view: 'e'})} />
                 </MuiThemeProvider>
-          
+
                 <div className="hide-on-med-and-down">{showButton}</div>
                 </div>
               </Col>
-            
+
             <Col s={12} m={8} l={10}>
                 {result}
             </Col>
             <Col s={12} className="hide-on-large-only">
               {showButton}
+              <br/>
+              <br/>
             </Col>
           </Row>
         </div>
