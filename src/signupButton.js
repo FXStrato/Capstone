@@ -1,9 +1,9 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import SignupForm from './signupForm';
 
 /**
@@ -35,7 +35,7 @@ export default class signupButton extends React.Component {
       <span>
         <button className="signUpButton" label="Sign Up" onTouchTap={this.handleOpen}>Create an Account</button>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-          
+
           <Dialog
             actions={actions}
             modal={true}
@@ -46,9 +46,9 @@ export default class signupButton extends React.Component {
               <p>Having an account to Frontier gives you access to all Full Project Specifications and allows you to submit your project to interested companies.</p>
               <SignupForm history={this.props.history}/>
             </div>
-            
-            
-            
+
+
+
           </Dialog>
         </MuiThemeProvider>
       </span>

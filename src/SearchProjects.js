@@ -31,6 +31,7 @@ class SearchProjects extends Component {
   }
 
   componentDidMount = () => {
+    window.scrollTo(0,0);
     if(this.state.onboardDifficulties.length > 0) {
       let temp = this.state.onboardDifficulties[0] || '';
       for(let i = 1; i < this.state.onboardDifficulties.length; i++) {
@@ -229,7 +230,7 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Link key={'project-'+index} to={'/project/' + elem.projectID}>
+          <Link target={!this.props.isAuth ? "_blank" : ""} key={'project-'+index} to={'/project/' + elem.projectID}>
             <Col s={12} m={6} style={{marginBottom: 20}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <Card className="projectCard">
@@ -278,7 +279,7 @@ class SearchProjects extends Component {
   }
 
   viewAll = () => {
-    this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:''})
+    this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:'', onboardDifficulties: [], onboardProfessions: [], onboardCompanies: []});
   }
 
   selectAll = filter => {
@@ -310,8 +311,8 @@ class SearchProjects extends Component {
   }
 
   render() {
-
-    let onboardProfessions = _.map(this.state.allProfessions, (elem,index) => {
+    let temp = this.state.allProfessions || this.state.professions;
+    let onboardProfessions = _.map(temp, (elem,index) => {
       let bg;
       if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
       else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
@@ -349,10 +350,10 @@ class SearchProjects extends Component {
         <div className="darkBlueBg">
           <div className="container">
             <Row>
-              <Col s={12} m={8} className="left-align">
+              <Col s={12} l={8} className="left-align">
                 <p style={{color:"white"}} className="topTagline">Explore brilliant project ideas</p>
               </Col>
-              <Col s={12} m={4}>
+              <Col s={12} l={4}>
                 <form onSubmit={(e) => {this.passSearch(e)}}>
                   <MuiThemeProvider muiTheme={getMuiTheme()}>
                     <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} style={{margin:"0px"}} />
@@ -386,19 +387,13 @@ class SearchProjects extends Component {
             <Row>
               {this.renderProjects()}
             </Row>
-            <Row>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <FlatButton label="View All Projects" fullWidth={true} secondary={true} onTouchTap={this.viewAll}/>
-                  </MuiThemeProvider>
-                </MuiThemeProvider>
-            </Row>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
               <Dialog
                 title={this.state.dialogChoice}
                 modal={false}
                 open={this.state.open}
                 onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
               >
                 {this.state.dialogChoice === 'Difficulty' &&
                   <div>

@@ -1,7 +1,7 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import Redirect from 'react-router-dom';
 import * as firebase from 'firebase';
-import { Row, Col } from 'react-materialize';
 
 
 class signupForm extends Component {

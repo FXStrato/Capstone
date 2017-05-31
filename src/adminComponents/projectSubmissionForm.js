@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -55,6 +56,32 @@ class ProjectSubmissionForm extends Component {
     var supportingCompanies = ["-Kgl0j0pOVUWZdrczJXB","-KglpkMFxCoiFyr_vt_x"];
     var additionalResources = ["Check out this link: https://www.google.com/", "A great resources for memes: https://www.reddit.com/r/AskReddit/"];
     var submissionRequirements = ["Must be mobile responsive", "Please add colors to show off visual design"];
+    var exScope = {
+      "platform":[
+        "Mobile","Desktop","Tablet","Virtual Reality","Augmented Reality / Mixed Reality"
+      ],
+      "personas":[{
+        "name":"Alice",
+        "title": "The Newly Wed",
+        "age": "29",
+        "location":"Downtown Seattle, WA",
+        "employment":"Journalist",
+        "income":"$50,000 / year",
+        "brands":["Lululemon","Nike","BBC","National Geographic"],
+        "biography":"Alice just celebrated her 1-year marriage anniversary to her highschool sweetheart, Eric. The young couple has been eagerly talking about having a child soon, but want to move out of their one bedroom apartment and buy a home before they have a baby. Spunky and excited, Alice has been saving money for the past half-decade just for the down payment for the mortgage. Between her and Eric’s combined income, they make roughly $160,00 a year. They are heavily prioritizing good schools, safe neighborhoods, & affordability."
+      },{
+        "name":"Roger",
+        "title": "The Downsizer",
+        "age": "72",
+        "location":"Suburbs of Boston, MA",
+        "employment":"Retired, with passive income rental properties",
+        "income":"$40,000 / year",
+        "brands":["Lululemon","Nike","BBC","National Geographic"],
+        "biography":"Roger was a long-time top salesmen in the North Eastern region who hung up his hat a couple years ago to retire with his wife, Susan. Now that all their kids have left the house (with their eldest now a top saleswoman in the North Easter region herself) they want to sell the ol’ faithful family house and live closer to the city, where their kids & families are. Roger and Susan have money saved, along with an apartment building that gives them passive income."
+      }],
+      "use_cases":["Find a new home with an intent to purcahse for oneself","Peruse a map to find interesting properties for investors"]
+    };
+
 
     var newProjectKey = firebase.database().ref().child('projects').push().key;
     // Adds project to database
@@ -70,7 +97,8 @@ class ProjectSubmissionForm extends Component {
         supporting_companies: supportingCompanies,
         additional_resources: additionalResources,
         submission_requirements: submissionRequirements,
-        cover_image_link: coverImage
+        cover_image_link: coverImage,
+        // scope:exScope
     });
   }
 

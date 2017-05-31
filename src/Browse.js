@@ -39,8 +39,7 @@ class Browse extends Component {
   }
 
   //Upon mounting component, pick up all available projects
-  //TODO: Change the durations to difficulties
-  componentDidMount = () => {
+  componentWillMount = () => {
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
       let difficulties = [];
@@ -222,7 +221,7 @@ class Browse extends Component {
                             :
                             <FlatButton disabled label={<span style={{marginLeft: 27, padding: "20px"}}>Select Profession</span>} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                           }
-                          
+
                         </Col>
                         <Col s={12} m={6} className="mockholder">
                           <img src={process.env.PUBLIC_URL + '/img/design_mock.png'} alt=""/>
@@ -240,7 +239,7 @@ class Browse extends Component {
                         {onboardCompanies}
                       </Row>
                       <Row>
-                        
+
                         <Col s={6} offset={'s3'}>
                           {this.state.onboardCompanies.length > 0 ?
                           <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d',3)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#F7BF59', marginTop: 10, padding: 12, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
@@ -277,9 +276,9 @@ class Browse extends Component {
                         <CircularProgress size={100} thickness={5}/>
                       </Col>
                     </Row>
-                    
+
                   </Tab>
-                  
+
                 </Tabs>
                 </div>
               </MuiThemeProvider>
@@ -289,7 +288,7 @@ class Browse extends Component {
           </div>
       )
     }
-    else full = <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
+    else full = <SearchProjects history={this.props.history} isAuth={this.props.isAuth} param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
     return (
       <div>
         {full}

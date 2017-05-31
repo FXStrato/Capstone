@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import { Row, Col } from 'react-materialize';
@@ -30,8 +31,8 @@ class signinForm extends Component {
 
   render() {
     return (
-    <span> 
-      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>    
+    <span>
+      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="https://www.codenameone.com/img/blog/google-sign-in.png" alt=""/>
     </span>
     );
   }
