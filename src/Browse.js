@@ -39,8 +39,7 @@ class Browse extends Component {
   }
 
   //Upon mounting component, pick up all available projects
-  //TODO: Change the durations to difficulties
-  componentDidMount = () => {
+  componentWillMount = () => {
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
       let difficulties = [];
@@ -252,7 +251,7 @@ class Browse extends Component {
         </Row>
       )
     }
-    else full = <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
+    else full = <SearchProjects history={this.props.history} isAuth={this.props.isAuth} param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
     return (
       <div className="container">
         {full}

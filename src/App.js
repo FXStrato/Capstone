@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import { Route, Switch, Link, withRouter, Redirect } from 'react-router-dom';
 import {AppBar, Drawer, MenuItem, Toolbar, ToolbarGroup, FlatButton, Popover, Menu} from 'material-ui';
@@ -185,8 +186,6 @@ class App extends Component {
             <Route path="/admin" component={AdminPanel}/>
             <Route path="/about" component={About}/>
             <Route path="/interests" component={Interests}/>
-            {/* <Route path="/projects/:searchTerm" component={SearchProjects}/>
-            <Route path="/projects" component={SearchProjects}/> */}
             <Route path="/browse/:type" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
             <Route path="/browse" render={(props)=><Browse {...props} isAuth={this.state.isAuth} userID={this.state.userID} userEmail={this.state.userEmail} onboard={this.state.onboard}/>}/>
             <Route path="/contact" component={Contact}/>

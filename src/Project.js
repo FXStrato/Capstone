@@ -192,6 +192,10 @@ class Project extends Component {
         }
       </div>
       break;
+      default:
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+        Default switch case
+      </div>
     }
 
     return (

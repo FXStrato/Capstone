@@ -31,6 +31,7 @@ class SearchProjects extends Component {
   }
 
   componentDidMount = () => {
+    window.scrollTo(0,0);
     if(this.state.onboardDifficulties.length > 0) {
       let temp = this.state.onboardDifficulties[0] || '';
       for(let i = 1; i < this.state.onboardDifficulties.length; i++) {
@@ -228,7 +229,7 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Link key={'project-'+index} to={'/project/' + elem.projectID}>
+          <Link target={!this.props.isAuth ? "_blank" : ""} key={'project-'+index} to={'/project/' + elem.projectID}>
             <Col s={12} m={6} style={{marginBottom: 20}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <Card>
@@ -269,7 +270,7 @@ class SearchProjects extends Component {
   }
 
   viewAll = () => {
-    this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:''})
+    this.setState({filters: {}, selectCompany: '', selectProfession: '', selectDifficulty: '', searchTerm:'', onboardDifficulties: [], onboardProfessions: [], onboardCompanies: []});
   }
 
   selectAll = filter => {
@@ -301,8 +302,8 @@ class SearchProjects extends Component {
   }
 
   render() {
-
-    let onboardProfessions = _.map(this.state.allProfessions, (elem,index) => {
+    let temp = this.state.allProfessions || this.state.professions;
+    let onboardProfessions = _.map(temp, (elem,index) => {
       let bg;
       if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
       else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
@@ -381,6 +382,7 @@ class SearchProjects extends Component {
             modal={false}
             open={this.state.open}
             onRequestClose={this.handleClose}
+            autoScrollBodyContent={true}
           >
             {this.state.dialogChoice === 'Difficulty' &&
               <div>
