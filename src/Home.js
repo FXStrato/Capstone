@@ -46,7 +46,7 @@ class Home extends Component {
             </Row>
           </div>
           <div className="createProjectSection">
-            <div className="numberCircle">2</div>
+            <div className="numberCircle" style={{color:"white",border:"white 2px solid"}}>2</div>
             <h2>Create brilliant projects</h2>
             <p>Use your skills and our tools to help craft some of your proudest work.</p>
           </div>

@@ -37,7 +37,7 @@ h2 {
 }
 
 h3 {
-    font-size: 17pt !important;
+    font-size: 16pt !important;
 }
 
 h4 {
@@ -148,8 +148,8 @@ h4 {
         height: 50px;
         padding: 5px;
         background: transparent;
-        border: 2px solid #666;
-        color: #666;
+        border: 2px solid #2F9CAA;
+        color: #2F9CAA;
         text-align: center;
         font-size: 25px;
         display: inline-block;
@@ -160,7 +160,9 @@ h4 {
         text-align: left;
         padding-top: 64px;
 
-        background-color: #ecf0f1;
+        background-color: #2F9CAA;
+        color: white;
+        
     }
         #homePage .heroBanner .content {
             padding: 10vh 0px;
@@ -194,6 +196,9 @@ h4 {
         padding: 15vh 0px;
         background-color: #E9E9E9;
         text-align: center;
+        background: url('https://cdn.pbrd.co/images/cO5w3deYh.png') no-repeat bottom center;
+        background-size: cover;
+        color: white;
     }
 
     #homePage .companyLogosList {
@@ -246,7 +251,7 @@ h4 {
     .selectInterestsSection .interestTile {
         text-align: center;
         font-family: 'Quicksand';
-        background-color: #C4C4C4;
+        background-color: #FFB734;
         padding: 25px 0px;
         width: 200px;
         height: 200px;
@@ -255,17 +260,22 @@ h4 {
         font-size: 15pt;
         margin-bottom: 10px;
         color: white;
-        border: solid 4px #C4C4C4;
+        border: solid 7px #FFB734;
+        transition: all 0.5s ease;
     }
         .selectInterestsSection .interestTile img {
+            padding-top: 5px;
             height: 100px;
         }
+
         .selectInterestsSection .interestTile i {
             font-size: 20pt;
         }
 
         .selectInterestsSection .interestTile:hover {
-            border: solid 4px #F7BF59;
+            padding-top: 18px;
+            padding-bottom: 7px;
+            border: solid 7px #FCDCA2;
         }
 
 /*=============================================
