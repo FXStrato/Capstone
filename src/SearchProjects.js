@@ -230,7 +230,7 @@ class SearchProjects extends Component {
           )
         });
         return (
-          <Link target={!this.props.isAuth ? "_blank" : ""} key={'project-'+index} to={'/project/' + elem.projectID}>
+          <Link target="_blank" key={'project-'+index} to={'/project/' + elem.projectID}>
             <Col s={12} m={6} style={{marginBottom: 20}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <Card className="projectCard">

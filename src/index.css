@@ -44,6 +44,10 @@ h4 {
     font-size: 14pt !important;
 }
 
+.zeroBottMargin {
+    margin-bottom: 0px !important;
+}
+
 /*=============================================
 
              Navigation Bar Style
@@ -61,8 +65,8 @@ h4 {
         position: fixed;
         background-color: white;
         -webkit-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
--moz-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        -moz-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
     }
 
 #nav .topLogo {
@@ -343,20 +347,59 @@ box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
 =============================================*/
 
 #projectPage {
-    margin: 50px 0px;
+    background-color: #ECECEC;
+    font-family: 'Quicksand';
 }
-    #projectPage .oneLiner {
-        font-size: 1.5rem;
+    #projectPage .projectPartButtons {
+        padding: 20px 0px;
     }
 
-    #projectPage .projectTitle {
-        font-size: 3em;
-        margin-top: 0px;
-    }
 
-    #projectPage .oneLiner {
-        font-size: 2rem;
+    #projectPage .projectHeaderSection {
+        padding: 9vh 0px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        -webkit-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        -moz-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
     }
+        #projectPage .projectHeaderSection .howmightyouTagline {
+            font-size: 1.5em;
+            margin: 0px;
+        }
+
+        #projectPage .projectHeaderSection h1 {
+            margin-top: 5px;
+            font-size: 30pt !important;
+        }
+
+        #projectPage .projectHeaderSection .chip {
+            background-color: rgba(255,255,255,0.8);
+            padding: 7px 15px;
+            height: initial;
+            border-radius: 0px;
+            font-size: 11pt;
+            margin-right: 10px;
+        }
+
+    #projectPage .projectContent {
+        background-color: white;
+        padding: 20px;
+        min-height: 100;
+        max-height: 500;
+        overflow-y: auto;
+    }
+        #projectPage .projectContent .lockedContent {
+            background-color: #939393;
+            color: white;
+            text-align: center;
+            padding: 5vh 0px;
+        }
+
+        #projectPage .logoImage {
+            height: 40px;
+            margin-top: 15px;
+        }
 
 /*=============================================
 
