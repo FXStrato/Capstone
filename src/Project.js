@@ -10,6 +10,7 @@ import SignUpForm from './signupForm';
 import SignInForm from './signinForm';
 import _ from 'lodash';
 import Loading from './loading.js';
+import FA from 'react-fontawesome';
 
 /* Page displaying the specific details of each project */
 
@@ -122,7 +123,32 @@ class Project extends Component {
     this.props.history.goBack();
   }
 
+  getProjectHeader = (imgLink,title,profession,diff,dueDate) => {
+    let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
+    return (
+      <div className="" style={{backgroundColor: "#2F9CAA",background:imgCSS, backgroundSize: "cover"}}>
+        {/*<div style={{background:"rgba(0, 0, 0, 0.5)"}}>
+          <div className="container" style={{paddingTop:"10px"}}>
+            <Link to="/browse" style={{color:"white"}}> <FA name="angle-double-left"></FA> Back To Projects</Link>
+          </div>
+        </div>*/}
+        
+        <div className="projectHeaderSection">
+          <div className="container">
+            <p className="howmightyouTagline">How might you...</p>
+            <h1>{title}</h1>
+            <div className="chip">{profession}</div>
+            <div className="chip">Difficulty: {diff}</div>
+            <div className="chip">Project Ends: {dueDate}</div>
+          </div> 
+        </div>
+               
+      </div>
+    );
+  }
+
   render() {
+    console.log(this.state.project);
     const actions = [
       <FlatButton
         label="Cancel"
@@ -160,40 +186,117 @@ class Project extends Component {
 
     let result;
     switch (this.state.view) {
+
+      
+      
+      // Summary Page Content
       case 'a':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
-        <p style={{padding: '10px'}}>{this.state.project.submission_requirements}</p>
+      let tags = _.map(this.state.project.tags, (elem2, index2) => {
+        return (
+          <div key={'project_'+index2} className="chip">{elem2}</div>
+        )
+      });
+
+      let companies = _.map(this.state.project.supporting_companies, (elem2, index2) => {
+        console.log(elem2);
+        return (
+          <div key={index2} style={{textAlign:"center"}}>
+              <img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + elem2.props.children.toLowerCase() + '.png'}/>
+          </div> 
+        )
+      });
+
+      result = <div className="projectContent">
+        <Row>
+          <Col s={12} m={8}>
+            <h3>Project Description</h3>
+            <p style={{padding: '10px'}}>{this.state.project.short_description}</p>
+            <p>Tags</p>
+            {tags}
+          </Col>
+          <Col s={12} m={4} style={{textAlign:"center"}}>
+            <h4>Interested Companies</h4>
+            {companies}
+          </Col>
+        </Row>
+        
       </div>
       break;
+
+      // Requirements Page Content
       case 'b':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
-        <p style={{padding: '10px'}}>{this.state.project.short_description}</p>
+      let reqs = _.map(this.state.project.submission_requirements, (elem, index) => {
+        return (
+          <li>{elem}</li>
+        )
+      });
+      result = <div className="projectContent">
+        <h3>Project Requirements</h3>
+        <p>The following are required to be in your submission in order to be evaluated by employers.</p>
+        <ul>{reqs}</ul>
       </div>
       break;
+
+      // Scope Page Content
       case 'c':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+      result = <div className="projectContent">
         {this.state.isActiveProject ?
           <div style={{padding: '10px'}}>
             <p>{this.state.project.one_liner}</p>
           </div>
         :
-          <p style={{padding: '10px'}}>Begin the project to view the scope</p>
+          <div>
+            <h3>Optional Project Scope</h3>
+            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+            <div className="lockedContent">
+              <h3>You must begin the project in order to see the scope</h3>              
+            </div>
+          </div>
         }
       </div>
       break;
+
+      // Helpful Resources Page Content
       case 'd':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+      result = <div className="projectContent">
         {this.state.isActiveProject ?
           <div style={{padding: '10px'}}>
             <p>{this.state.project.name}</p>
           </div>
         :
-          <p style={{padding: '10px'}}>Begin the project to view additional resources</p>
+          <div>
+            <h3>Helpful Resources</h3>
+            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+            <div className="lockedContent">
+              <h3>You must begin the project in order to see the helpful resources</h3>              
+            </div>
+          </div>
         }
       </div>
       break;
+
+      // Inspiration Page Content
+      case 'e':
+      result = <div className="projectContent">
+        {this.state.isActiveProject ?
+          <div style={{padding: '10px'}}>
+            <p>This is the inpriation page content!!!</p>
+          </div>
+        :
+          <div>
+            <h3>Inspiration</h3>
+            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+            <div className="lockedContent">
+              <h3>You must begin the project in order to see the project's inspiration</h3>              
+            </div>
+          </div>
+        }
+      </div>
+      break;
+
+
       default:
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+      result = <div className="projectContent">
         Default switch case
       </div>
     }
@@ -201,25 +304,35 @@ class Project extends Component {
     return (
       <section id="projectPage">
         {this.state.showLoading ? <Loading /> : ""}
+
+        {this.getProjectHeader(this.state.project.cover_image_link,this.state.project.name,this.state.project.profession_type,this.state.project.difficulty,this.state.project.due_date)}
+
         <div className="container">
-          <div style={{marginBottom: 20}}><Link to="/browse">Go Back to All Projects</Link></div>
-          <Row>
-            <Col s={12} m={4} l={3}>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton fullWidth={true} label="Summary" onTouchTap={() => this.setState({view: 'a'})} />
-              </MuiThemeProvider>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton fullWidth={true} label="Requirements" onTouchTap={() => this.setState({view: 'b'})} />
-              </MuiThemeProvider>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
-              </MuiThemeProvider>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton fullWidth={true} style={{marginBottom: 20}} label="Additional Resources" onTouchTap={() => this.setState({view: 'd'})} />
-              </MuiThemeProvider>
-              <div className="hide-on-med-and-down">{showButton}</div>
-            </Col>
-            <Col s={12} m={8} l={9}>
+          <Row className="zeroBottMargin">
+            
+              <Col s={12} m={4} l={2}>
+                <div className="projectPartButtons">
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Summary" onTouchTap={() => this.setState({view: 'a'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Requirements" onTouchTap={() => this.setState({view: 'b'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Helpful Resources" onTouchTap={() => this.setState({view: 'd'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton fullWidth={true} style={{marginBottom: 20, textAlign:"right"}} label="Inspiration" onTouchTap={() => this.setState({view: 'e'})} />
+                </MuiThemeProvider>
+          
+                <div className="hide-on-med-and-down">{showButton}</div>
+                </div>
+              </Col>
+            
+            <Col s={12} m={8} l={10}>
                 {result}
             </Col>
             <Col s={12} className="hide-on-large-only">
