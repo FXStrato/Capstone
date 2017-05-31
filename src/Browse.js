@@ -274,6 +274,9 @@ class Browse extends Component {
                       <Col className="center-align" offset={'s3'} s={6} style={{marginTop: 40, paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.7)'}}>
                         <h2 style={{fontSize: '1.5rem', color: '#fff'}}>Searching for the best projects for you...</h2>
                         <CircularProgress size={100} thickness={5}/>
+                        <br/>
+                        <br/>
+                        <br/>
                       </Col>
                     </Row>
 

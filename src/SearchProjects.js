@@ -377,7 +377,7 @@ class SearchProjects extends Component {
               </Col>
               <Col s={12} m={12} l={4}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField style={{cursor: 'pointer'}} floatingLabelStyle={{color: '#fff'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
+                  <TextField style={{cursor: 'pointer'}} floatingLabelStyle={{color: '#fff'}} inputStyle={{color: '#fff'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
                 </MuiThemeProvider>
               </Col>
             </Row>
