@@ -54,6 +54,7 @@ h4 {
     z-index: 10000;
     height: 64px;
     position: relative;
+    color: #4F4F4F;
 }
     #nav .navStyle {
         width: 100%;
@@ -95,6 +96,10 @@ box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
 
     #navbar-appbar>button>div>svg {
         fill: black !important;
+    }
+
+    #nav a {
+        color: #4F4F4F;
     }
 
     /*=============================================
@@ -297,6 +302,38 @@ box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
 
         .onboardSection .onboardPart .logoImage {
             width: 100px;
+        }
+
+/*=============================================
+
+             Browse Projects Style
+
+=============================================*/
+
+.browseProjectsSection {
+    font-family: 'Quicksand';
+}
+    .browseProjectsSection .topTagline {
+        font-size: 18pt;
+        margin-top: 25px;
+    }
+
+    .browseProjectsSection .filterOptions {
+        margin: 0 !important;
+    }
+
+    .browseProjectsSection .projectCard {
+        color: #333333;
+        font-family: 'Quicksand';
+    }
+        .browseProjectsSection .projectCard .projectPhoto {
+            height: 200px;
+            background-size: cover;
+        }
+
+        .browseProjectsSection .projectCard p, .browseProjectsSection .projectCard h3 {
+            font-family: 'Quicksand';
+            margin: 0;
         }
 
 /*=============================================

@@ -112,6 +112,7 @@ class App extends Component {
     } else {
       navigation = (
         <div>
+          <Link to="/browse" style={{position: 'absolute', top: 25, left: -350, width: 150}}>EXPLORE PROJECTS</Link>
           <Link to="/dashboard" style={{position: 'absolute', top: 25, left: -150, width: 150}}>YOUR PROJECTS</Link>
           <img style={{cursor: 'pointer'}} onTouchTap={this.handleTouchTap} className="profilePic hoverable" src={this.state.userProfilePicLink}/>
           <Popover

@@ -221,6 +221,7 @@ class SearchProjects extends Component {
       }
       //Each project should display the name, one_liner, posting_company, estimated_duration, and tags
       let result = _.map(projectList, (elem, index) => {
+        console.log(elem);
         let company = this.state.allCompanies[elem.posting_company].name;
         let tags = _.map(elem.tags, (elem2, index2) => {
           return (
@@ -231,16 +232,17 @@ class SearchProjects extends Component {
           <Link key={'project-'+index} to={'/project/' + elem.projectID}>
             <Col s={12} m={6} style={{marginBottom: 20}}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <Card>
-                   <CardHeader
-                     title={elem.name}
-                     subtitle="List of sponsors can go here"
-                     avatar={elem.cover_image_link}
-                   />
-                   <CardText className="truncate">
-                     {elem.one_liner} <br/>
-                     {elem.profession_type} | {this.capFirst(elem.difficulty)} <br/> <br/>
-                     <div className="truncate" style={{paddingRight: 10}}>{tags}</div>
+                  <Card className="projectCard">
+                    <CardMedia style={{backgroundColor:"#2F9CAA"}}>
+                      {this.getBackgroundImg(elem.cover_image_link)}
+                    </CardMedia>
+                   <CardText className="">
+                     <p>How might you...</p>
+                     <h3>{elem.name}</h3>
+                     <p>{elem.profession_type + " | " + this.capFirst(elem.difficulty)}</p>
+                     <p>{elem.one_liner}</p>
+                     <br/>
+                     <div className="" style={{paddingRight: 10}}>{tags}</div>
                    </CardText>
                  </Card>
               </MuiThemeProvider>
@@ -256,6 +258,13 @@ class SearchProjects extends Component {
         return <div></div>;
         // this.setState({renderedProjects: <div>Projects have not loaded</div>})
     }
+  }
+
+  getBackgroundImg = (imgLink) => {
+    let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
+    return (
+      <div className="projectPhoto" style={{backgroundColor: "#2F9CAA",background:imgCSS, backgroundSize: "cover"}}></div>
+    );
   }
 
   //option parameter should be either 'difficulty', 'company', or 'profession'
@@ -336,75 +345,86 @@ class SearchProjects extends Component {
     })
 
     return (
-      <div>
-        <Row className="reduce-bot-margin">
-          <Col s={6} className="center-align">
-            <h1 className="flow-text" style={{fontSize: '2.5rem'}}>Browse Projects</h1>
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <div className="browseProjectsSection">
+        <div className="darkBlueBg">
+          <div className="container">
+            <Row>
+              <Col s={12} m={8} className="left-align">
+                <p style={{color:"white"}} className="topTagline">Explore brilliant project ideas</p>
+              </Col>
+              <Col s={12} m={4}>
+                <form onSubmit={(e) => {this.passSearch(e)}}>
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} style={{margin:"0px"}} />
+                  </MuiThemeProvider>
+                </form>
+              </Col>
+            </Row>
+            <Row className="filterOptions">
+              <Col s={12} m={12} l={4}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Difficulty', e)} className="truncate" value={this.state.selectDifficulty} floatingLabelText="Difficulty"/>
+                </MuiThemeProvider>
+              </Col>
+              <Col s={12} m={12} l={4}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Profession', e)} className="truncate" value={this.state.selectProfession} floatingLabelText="Professions"/>
+                </MuiThemeProvider>
+              </Col>
+              <Col s={12} m={12} l={4}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
+                </MuiThemeProvider>
+              </Col>
+            </Row>
+          </div>
+        </div>
+        
+        <div style={{backgroundColor:"#ECECEC", paddingTop:20}}>
+
+          <div className="container">
+            <Row>
+              {this.renderProjects()}
+            </Row>
+            <Row>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton label="View All Projects" fullWidth={true} secondary={true} onTouchTap={this.viewAll}/>
-              </MuiThemeProvider>
-            </MuiThemeProvider>
-          </Col>
-          <Col s={6}>
-            <form onSubmit={(e) => {this.passSearch(e)}}>
-              <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} />
-              </MuiThemeProvider>
-            </form>
-          </Col>
-        </Row>
-        <Row style={{marginTop: -10}}>
-          <Col s={12} m={12} l={4}>
+                  <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <FlatButton label="View All Projects" fullWidth={true} secondary={true} onTouchTap={this.viewAll}/>
+                  </MuiThemeProvider>
+                </MuiThemeProvider>
+            </Row>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Difficulty', e)} className="truncate" value={this.state.selectDifficulty} floatingLabelText="Difficulty"/>
+              <Dialog
+                title={this.state.dialogChoice}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+              >
+                {this.state.dialogChoice === 'Difficulty' &&
+                  <div>
+                    <FlatButton label="Select All" onTouchTap={() => this.selectAll('difficulty')}/>
+                    <FlatButton label="Clear All" onTouchTap={() => this.removeAll('difficulty')}/>
+                    {onboardDifficulties}
+                  </div>
+                }
+                {this.state.dialogChoice === 'Profession' &&
+                <div>
+                  <FlatButton label="Select All" onTouchTap={() => this.selectAll('profession')}/>
+                  <FlatButton label="Clear All" onTouchTap={() => this.removeAll('profession')}/>
+                  {onboardProfessions}
+                </div>
+                }
+                {this.state.dialogChoice === 'Company' &&
+                <div>
+                  <FlatButton label="Select All" onTouchTap={() => this.selectAll('company')}/>
+                  <FlatButton label="Clear All" onTouchTap={() => this.removeAll('company')}/>
+                  {onboardCompanies}
+                </div>
+                }
+              </Dialog>
             </MuiThemeProvider>
-          </Col>
-          <Col s={12} m={12} l={4}>
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Profession', e)} className="truncate" value={this.state.selectProfession} floatingLabelText="Professions"/>
-            </MuiThemeProvider>
-          </Col>
-          <Col s={12} m={12} l={4}>
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-              <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
-            </MuiThemeProvider>
-          </Col>
-          <Col s={12}><hr/></Col>
-        </Row>
-        <Row>
-          {this.renderProjects()}
-        </Row>
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <Dialog
-            title={this.state.dialogChoice}
-            modal={false}
-            open={this.state.open}
-            onRequestClose={this.handleClose}
-          >
-            {this.state.dialogChoice === 'Difficulty' &&
-              <div>
-                <FlatButton label="Select All" onTouchTap={() => this.selectAll('difficulty')}/>
-                <FlatButton label="Clear All" onTouchTap={() => this.removeAll('difficulty')}/>
-                {onboardDifficulties}
-              </div>
-            }
-            {this.state.dialogChoice === 'Profession' &&
-            <div>
-              <FlatButton label="Select All" onTouchTap={() => this.selectAll('profession')}/>
-              <FlatButton label="Clear All" onTouchTap={() => this.removeAll('profession')}/>
-              {onboardProfessions}
-            </div>
-            }
-            {this.state.dialogChoice === 'Company' &&
-            <div>
-              <FlatButton label="Select All" onTouchTap={() => this.selectAll('company')}/>
-              <FlatButton label="Clear All" onTouchTap={() => this.removeAll('company')}/>
-              {onboardCompanies}
-            </div>
-            }
-          </Dialog>
-        </MuiThemeProvider>
+          </div>
+        </div>
       </div>
     );
   }
