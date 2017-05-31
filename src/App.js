@@ -44,7 +44,7 @@ class App extends Component {
     let path = location.pathname;
     if(path === link) {
       if(location.pathname !== '/' && link === '/') return {color: '#000'};
-      return {backgroundColor: 'pink', color: '#000'};
+      return {backgroundColor: '#80DEEA', color: '#000'};
     } else {
       return {color: '#000'};
     }
@@ -97,11 +97,11 @@ class App extends Component {
   }
 
   render() {
-    let links = [{link: '/', body: 'Home'}, {link: '/interests', body: 'Interests'}, {link: '/browse', body: 'Browse Projects'}, {link: '/about', body: 'About'},];
+    let links = [{link: '/', body: 'Home'}, {link: '/dashboard', body: 'Your Projects'}, {link: '/browse', body: 'Browse Projects'}];
     let drawerlinks = _.map(links, (elem, index) => {
       let activeStyle = this.handleActiveLink(elem.link);
       return (
-        <Link to={elem.link} key={'drawerlink-' + index}><MenuItem style={activeStyle}>{elem.body}</MenuItem></Link>
+        <Link onTouchTap={() => this.setState({open: false})} to={elem.link} key={'drawerlink-' + index}><MenuItem style={activeStyle}>{elem.body}</MenuItem></Link>
       )
     });
 
