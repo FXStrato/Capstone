@@ -314,7 +314,7 @@ class SearchProjects extends Component {
     let temp = this.state.allProfessions || this.state.professions;
     let onboardProfessions = _.map(temp, (elem,index) => {
       let bg;
-      if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
+      if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#F7BF59 solid 2px', backgroundColor: '#fff'};
       else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
       return (
         <MuiThemeProvider key={'onboardProfessions-'+index} muiTheme={getMuiTheme()}>
@@ -325,7 +325,7 @@ class SearchProjects extends Component {
 
     let onboardCompanies = _.map(this.state.allCompanies, (elem, index) => {
       let bg;
-      if(_.indexOf(this.state.onboardCompanies, index) !== -1) bg = {height: 80, marginTop: 15, border: '#FF7043 solid 2px', backgroundColor: '#fff'}
+      if(_.indexOf(this.state.onboardCompanies, index) !== -1) bg = {height: 80, marginTop: 15, border: '#F7BF59 solid 2px', backgroundColor: '#fff'}
       else bg = {height: 80, marginTop: 15, backgroundColor: '#fff'}
       return (
         <Col key={'onboardCompanies-'+elem.name} className="center-align" s={12} m={3}>
@@ -336,7 +336,7 @@ class SearchProjects extends Component {
 
     let onboardDifficulties = _.map(['beginner', 'moderate', 'advanced', 'expert'], (elem, index) => {
       let bg;
-      if(_.indexOf(this.state.onboardDifficulties, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
+      if(_.indexOf(this.state.onboardDifficulties, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#F7BF59 solid 2px', backgroundColor: '#fff'};
       else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
       return (
         <MuiThemeProvider key={'onboardDifficulties-'+index} muiTheme={getMuiTheme()}>
@@ -352,9 +352,7 @@ class SearchProjects extends Component {
             <Row>
               <Col s={12} l={8} className="left-align">
                 <p style={{color:"white"}} className="topTagline">Explore brilliant project ideas</p>
-                <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <FlatButton label="View All Projects" style={{color: '#fff'}} onTouchTap={this.viewAll}/>
-                </MuiThemeProvider>
+                
               </Col>
               <Col s={12} l={4}>
                 <form onSubmit={(e) => {this.passSearch(e)}}>
@@ -390,6 +388,11 @@ class SearchProjects extends Component {
             <Row>
               {this.renderProjects()}
             </Row>
+            <div style={{textAlign:"center"}}>
+              <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <FlatButton label="View All Projects" onTouchTap={this.viewAll}/>
+              </MuiThemeProvider>
+            </div>
             <MuiThemeProvider muiTheme={getMuiTheme()}>
               <Dialog
                 title={this.state.dialogChoice}

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {Row, Col} from 'react-materialize';
 import { withRouter, Link } from 'react-router-dom';
-import { RaisedButton, Dialog, FlatButton, TextField } from 'material-ui';
+import { TextField, RaisedButton, Checkbox, Dialog, FlatButton, Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
@@ -245,16 +245,67 @@ class Project extends Component {
 
       // Scope Page Content
       case 'c':
+      let targetProject = this.state.project;
+      let personas = _.map(targetProject.scope.personas, (elem, index) => {
+        return (
+          <Col s={12} m={6}>
+            <h3>{elem.name}</h3>
+            <h4>{elem.title}</h4>
+            <ul>
+              <li>Age: {elem.age}</li>
+              <li>Employment: {elem.employment}</li>
+              <li>Income: {elem.income}</li>
+              <li>Location: {elem.location}</li>
+            </ul>
+            <p>{elem.biography}</p>
+          </Col>
+        )
+      });
+
+      let usecases = _.map(targetProject.scope.use_cases, (elem, index) => {
+        return (
+          <li key={index}>{elem}</li>
+        )
+      });
+
+      let platforms = _.map(targetProject.scope.platform, (elem, index) => {
+        return (
+          <li key={index}>{elem}</li>
+        )
+      });
+
       result = <div className="projectContent">
+        <h3>Optional Project Scope</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
         {this.state.isActiveProject ?
-          <div style={{padding: '10px'}}>
-            <p>{this.state.project.one_liner}</p>
+          
+          <div>
+            <Row>
+              <Col s={12} m={8}>
+                <h3>User Personas</h3>
+                <p>Here are example user personas of people who would use this product.</p>
+                <Row>
+                  {personas}
+                </Row>
+              </Col>
+              <Col s={12} m={4}>
+                <h3>Use Cases</h3>
+                  <ul>
+                    {usecases}
+                  </ul>
+                  <h3>Platform Considerations</h3>
+                  <p>Here are platform that you could consdier designing this experience for:</p>
+                  <ul>
+                    {platforms}
+                  </ul>
+              </Col>
+            </Row>
           </div>
         :
           <div>
-            <h3>Optional Project Scope</h3>
-            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+            
             <div className="lockedContent">
+              <h2> <FA name="lock"></FA> </h2>
               <h3>You must begin the project in order to see the scope</h3>
             </div>
           </div>
@@ -264,18 +315,23 @@ class Project extends Component {
 
       // Helpful Resources Page Content
       case 'd':
+      let resources = _.map(this.state.project.additional_resources, (elem, index) => {
+        return (
+          <div key={index}>{elem}</div>
+        )
+      });
+
       result = <div className="projectContent">
+        <h3>Helpful Resources</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
         {this.state.isActiveProject ?
-          <div style={{padding: '10px'}}>
-            <p>{this.state.project.name}</p>
-          </div>
+          <ul>
+            {resources}
+          </ul>
         :
-          <div>
-            <h3>Helpful Resources</h3>
-            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
-            <div className="lockedContent">
-              <h3>You must begin the project in order to see the helpful resources</h3>
-            </div>
+          <div className="lockedContent">
+            <h2> <FA name="lock"></FA> </h2>
+            <h3>You must begin the project in order to see the helpful resources</h3>
           </div>
         }
       </div>
@@ -284,17 +340,16 @@ class Project extends Component {
       // Inspiration Page Content
       case 'e':
       result = <div className="projectContent">
+        <h3>Inspiration</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
         {this.state.isActiveProject ?
           <div style={{padding: '10px'}}>
-            <p>This is the inpriation page content!!!</p>
+            <p>Inspirational content coming soon!</p>
           </div>
-        :
-          <div>
-            <h3>Inspiration</h3>
-            <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
-            <div className="lockedContent">
-              <h3>You must begin the project in order to see the project's inspiration</h3>
-            </div>
+        :      
+          <div className="lockedContent">
+            <h2> <FA name="lock"></FA> </h2>
+            <h3>You must begin the project in order to see the project's inspiration</h3>
           </div>
         }
       </div>
@@ -328,7 +383,7 @@ class Project extends Component {
                   <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
                 </MuiThemeProvider>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Helpful Resources" onTouchTap={() => this.setState({view: 'd'})} />
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Resources" onTouchTap={() => this.setState({view: 'd'})} />
                 </MuiThemeProvider>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
                   <FlatButton fullWidth={true} style={{marginBottom: 20, textAlign:"right"}} label="Inspiration" onTouchTap={() => this.setState({view: 'e'})} />

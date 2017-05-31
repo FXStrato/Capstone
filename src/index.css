@@ -384,12 +384,13 @@ h4 {
         }
 
         #projectPage .projectHeaderSection .chip {
-            background-color: rgba(255,255,255,0.8);
+            background-color: rgba(255,255,255,0.9);
             padding: 7px 15px;
             height: initial;
             border-radius: 0px;
             font-size: 11pt;
             margin-right: 10px;
+            font-weight: bold;
         }
 
     #projectPage .projectContent {
@@ -404,6 +405,13 @@ h4 {
             color: white;
             text-align: center;
             padding: 5vh 0px;
+            padding-top: 3vh;
+        }
+
+        #projectPage .projectContent li {
+            list-style-type: disc;
+            margin-left: 20px;
+            font-weight: bold;
         }
 
         #projectPage .logoImage {
@@ -413,9 +421,32 @@ h4 {
 
 /*=============================================
 
+             Dashboard Screen Style
+
+=============================================*/
+
+.dashboardSection .projectCard {
+        color: #333333;
+        font-family: 'Quicksand';
+    }
+        .dashboardSection .projectCard .projectPhoto {
+            height: 200px;
+            background-size: cover;
+        }
+
+        .dashboardSection .projectCard p, .browseProjectsSection .projectCard h3 {
+            font-family: 'Quicksand';
+            margin: 0;
+        }
+
+
+/*=============================================
+
              Loading Screen Style
 
 =============================================*/
+
+
 
 .loadingScreen {
 	background: rgba(0,0,0,0.5);

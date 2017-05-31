@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import moment from 'moment';
-import { Dialog, FlatButton } from 'material-ui';
+import { TextField, RaisedButton, Checkbox, Dialog, FlatButton, Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Interests from './Interests';
@@ -86,6 +86,8 @@ class Dashboard extends React.PureComponent {
     })
   }
 
+  
+
   // Renders all active projects
   renderActiveProjects = () => {
     // If the user is not authenticated
@@ -106,7 +108,24 @@ class Dashboard extends React.PureComponent {
           timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
         }
         return (
-          <li key={'activeProject-'+index}><Link to={'/project/' + projectID}>{targetProject.name}</Link> - {timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></li>
+           <Col s={12} m={4}>
+            <p>{timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></p>
+            <Link target="_blank" key={'project-'+index} to={'/project/' + projectID}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <Card className="projectCard">
+                      <CardMedia style={{backgroundColor:"#2F9CAA"}}>
+                        {this.getBackgroundImg(targetProject.cover_image_link)}
+                      </CardMedia>
+                    <CardText className="">
+                      <p>How might you...</p>
+                      <h3>{targetProject.name}</h3>
+                      <p>{targetProject.profession_type + " | " + targetProject.difficulty}</p>
+                      <p>{targetProject.one_liner}</p>
+                    </CardText>
+                  </Card>
+                </MuiThemeProvider>
+            </Link>
+          </Col>
         )
       });
 
@@ -120,11 +139,36 @@ class Dashboard extends React.PureComponent {
     }
   }
 
+  getBackgroundImg = (imgLink) => {
+    let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
+    return (
+      <div className="projectPhoto" style={{backgroundColor: "#2F9CAA",background:imgCSS, backgroundSize: "cover"}}></div>
+    );
+  }
+
   renderCompletedProjects = () => {
     if(this.state.userID) {
       let result = _.map(this.state.completedProjects, (elem, index) => {
+        let targetProject = this.state.allProjects[index];
         return (
-          <li key={'completedProject-'+index}><Link to={'/project/' + index}>{this.state.allProjects[index].name}</Link></li>
+          <Col s={12} m={4}>
+            <p style={{color: '#4CAF50'}}>Status: Project is being reviewed by employers</p>
+            <Link target="_blank" key={'project-'+index} to={'/project/' + targetProject.projectID}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <Card className="projectCard">
+                      <CardMedia style={{backgroundColor:"#2F9CAA"}}>
+                        {this.getBackgroundImg(targetProject.cover_image_link)}
+                      </CardMedia>
+                    <CardText className="">
+                      <p>How might you...</p>
+                      <h3>{targetProject.name}</h3>
+                      <p>{targetProject.profession_type + " | " + targetProject.difficulty}</p>
+                      <p>{targetProject.one_liner}</p>
+                    </CardText>
+                  </Card>
+                </MuiThemeProvider>
+            </Link>
+          </Col>
         )
       });
       if(result.length > 0) return result;
@@ -149,21 +193,21 @@ class Dashboard extends React.PureComponent {
       />,
     ];
     return (
-      <div className="container">
+      <div className="container dashboardSection">
         <Row>
           <Col s={12}>
             <h2 style={{fontSize: '1.5rem'}}>Active Projects</h2>
-            <ul>
+            <Row> 
               {this.renderActiveProjects()}
-            </ul>
+            </Row>
           </Col>
         </Row>
         <Row>
           <Col s={12}>
             <h2 style={{fontSize: '1.5rem'}}>Completed Projects</h2>
-            <ul>
+            <Row>
               {this.renderCompletedProjects()}
-            </ul>
+            </Row>
           </Col>
         </Row>
         <h2 style={{fontSize: '1.5rem'}}>Browse new projects</h2>
