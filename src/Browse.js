@@ -78,7 +78,7 @@ class Browse extends Component {
       }
       setTimeout(() => {
         this.setState({finished: true});
-      }, 500);
+      }, 1000);
     }
 
     if(_.indexOf(this.state.completedSteps, step) !== -1) this.handlePrev();
@@ -173,10 +173,13 @@ class Browse extends Component {
         </MuiThemeProvider>
       )
     })
-    return (
-      <div style={{backgroundColor:"#ECECEC"}}>
-        {!this.state.finished ?
-          <div className="onboardSection">
+
+    let full = this.state.finished;
+    if(full === undefined) {
+      full = <div></div>
+    } else if(!full) {
+      full = (
+        <div className="onboardSection">
           <Row className="darkBlueBg">
             <div>
             <div className="container">
@@ -284,11 +287,12 @@ class Browse extends Component {
             </div>
           </Row>
           </div>
-        :
-        <div className="container">
-          <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
-        </div>
-        }
+      )
+    }
+    else full = <div className="container"><SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/></div>
+    return (
+      <div>
+        {full}
       </div>
     )
   }

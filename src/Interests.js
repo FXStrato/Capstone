@@ -14,7 +14,7 @@ class Interests extends Component {
           <Col s={12} m={12} l={4}>
             <Link to="/browse/software">
               <div className="interestTile">
-                <img src={process.env.PUBLIC_URL + '/img/SoftwareGuy.png'}/><br/>
+                <img src={process.env.PUBLIC_URL + '/img/SoftwareGuy.png'} alt="Software Guy"/><br/>
                 Software
               </div>
             </Link>
@@ -23,7 +23,7 @@ class Interests extends Component {
           <Col s={12} m={12} l={4}>
             <Link to="/browse/design">
               <div className="interestTile">
-                <img src={process.env.PUBLIC_URL + '/img/DesignGuy.png'}/><br/>
+                <img src={process.env.PUBLIC_URL + '/img/DesignGuy.png'} alt="Design Guy"/><br/>
                 <span>Design</span>
               </div>
             </Link>
@@ -32,7 +32,7 @@ class Interests extends Component {
           <Col s={12} m={12} l={4}>
             <Link to="/browse/pm">
               <div className="interestTile">
-                <img src={process.env.PUBLIC_URL + '/img/pmGuy.png'}/><br/>
+                <img src={process.env.PUBLIC_URL + '/img/pmGuy.png'} alt="PM Guy"/><br/>
                 <span>PM</span>
               </div>
             </Link>

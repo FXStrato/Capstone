@@ -103,7 +103,9 @@ class Project extends Component {
         activeProjects: actProjects
       }).then(() => {
         // After project is uploaded, sends user to the full specification of the page
-        this.props.history.push('/projectfull/' + this.state.projID);
+        //this.props.history.push('/projectfull/' + this.state.projID)
+        this.setState({showLoading: false, open: false});
+        location.reload();
       });
     });
   }
@@ -144,7 +146,7 @@ class Project extends Component {
     let showButton;
     if(this.state.isActiveProject) {
       showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <RaisedButton primary={true} fullWidth={true} onTouchTap={() => {this.props.history.push('/projectfull/' + this.state.projID);}} label="View Project Full Spec" />
+        <RaisedButton primary={true} fullWidth={true} onTouchTap={() => this.props.history.push('/submit/' + this.state.projID)} label="Submit Project" />
       </MuiThemeProvider>;
     } else if(this.state.isCompletedProject) {
       showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -159,23 +161,35 @@ class Project extends Component {
     let result;
     switch (this.state.view) {
       case 'a':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
         <p style={{padding: '10px'}}>{this.state.project.submission_requirements}</p>
       </div>
       break;
       case 'b':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
         <p style={{padding: '10px'}}>{this.state.project.short_description}</p>
       </div>
       break;
       case 'c':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
-        <p style={{padding: '10px'}}>{this.state.project.one_liner}</p>
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+        {this.state.isActiveProject ?
+          <div style={{padding: '10px'}}>
+            <p>{this.state.project.one_liner}</p>
+          </div>
+        :
+          <p style={{padding: '10px'}}>Begin the project to view the scope</p>
+        }
       </div>
       break;
       case 'd':
-      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100}}>
-        <p style={{padding: '10px'}}>{this.state.project.posting_company}</p>
+      result = <div style={{backgroundColor: 'rgba(0,0,0,0.2)', minHeight: 100, maxHeight: 500, overflowY: 'auto'}}>
+        {this.state.isActiveProject ?
+          <div style={{padding: '10px'}}>
+            <p>{this.state.project.name}</p>
+          </div>
+        :
+          <p style={{padding: '10px'}}>Begin the project to view additional resources</p>
+        }
       </div>
       break;
     }
@@ -186,7 +200,7 @@ class Project extends Component {
         <div className="container">
           <div style={{marginBottom: 20}}><Link to="/browse">Go Back to All Projects</Link></div>
           <Row>
-            <Col s={12} m={4} l={2}>
+            <Col s={12} m={4} l={3}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <FlatButton fullWidth={true} label="Summary" onTouchTap={() => this.setState({view: 'a'})} />
               </MuiThemeProvider>
@@ -197,54 +211,17 @@ class Project extends Component {
                 <FlatButton fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
               </MuiThemeProvider>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <FlatButton fullWidth={true} label="Additional Resources" onTouchTap={() => this.setState({view: 'd'})} />
+                <FlatButton fullWidth={true} style={{marginBottom: 20}} label="Additional Resources" onTouchTap={() => this.setState({view: 'd'})} />
               </MuiThemeProvider>
+              <div className="hide-on-med-and-down">{showButton}</div>
             </Col>
-            <Col s={12} m={8} l={10}>
+            <Col s={12} m={8} l={9}>
                 {result}
             </Col>
+            <Col s={12} className="hide-on-large-only">
+              {showButton}
+            </Col>
           </Row>
-          {Object.keys(this.state.project).length > 0 ?
-            <Row>
-              <Col s={12} m={12} l={8}>
-                <h2 className="projectTitle">{this.state.project.name}</h2>
-                <h4 className="oneLiner">
-                  {this.state.project.one_liner}
-                </h4>
-                <Row>
-                  <Col s={4}>
-                    <p>{this.state.project.profession_type}</p>
-                  </Col>
-                  <Col s={4}>
-                    <p>Posted: {this.state.project.posting_date}</p>
-                  </Col>
-                  <Col s={4}>
-                    <p>Submission Due: {this.state.project.due_date}</p>
-                  </Col>
-                </Row>
-                <p>{this.state.project.short_description}</p>
-                <br/>
-                <div>
-                  Tags:
-                  {this.state.project.tags}
-                </div>
-              </Col>
-              <Col s={12} m={12} l={4}>
-                <div className="card">
-                  <div className="card-image">
-                    <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
-                  </div>
-                  <div className="card-content">
-                    <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
-                    <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
-                    {showButton}
-                  </div>
-                </div>
-              </Col>
-            </Row>
-            :
-            <div>That project doesn't exist. <a href="" onTouchTap={this.handleReturn}>Click here to return to your previous location.</a></div>
-          }
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
@@ -277,3 +254,47 @@ class Project extends Component {
 
 
 export default withRouter(Project);
+
+/*
+{Object.keys(this.state.project).length > 0 ?
+  <Row>
+    <Col s={12} m={12} l={8}>
+      <h2 className="projectTitle">{this.state.project.name}</h2>
+      <h4 className="oneLiner">
+        {this.state.project.one_liner}
+      </h4>
+      <Row>
+        <Col s={4}>
+          <p>{this.state.project.profession_type}</p>
+        </Col>
+        <Col s={4}>
+          <p>Posted: {this.state.project.posting_date}</p>
+        </Col>
+        <Col s={4}>
+          <p>Submission Due: {this.state.project.due_date}</p>
+        </Col>
+      </Row>
+      <p>{this.state.project.short_description}</p>
+      <br/>
+      <div>
+        Tags:
+        {this.state.project.tags}
+      </div>
+    </Col>
+    <Col s={12} m={12} l={4}>
+      <div className="card">
+        <div className="card-image">
+          <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
+        </div>
+        <div className="card-content">
+          <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
+          <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
+          {showButton}
+        </div>
+      </div>
+    </Col>
+  </Row>
+  :
+  <div>That project doesn't exist. <a href="" onTouchTap={this.handleReturn}>Click here to return to your previous location.</a></div>
+}
+*/

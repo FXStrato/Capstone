@@ -35,6 +35,7 @@ class Dashboard extends React.PureComponent {
   }
 
   componentDidMount = () => {
+    window.scrollTo(0,0);
     //Pull all projects from firebase, and store in state.
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
@@ -105,7 +106,7 @@ class Dashboard extends React.PureComponent {
           timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
         }
         return (
-          <li key={'activeProject-'+index}><Link to={'/projectfull/' + projectID}>{targetProject.name}</Link> - {timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></li>
+          <li key={'activeProject-'+index}><Link to={'/project/' + projectID}>{targetProject.name}</Link> - {timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></li>
         )
       });
 
