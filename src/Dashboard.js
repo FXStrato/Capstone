@@ -86,7 +86,7 @@ class Dashboard extends React.PureComponent {
     })
   }
 
-  
+
 
   // Renders all active projects
   renderActiveProjects = () => {
@@ -108,7 +108,7 @@ class Dashboard extends React.PureComponent {
           timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
         }
         return (
-           <Col s={12} m={4}>
+           <Col key={'activeProjects-'+index} s={12} m={4}>
             <p>{timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></p>
             <Link target="_blank" key={'project-'+index} to={'/project/' + projectID}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -151,7 +151,7 @@ class Dashboard extends React.PureComponent {
       let result = _.map(this.state.completedProjects, (elem, index) => {
         let targetProject = this.state.allProjects[index];
         return (
-          <Col s={12} m={4}>
+          <Col key={'completedProjects-'+index} s={12} m={4}>
             <p style={{color: '#4CAF50'}}>Status: Project is being reviewed by employers</p>
             <Link target="_blank" key={'project-'+index} to={'/project/' + targetProject.projectID}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -197,7 +197,7 @@ class Dashboard extends React.PureComponent {
         <Row>
           <Col s={12}>
             <h2 style={{fontSize: '1.5rem'}}>Active Projects</h2>
-            <Row> 
+            <Row>
               {this.renderActiveProjects()}
             </Row>
           </Col>

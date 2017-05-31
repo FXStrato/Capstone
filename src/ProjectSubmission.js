@@ -220,8 +220,9 @@ class ProjectSubmission extends Component {
               actions={actions}
               open={this.state.open}
               onRequestClose={() => {this.handleClose()}}
+              autoScrollBodyContent={true}
             >
-            lorem ipsum about the intellectual Property Rights
+              All submissions through Frontier will be subject to review before being submitted to companies. By submitting, you agree that Frontier will not suffer legal repercussions for 3rd party relinquishment of data. So long as a project remains, submissions for that project will be stored until the project is removed. 
             </Dialog>
           </MuiThemeProvider>
           <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>

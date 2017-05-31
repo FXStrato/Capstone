@@ -233,7 +233,7 @@ class Project extends Component {
       case 'b':
       let reqs = _.map(this.state.project.submission_requirements, (elem, index) => {
         return (
-          <li>{elem}</li>
+          <li key={'subrequirements-'+index}>{elem}</li>
         )
       });
       result = <div className="projectContent">
@@ -248,7 +248,7 @@ class Project extends Component {
       let targetProject = this.state.project;
       let personas = _.map(targetProject.scope.personas, (elem, index) => {
         return (
-          <Col s={12} m={6}>
+          <Col s={12} m={6} key={'personas-'+index}>
             <h3>{elem.name}</h3>
             <h4>{elem.title}</h4>
             <ul>
@@ -278,7 +278,7 @@ class Project extends Component {
         <h3>Optional Project Scope</h3>
         <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
         {this.state.isActiveProject ?
-          
+
           <div>
             <Row>
               <Col s={12} m={8}>
@@ -303,7 +303,7 @@ class Project extends Component {
           </div>
         :
           <div>
-            
+
             <div className="lockedContent">
               <h2> <FA name="lock"></FA> </h2>
               <h3>You must begin the project in order to see the scope</h3>
@@ -346,7 +346,7 @@ class Project extends Component {
           <div style={{padding: '10px'}}>
             <p>Inspirational content coming soon!</p>
           </div>
-        :      
+        :
           <div className="lockedContent">
             <h2> <FA name="lock"></FA> </h2>
             <h3>You must begin the project in order to see the project's inspiration</h3>

@@ -262,7 +262,7 @@ class Browse extends Component {
                         {this.state.onboardDifficulties.length > 0 ?
                           <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e',4)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#F7BF59', marginTop: 10, padding: 12, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                           :
-                          <FlatButton disabled label={<span style={{marginLeft: 27}}>Select Companies</span>} onTouchTap={() => this.handleChange('c',2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                          <FlatButton disabled label={<span style={{marginLeft: 27}}>Select Difficulty</span>} onTouchTap={() => this.handleChange('c',2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
                         }
                         <FlatButton style={{marginBottom: 10, marginTop: 10, backgroundColor: 'transparent'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('b', 1)}/>
                       </Col>
