@@ -80,6 +80,7 @@ class Browse extends Component {
         this.setState({finished: true});
       }, 500);
     }
+
     if(_.indexOf(this.state.completedSteps, step) !== -1) this.handlePrev();
     else this.handleNext();
     this.setState({value: value});
@@ -142,30 +143,30 @@ class Browse extends Component {
   render = () => {
     let onboardProfessions = _.map(this.state.professions, (elem,index) => {
       let bg;
-      if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
-      else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
+      if(_.indexOf(this.state.onboardProfessions, elem) !== -1) bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000', padding: "12px", fontSize:"20pt", lineHeight:"20pt", height:"inherit", textAlign:"left", border:"3px #F7BF59 solid"};
+      else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000', padding: "12px", fontSize:"20pt", lineHeight:"20pt", height:"inherit", textAlign:"left", border:"3px white solid", borderBottom:"3px #D4D4D4 solid"};
       return (
         <MuiThemeProvider key={'onboardProfessions-'+index} muiTheme={getMuiTheme()}>
-          <FlatButton onTouchTap={() => this.handleOnboardProfessions(elem)} label={elem} fullWidth={true} style={bg}/>
+          <FlatButton className="browseOptionButton" onTouchTap={() => this.handleOnboardProfessions(elem)} label={elem} fullWidth={true} style={bg}/>
         </MuiThemeProvider>
       )
     })
 
     let onboardCompanies = _.map(this.state.allCompanies, (elem, index) => {
       let bg;
-      if(_.indexOf(this.state.onboardCompanies, index) !== -1) bg = {height: 80, marginTop: 15, border: '#FF7043 solid 2px', backgroundColor: '#fff'}
-      else bg = {height: 80, marginTop: 15, backgroundColor: '#fff'}
+      if(_.indexOf(this.state.onboardCompanies, index) !== -1) bg = {height: 80, marginTop: 15, border: '#F7BF59 solid 3px', backgroundColor: '#fff'}
+      else bg = {height: 80, marginTop: 15, backgroundColor: '#fff', border: 'white solid 3px'};
       return (
         <Col key={'onboardCompanies-'+elem.name} className="center-align" s={12} m={3}>
-          <FlatButton fullWidth={true} onTouchTap={() => this.handleOnboardCompanies(index)} style={bg} label={<img src={process.env.PUBLIC_URL + '/img/' + elem.name.toLowerCase() + '.png'} style={{maxHeight: 50, maxWidth: '85%', paddingTop: 10}} alt={elem.name + ' Banner'}/>}/>
+          <FlatButton fullWidth={true} onTouchTap={() => this.handleOnboardCompanies(index)} style={bg} label={<img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + elem.name.toLowerCase() + '.png'} style={{maxHeight: 50, maxWidth: '85%', paddingTop: 10}} alt={elem.name + ' Banner'}/>}/>
         </Col>
       )
     })
 
     let onboardDifficulties = _.map(['beginner', 'moderate', 'advanced', 'expert'], (elem, index) => {
       let bg;
-      if(_.indexOf(this.state.onboardDifficulties, elem) !== -1) bg = {display: 'block', marginTop: 10, border: '#FF7043 solid 2px', backgroundColor: '#fff'};
-      else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000'};
+      if(_.indexOf(this.state.onboardDifficulties, elem) !== -1) bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000', padding: "12px", fontSize:"20pt", lineHeight:"20pt", height:"inherit", textAlign:"left", border:"3px #F7BF59 solid"};
+      else bg = {display: 'block', marginTop: 10, backgroundColor: '#fff', color: '#000', padding: "12px", fontSize:"20pt", lineHeight:"20pt", height:"inherit", textAlign:"left", border:"3px white solid", borderBottom:"3px #D4D4D4 solid"};
       return (
         <MuiThemeProvider key={'onboardDifficulties-'+index} muiTheme={getMuiTheme()}>
           <FlatButton onTouchTap={() => this.handleOnboardDifficulties(elem)} label={elem} fullWidth={true} style={bg}/>
@@ -173,12 +174,15 @@ class Browse extends Component {
       )
     })
     return (
-      <div className="container">
+      <div style={{backgroundColor:"#ECECEC"}}>
         {!this.state.finished ?
-          <Row>
+          <div className="onboardSection">
+          <Row className="darkBlueBg">
+            <div>
+            <div className="container">
             <Col s={12}>
               <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <Stepper activeStep={this.state.stepIndex} style={{width: '85%', marginLeft: '7%'}}>
+                <Stepper connector={null} activeStep={this.state.stepIndex} style={{width: '85%', marginLeft: '7%', color:"white"}}>
                   <Step completed={true}><StepLabel/></Step>
                   <Step completed={_.indexOf(this.state.completedSteps, 1) !== -1}><StepLabel/></Step>
                   <Step completed={_.indexOf(this.state.completedSteps, 2) !== -1}><StepLabel/></Step>
@@ -187,68 +191,103 @@ class Browse extends Component {
                 </Stepper>
               </MuiThemeProvider>
             </Col>
-            <Col s={12}>
+            </div>
+            </div>
+            </Row>
+            <Row>
+            <div >
+            <Col s={12} className="darkBlueBg">
               <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div className="container">
                 <Tabs
                   value={this.state.value}
                   onChange={this.handleChange}
-                  inkBarStyle={{zIndex: '10', backgroundColor: '#000'}}
+                  tabItemContainerStyle={{backgroundColor:'red'}}
+                  inkBarStyle={{zIndex: '10', backgroundColor: '#8EEBF6', height: "5px", fontWeight:"200"}}
                 >
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">{this.state.type}</span><span className="hide-on-large-only">1</span></div>} value="a">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#2F9CAA', color: '#fff'}} label={<div><span className="hide-on-med-and-down">{this.state.type}</span><span className="hide-on-large-only">1</span></div>} value="a">
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Profession</span><span className="hide-on-large-only">2</span></div>} value="b">
-                    <Row className="reduced-bot-margin">
-                      <Col s={12}>
-                        <h2 style={{fontSize: '1.5rem'}}>Let's find you the perfect project for your design portfolio</h2>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col s={12} m={6}>
-                        <p style={{marginTop: -10}}>What professions are you interested in?</p>
-                        {onboardProfessions}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c', 2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                      </Col>
-                    </Row>
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#2F9CAA', color: '#fff'}} label={<div><span className="hide-on-med-and-down">Select Profession</span><span className="hide-on-large-only">2</span></div>} value="b">
+                    <div className="onboardPart">
+                      <Row className="reduced-bot-margin">
+                        <Col s={12} m={6} >
+                          <h2 style={{fontSize: '1.5rem'}}>Let's find you the perfect project for your design portfolio</h2>
+                          <p style={{marginTop: -10}}>What professions are you interested in?</p>
+                          {onboardProfessions}
+                          {this.state.onboardProfessions.length > 0 ?
+                            <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('c', 2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#F7BF59', marginTop: 10, padding: 12, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                            :
+                            <FlatButton disabled label={<span style={{marginLeft: 27, padding: "20px"}}>Select Profession</span>} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                          }
+                          
+                        </Col>
+                        <Col s={12} m={6} className="mockholder">
+                          <img src={process.env.PUBLIC_URL + '/img/design_mock.png'} alt=""/>
+                        </Col>
+                      </Row>
+                    </div>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Companies</span><span className="hide-on-large-only">3</span></div>} value="c">
-                    <Row>
-                      <Col s={12} className="center-align">
-                        <h2 style={{fontSize: '1.5rem'}}>Great! Now what companies are you interested in?</h2>
-                        <p>Select all that apply</p>
-                      </Col>
-                      {onboardCompanies}
-                    </Row>
-                    <Row>
-                      <Col s={6} offset={'s3'}>
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d',3)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                        <FlatButton style={{marginTop: 10, backgroundColor: '#E0E0E0'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('b', 1)}/>
-                      </Col>
-                    </Row>
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#2F9CAA', color: '#fff'}} label={<div><span className="hide-on-med-and-down">Select Companies</span><span className="hide-on-large-only">3</span></div>} value="c">
+                    <div className="onboardPart">
+                      <Row>
+                        <Col s={12} className="center-align">
+                          <h2 style={{fontSize: '1.5rem'}}>Great! Now what companies are you interested in?</h2>
+                          <p>Select all that apply</p>
+                        </Col>
+                        {onboardCompanies}
+                      </Row>
+                      <Row>
+                        
+                        <Col s={6} offset={'s3'}>
+                          {this.state.onboardCompanies.length > 0 ?
+                          <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('d',3)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#F7BF59', marginTop: 10, padding: 12, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                          :
+                          <FlatButton disabled label={<span style={{marginLeft: 27}}>Select Companies</span>} onTouchTap={() => this.handleChange('d',3)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                          }
+                          <FlatButton style={{marginBottom: 10, marginTop: 10, backgroundColor: 'transparent'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('b', 1)}/>
+                        </Col>
+                      </Row>
+                    </div>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">Select Difficulty</span><span className="hide-on-large-only">4</span></div>} value="d">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#2F9CAA', color: '#fff'}} label={<div><span className="hide-on-med-and-down">Select Difficulty</span><span className="hide-on-large-only">4</span></div>} value="d">
+                    <div className="onboardPart">
                     <Row>
-                      <Col s={12}><h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2></Col>
+                      <Col s={3}></Col>
                       <Col s={6}>
+                        <h2 style={{fontSize: '1.5rem'}}>How difficult should the projects be?</h2>
                         {onboardDifficulties}
-                        <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e',4)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
-                        <FlatButton style={{marginTop: 10, backgroundColor: '#E0E0E0'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('c', 2)}/>
+
+                        {this.state.onboardDifficulties.length > 0 ?
+                          <FlatButton label={<span style={{marginLeft: 27}}>Next</span>} onTouchTap={() => this.handleChange('e',4)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#F7BF59', marginTop: 10, padding: 12, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                          :
+                          <FlatButton disabled label={<span style={{marginLeft: 27}}>Select Companies</span>} onTouchTap={() => this.handleChange('c',2)} fullWidth={true} labelPosition="before" style={{backgroundColor: '#CFD8DC', marginTop: 10, padding: 5, height: "inherit"}} icon={<ArrowRight className="right" style={{paddingTop: 12}}/>}/>
+                        }
+                        <FlatButton style={{marginBottom: 10, marginTop: 10, backgroundColor: 'transparent'}} label='Back' fullWidth={true} onTouchTap={() => this.handleChange('b', 1)}/>
                       </Col>
                     </Row>
+                    </div>
                   </Tab>
-                  <Tab disabled={true} buttonStyle={{backgroundColor: '#fff', color: '#000'}} label={<div><span className="hide-on-med-and-down">See Projects</span><span className="hide-on-large-only">5</span></div>} value="e">
+                  <Tab disabled={true} buttonStyle={{backgroundColor: '#2F9CAA', color: '#fff'}} label={<div><span className="hide-on-med-and-down">See Projects</span><span className="hide-on-large-only">5</span></div>} value="e">
                     <Row>
                       <Col className="center-align" offset={'s3'} s={6} style={{marginTop: 40, paddingBottom: 40, backgroundColor: 'rgba(0,0,0,0.7)'}}>
                         <h2 style={{fontSize: '1.5rem', color: '#fff'}}>Searching for the best projects for you...</h2>
                         <CircularProgress size={100} thickness={5}/>
                       </Col>
                     </Row>
+                    
                   </Tab>
+                  
                 </Tabs>
+                </div>
               </MuiThemeProvider>
             </Col>
+            </div>
           </Row>
+          </div>
         :
+        <div className="container">
           <SearchProjects param={this.props.match.params.type} onboardCompanies={this.state.onboardCompanies} onboardProfessions={this.state.onboardProfessions} onboardDifficulties={this.state.onboardDifficulties} allDifficulties={this.state.difficulties} allProfessions={this.state.professions} allCompanies={this.state.allCompanies} allProjects={this.state.allProjects}/>
+        </div>
         }
       </div>
     )

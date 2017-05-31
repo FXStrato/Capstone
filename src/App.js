@@ -5,6 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import _ from 'lodash';
 import BlackLogo from "./img/logo_black.png";
+import BlueLogo from "./img/frlogo_blue2.png";
 import SignoutButton from "./signoutButton";
 import firebase from 'firebase';
 import Home from './Home';
@@ -115,7 +116,7 @@ class App extends Component {
                     style={{backgroundColor: 'transperant', boxShadow: 'none'}}
                     onLeftIconButtonTouchTap={this.handleToggle}
                     id="navbar-appbar"
-                    title={ <Link to="/"><img className="topLogo" src={BlackLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
+                    title={ <Link to="/"><img className="topLogo" src={BlueLogo} alt="Frontier Black Logo" style={{cursor: 'pointer'}}/></Link> }
                   />
                 </ToolbarGroup>
                 <ToolbarGroup>
