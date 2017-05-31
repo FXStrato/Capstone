@@ -352,11 +352,14 @@ class SearchProjects extends Component {
             <Row>
               <Col s={12} l={8} className="left-align">
                 <p style={{color:"white"}} className="topTagline">Explore brilliant project ideas</p>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton label="View All Projects" style={{color: '#fff'}} onTouchTap={this.viewAll}/>
+                </MuiThemeProvider>
               </Col>
               <Col s={12} l={4}>
                 <form onSubmit={(e) => {this.passSearch(e)}}>
                   <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <TextField fullWidth={true} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} style={{margin:"0px"}} />
+                    <TextField fullWidth={true} floatingLabelStyle={{color: '#fff'}} inputStyle={{color: '#fff'}} floatingLabelText="Tag/Name Search" name="search" onChange={(e) => {this.handleChange(e)}} style={{margin:"0px"}} />
                   </MuiThemeProvider>
                 </form>
               </Col>
@@ -364,23 +367,23 @@ class SearchProjects extends Component {
             <Row className="filterOptions">
               <Col s={12} m={12} l={4}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Difficulty', e)} className="truncate" value={this.state.selectDifficulty} floatingLabelText="Difficulty"/>
+                  <TextField style={{cursor: 'pointer'}} floatingLabelStyle={{color: '#fff'}} inputStyle={{color: '#fff'}} onTouchTap={(e) => this.handleOpen('Difficulty', e)} className="truncate" value={this.state.selectDifficulty} floatingLabelText="Difficulty"/>
                 </MuiThemeProvider>
               </Col>
               <Col s={12} m={12} l={4}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Profession', e)} className="truncate" value={this.state.selectProfession} floatingLabelText="Professions"/>
+                  <TextField style={{cursor: 'pointer'}} floatingLabelStyle={{color: '#fff'}} inputStyle={{color: '#fff'}} onTouchTap={(e) => this.handleOpen('Profession', e)} className="truncate" value={this.state.selectProfession} floatingLabelText="Professions"/>
                 </MuiThemeProvider>
               </Col>
               <Col s={12} m={12} l={4}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                  <TextField style={{cursor: 'pointer'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
+                  <TextField style={{cursor: 'pointer'}} floatingLabelStyle={{color: '#fff'}} onTouchTap={(e) => this.handleOpen('Company', e)} className="truncate" value={this.state.selectCompany} floatingLabelText="Companies"/>
                 </MuiThemeProvider>
               </Col>
             </Row>
           </div>
         </div>
-        
+
         <div style={{backgroundColor:"#ECECEC", paddingTop:20}}>
 
           <div className="container">
