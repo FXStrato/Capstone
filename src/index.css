@@ -3,9 +3,19 @@
              Global Element Designs
 
 =============================================*/
+body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+ }
+
+ main {
+   flex: 1 0 auto;
+ }
 
 html, main {
-    background-color: #ecf0f1;
+    background-color: white;
+    font-family: 'Roboto','Helvetica Neue',Arial,sans-serif;
 }
 
 .secondaryButton {
@@ -14,11 +24,50 @@ html, main {
     padding: 7px 15px;
 }
 
+h1, h2 {
+    font-family: 'Quicksand','Helvetica Neue',Arial,sans-serif;
+}
+
+h1 {
+    font-size: 36pt !important;
+}
+
+h2 {
+    font-size: 25pt !important;
+}
+
+h3 {
+    font-size: 16pt !important;
+}
+
+h4 {
+    font-size: 14pt !important;
+}
+
+.zeroBotMargin {
+    margin-bottom: 0px !important;
+}
+
 /*=============================================
 
              Navigation Bar Style
 
 =============================================*/
+
+#nav {
+    z-index: 10000;
+    height: 64px;
+    position: relative;
+    color: #4F4F4F;
+}
+    #nav .navStyle {
+        width: 100%;
+        position: fixed;
+        background-color: white;
+        -webkit-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        -moz-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+    }
 
 #nav .topLogo {
     height: 45px;
@@ -53,6 +102,10 @@ html, main {
         fill: black !important;
     }
 
+    #nav a {
+        color: #4F4F4F;
+    }
+
     /*=============================================
              Authentication Modal Style
     =============================================*/
@@ -78,17 +131,51 @@ html, main {
 =============================================*/
 
 #homePage {
-    
+    margin-top: -64px;
+    z-index: 1;
 }
     #homePage a {
         color: initial;
     }
-    #homePage .heroBanner {
-        text-align: center;
-        padding: 10vh 0px;
+
+    #homePage h2 {
+        margin-top: 4vh;
     }
+
+    #homePage .numberCircle {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        padding: 5px;
+        background: transparent;
+        border: 2px solid #2F9CAA;
+        color: #2F9CAA;
+        text-align: center;
+        font-size: 25px;
+        display: inline-block;
+        margin-top: 2vh;
+    }
+
+    #homePage .heroBanner {
+        text-align: left;
+        padding-top: 64px;
+
+        background-color: #2F9CAA;
+        color: white;
+        
+    }
+        #homePage .heroBanner .content {
+            padding: 10vh 0px;
+        }
+
+        #homePage .heroBanner h1 {
+            margin: 0;
+            margin-bottom: 5vh;
+        }
+
         #homePage .heroBanner h3 {
-            font-size: 1.5em;
+            margin: 0;
+            margin-bottom: 10px;
         }
 
         #homePage .heroBanner .primaryCTA {
@@ -96,11 +183,34 @@ html, main {
             border: solid black 2px;
             padding: 10px 20px;
         }
-    
+
+    #homePage .browseTileSection {
+
+    }
+        #homePage .browseTileSection img {
+            width: 100%;
+        }
+
+    #homePage .createProjectSection {
+        margin-top: -100px;
+        padding: 15vh 0px;
+        background-color: #E9E9E9;
+        text-align: center;
+        background: url('https://cdn.pbrd.co/images/cO5w3deYh.png') no-repeat bottom center;
+        background-size: cover;
+        color: white;
+    }
+
     #homePage .companyLogosList {
         text-align: center;
-        padding: 25px 0px;
-    }   
+        padding: 10vh 0px;
+    }
+        #homePage .companyLogosList .imageHolder {
+            width: 100%;
+            padding: 30px 0px;
+            text-align: center;
+        }
+
         #homePage .companyLogosList img {
             max-height: 30px;
             max-width: 85%;
@@ -117,6 +227,8 @@ html, main {
 
 =============================================*/
 
+
+
 .selectInterestsSection {
     text-align: center;
     padding: 30px 0px;
@@ -127,26 +239,115 @@ html, main {
         padding: 25px 0px;
     }
 
+    .selectInterestsSection h4 {
+        color: #939393;
+        font-size: 5pt;
+    }
+
     .selectInterestsSection a {
         color: inherit;
     }
 
     .selectInterestsSection .interestTile {
-        background-color: white;
-        padding: 20px;
-        width: 100%;
-        max-width: 200px;
+        text-align: center;
+        font-family: 'Quicksand';
+        background-color: #FFB734;
+        padding: 25px 0px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
         display: inline-block;
         font-size: 15pt;
-        border-bottom: solid white 5px;
         margin-bottom: 10px;
+        color: white;
+        border: solid 7px #FFB734;
+        transition: all 0.5s ease;
     }
+        .selectInterestsSection .interestTile img {
+            padding-top: 5px;
+            height: 100px;
+        }
+
         .selectInterestsSection .interestTile i {
             font-size: 20pt;
         }
 
         .selectInterestsSection .interestTile:hover {
-            border-bottom: solid gray 5px;
+            padding-top: 18px;
+            padding-bottom: 7px;
+            border: solid 7px #FCDCA2;
+        }
+
+/*=============================================
+
+             Onboarding Flow Style
+
+=============================================*/
+
+.onboardSection {
+
+}
+    .darkBlueBg {
+        background-color: #2F9CAA;
+    }
+
+    .onboardSection .row {
+        margin-bottom: 0px !important;
+    }
+
+    .onboardSection .browseOptionButton {
+        text-align: left;
+    }
+
+    .onboardSection .onboardPart {
+        padding: 30px;
+        padding-bottom: 0px;
+        background-color: white;
+    }
+
+        .onboardSection .onboardPart .mockholder {
+            text-align: center;
+        }
+
+        .onboardSection .onboardPart .mockholder img {
+            max-width: 95%;
+            margin-bottom: -6px;
+        }
+
+        .onboardSection .onboardPart .logoImage {
+            width: 100px;
+        }
+
+/*=============================================
+
+             Browse Projects Style
+
+=============================================*/
+
+.browseProjectsSection {
+    font-family: 'Quicksand';
+}
+    .browseProjectsSection .topTagline {
+        font-size: 18pt;
+        margin-top: 25px;
+    }
+
+    .browseProjectsSection .filterOptions {
+        margin: 0 !important;
+    }
+
+    .browseProjectsSection .projectCard {
+        color: #333333;
+        font-family: 'Quicksand';
+    }
+        .browseProjectsSection .projectCard .projectPhoto {
+            height: 200px;
+            background-size: cover;
+        }
+
+        .browseProjectsSection .projectCard p, .browseProjectsSection .projectCard h3 {
+            font-family: 'Quicksand';
+            margin: 0;
         }
 
 /*=============================================
@@ -156,26 +357,96 @@ html, main {
 =============================================*/
 
 #projectPage {
-    margin: 50px 0px;
+    background-color: #ECECEC;
+    font-family: 'Quicksand';
 }
-    #projectPage .oneLiner {
-        font-size: 1.5rem;
+    #projectPage .projectPartButtons {
+        padding: 20px 0px;
     }
 
-    #projectPage .projectTitle {
-        font-size: 3em;
-        margin-top: 0px;
-    }
 
-    #projectPage .oneLiner {
-        font-size: 2rem;
+    #projectPage .projectHeaderSection {
+        padding: 9vh 0px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        -webkit-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        -moz-box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
+        box-shadow: 0px 2px 10px 0px rgba(110,110,110,0.25);
     }
+        #projectPage .projectHeaderSection .howmightyouTagline {
+            font-size: 1.5em;
+            margin: 0px;
+        }
+
+        #projectPage .projectHeaderSection h1 {
+            margin-top: 5px;
+            font-size: 30pt !important;
+        }
+
+        #projectPage .projectHeaderSection .chip {
+            background-color: rgba(255,255,255,0.9);
+            padding: 7px 15px;
+            height: initial;
+            border-radius: 0px;
+            font-size: 11pt;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+    #projectPage .projectContent {
+        background-color: white;
+        padding: 20px;
+        min-height: 100;
+        max-height: 500;
+        overflow-y: auto;
+    }
+        #projectPage .projectContent .lockedContent {
+            background-color: #939393;
+            color: white;
+            text-align: center;
+            padding: 5vh 0px;
+            padding-top: 3vh;
+        }
+
+        #projectPage .projectContent li {
+            list-style-type: disc;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        #projectPage .logoImage {
+            width: 120px;
+            margin-top: 15px;
+        }
+
+/*=============================================
+
+             Dashboard Screen Style
+
+=============================================*/
+
+.dashboardSection .projectCard {
+        color: #333333;
+        font-family: 'Quicksand';
+    }
+        .dashboardSection .projectCard .projectPhoto {
+            height: 200px;
+            background-size: cover;
+        }
+
+        .dashboardSection .projectCard p, .browseProjectsSection .projectCard h3 {
+            font-family: 'Quicksand';
+            margin: 0;
+        }
+
 
 /*=============================================
 
              Loading Screen Style
 
 =============================================*/
+
+
 
 .loadingScreen {
 	background: rgba(0,0,0,0.5);
@@ -229,6 +500,11 @@ html, main {
              Misc Media Style
 
 =============================================*/
+
+
+.reduce-bot-margin {
+    margin-bottom: 0 !important;
+}
 
 @-webkit-keyframes sk-bounce {
   0%, 100% { -webkit-transform: scale(0.0) }

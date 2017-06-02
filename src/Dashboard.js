@@ -4,15 +4,24 @@ import { Row, Col } from 'react-materialize';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import moment from 'moment';
+import { TextField, RaisedButton, Checkbox, Dialog, FlatButton, Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Interests from './Interests';
+
 
 
 /* Home will be the landing page for the application. */
 
 class Dashboard extends React.PureComponent {
   state = {
+    open: false,
     userID: this.props.userID,
     isAuth: this.props.isAuth,
     activeProjects: null,
+    removeProjID: '',
+    removeProjName: '',
   };
 
   // This listens for when the new props change
@@ -22,10 +31,11 @@ class Dashboard extends React.PureComponent {
       isAuth: newProps.isAuth,
       userID: newProps.userID,
     });
-    this.getActiveProjects();
+    this.getUserProjects();
   }
 
   componentDidMount = () => {
+    window.scrollTo(0,0);
     //Pull all projects from firebase, and store in state.
     firebase.database().ref('/projects/').once('value').then((snapshot) => {
       this.setState({allProjects: snapshot.val()})
@@ -34,37 +44,91 @@ class Dashboard extends React.PureComponent {
       this.setState({allCompanies: snapshot.val()})
     });
     if(this.state.isAuth){
-      this.getActiveProjects();
+      this.getUserProjects();
     }
   }
 
-  // Gets the active projects of the user from firebase and saves them locally
-  getActiveProjects = () => {
-    console.log("GOING INTO ACTIVE PROJECTS");
+  handleOpen = (projectID, projectName) => {
+    this.setState({open: true, removeProjID: projectID, removeProjName: projectName})
+  };
+
+  handleClose = () => {
+    this.setState({open: false})
+  };
+
+  // Gets the active/completed projects of the user from firebase and saves them locally
+  getUserProjects = () => {
     firebase.database().ref('users/' + this.props.userID + "/activeProjects").once('value', (snapshot) => {
       this.setState({
         activeProjects: snapshot.val()
       });
-      console.log("...checking active projects");
+    });
+    firebase.database().ref('users/' + this.props.userID + "/completedProjects").once('value', (snapshot) => {
+      this.setState({
+        completedProjects: snapshot.val()
+      });
     });
   }
 
+  //Removes active project from active list
+  removeActiveProject = () => {
+    let actProjects = this.state.activeProjects;
+    _.remove(actProjects, (n) => {
+      return n === this.state.removeProjID;
+    });
+    firebase.database().ref('users/' + this.props.userID).update({
+      activeProjects: actProjects
+    }).then(() => {
+      this.setState({open: false})
+      this.getUserProjects();
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+
+
   // Renders all active projects
   renderActiveProjects = () => {
-    console.log(this.state);
     // If the user is not authenticated
     if(!this.state.isAuth){
       return ("");
     } else if(this.state.isAuth) {
       // Build each project
-      console.log("Active Projects",this.state.activeProjects);
       let result = _.map(this.state.activeProjects, (projectID, index) => {
         var targetProject = this.state.allProjects[this.state.activeProjects[index]];
+        let now = moment();
+        let dueDate = moment(targetProject.due_date);
+        let timeLeft;
+        if(dueDate.diff(now, 'days') >= 0) {
+          //Means they still have time
+          timeLeft = <span style={{color: '#4CAF50'}}>{dueDate.diff(now, 'days')} days left for submission</span>
+        } else {
+          //Project is over due date.
+          timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
+        }
         return (
-          <Row key={'activeProject-'+index}><Link to={'/projectfull/' + projectID}>{targetProject.name}</Link></Row>
+           <Col key={'activeProjects-'+index} s={12} m={4}>
+            <p>{timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></p>
+            <Link target="_blank" key={'project-'+index} to={'/project/' + projectID}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <Card className="projectCard">
+                      <CardMedia style={{backgroundColor:"#2F9CAA"}}>
+                        {this.getBackgroundImg(targetProject.cover_image_link)}
+                      </CardMedia>
+                    <CardText className="">
+                      <p>How might you...</p>
+                      <h3>{targetProject.name}</h3>
+                      <p>{targetProject.profession_type + " | " + targetProject.difficulty}</p>
+                      <p>{targetProject.one_liner}</p>
+                    </CardText>
+                  </Card>
+                </MuiThemeProvider>
+            </Link>
+          </Col>
         )
       });
-      
+
       if(result.length > 0){
         return result;
       } else {
@@ -72,59 +136,93 @@ class Dashboard extends React.PureComponent {
           <p>You haven't started any projects</p>
         )
       }
-      
     }
-    
+  }
+
+  getBackgroundImg = (imgLink) => {
+    let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
+    return (
+      <div className="projectPhoto" style={{backgroundColor: "#2F9CAA",background:imgCSS, backgroundSize: "cover"}}></div>
+    );
+  }
+
+  renderCompletedProjects = () => {
+    if(this.state.userID && this.state.allProjects) {
+      let result = _.map(this.state.completedProjects, (elem, index) => {
+        let targetProject = this.state.allProjects[index];
+        return (
+          <Col key={'completedProjects-'+index} s={12} m={4}>
+            <p style={{color: '#4CAF50'}}>Status: Project is being reviewed by employers</p>
+            <Link target="_blank" to={'/project/' + index}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <Card className="projectCard">
+                      <CardMedia style={{backgroundColor:"#2F9CAA"}}>
+                        {this.getBackgroundImg(targetProject.cover_image_link)}
+                      </CardMedia>
+                    <CardText className="">
+                      <p>How might you...</p>
+                      <h3>{targetProject.name}</h3>
+                      <p>{targetProject.profession_type + " | " + targetProject.difficulty}</p>
+                      <p>{targetProject.one_liner}</p>
+                    </CardText>
+                  </Card>
+                </MuiThemeProvider>
+            </Link>
+          </Col>
+        )
+      });
+      if(result.length > 0) return result;
+      else return <div>There are no completed projects</div>
+    }
+    else {
+      return <div>User not authenticated</div>
+    }
   }
 
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Remove Project"
+        primary={true}
+        onTouchTap={this.removeActiveProject}
+      />,
+    ];
     return (
-      <div className="container">
-        <h3>Active Projects</h3>
-        {this.renderActiveProjects()}
-        <h3>Browse new projects</h3>
-        <div className="selectInterestsSection">
-        <Row className="center-align">
-          <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['UX Designer','Visual Communication Designer']}}}>
-              <div className="interestTile">
-              <i className="fa fa-paint-brush fa-2x" aria-hidden="true"></i><br/>Design
-              </div>
-            </Link>
-          </Col>
-          <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['Software Developer']}}}>
-              <div className="interestTile">
-                <i className="fa fa-code" aria-hidden="true"></i><br/>Software Development
-              </div>
-            </Link>
-          </Col>
-          <Col s={12} m={12} l={4}>
-            <Link to={{pathname: '/projects/', state: {professions: ['Project Manager']}}}>
-              <div className="interestTile">
-                <i className="fa fa-users" aria-hidden="true"></i><br/>Management
-              </div>
-            </Link>
+      <div className="container dashboardSection">
+        <Row>
+          <Col s={12}>
+            <h2 style={{fontSize: '1.5rem'}}>Active Projects</h2>
+            <Row>
+              {this.renderActiveProjects()}
+            </Row>
           </Col>
         </Row>
-        <Row className="center-align">
-          <Col s={12} m={12} l={6}>
-            <Link to={{pathname: '/projects/', state:{professions: ['Marketing, Analyst']}}}>
-              <div className="interestTile">
-                <i className="fa fa-bullhorn" aria-hidden="true"></i><br/>Marketing
-              </div>
-            </Link>
-          </Col>
-          <Col s={12} m={12} l={6}>
-            <Link to={{pathname: '/projects/', state:{professions: ['Security Analyst', 'System Administrator']}}}>
-              <div className="interestTile">
-                <i className="fa fa-shield" aria-hidden="true"></i><br/>Security
-              </div>
-            </Link>
+        <Row>
+          <Col s={12}>
+            <h2 style={{fontSize: '1.5rem'}}>Completed Projects</h2>
+            <Row>
+              {this.renderCompletedProjects()}
+            </Row>
           </Col>
         </Row>
-       <Link to="/projects/"><button className="secondaryButton">See All Projects</button></Link>
-      </div>       
+        <h2 style={{fontSize: '1.5rem'}}>Browse new projects</h2>
+        <Interests></Interests>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Dialog
+          title="Confirm Project Deletion"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={() => {this.handleClose()}}
+        >
+          Are you sure you want to remove "{this.state.removeProjName}" from your active projects?
+        </Dialog>
+      </MuiThemeProvider>
       </div>
     );
   }

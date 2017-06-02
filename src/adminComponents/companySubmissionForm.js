@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 
@@ -43,7 +44,7 @@ class CompanySubmissionForm extends Component {
     //         alert('file uploaded!');
     //     }
     // );
-      
+
     //   console.log(cLogo);
   }
 

@@ -1,18 +1,19 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import { Row, Col } from 'react-materialize';
-import { Link } from 'react-router';
 
-/* Contact Us Page */
+/* 404 Page*/
 
-class Contact extends Component {
+class NotFound extends Component {
+
   render() {
     return (
       <div className="container">
         <Row>
           <Col s={12}>
-            <h3>Have questions?</h3>
-            <p>Email us at questions@frontier.com (Please don't actually email us, we don't have that set up)</p>
+            <h1 style={{display: 'none'}}>404 Page</h1>
+            <h2 style={{fontSize: '1.7rem'}}>Oops!</h2>
+            <p>Seems like you've navigated to a location that doesn't exist.</p>
           </Col>
         </Row>
       </div>
@@ -20,4 +21,4 @@ class Contact extends Component {
   }
 }
 
-export default Contact;
+export default NotFound;

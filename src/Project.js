@@ -1,8 +1,8 @@
 /*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import {Row, Col} from 'react-materialize';
-import { withRouter } from 'react-router-dom';
-import { RaisedButton, Dialog, FlatButton, TextField } from 'material-ui';
+import { withRouter, Link } from 'react-router-dom';
+import { TextField, RaisedButton, Checkbox, Dialog, FlatButton, Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import firebase from 'firebase';
@@ -10,6 +10,7 @@ import SignUpForm from './signupForm';
 import SignInForm from './signinForm';
 import _ from 'lodash';
 import Loading from './loading.js';
+import FA from 'react-fontawesome';
 
 /* Page displaying the specific details of each project */
 
@@ -21,6 +22,7 @@ class Project extends Component {
     isAuth: this.props.isAuth,
     userID: this.props.userID,
     showLoading: false,
+    view: 'a',
   }
 
 //Temp: -Kh4diidw7jpXDbKz-go
@@ -34,12 +36,26 @@ class Project extends Component {
         isAuth: newProps.isAuth,
         userID: newProps.userID,
       });
+      firebase.database().ref('users/' + newProps.userID).once('value').then((snapshot) => {
+        if(_.indexOf(snapshot.val().activeProjects, this.state.projID) > -1) this.setState({isActiveProject: true});
+        if(snapshot.val().completedProjects[this.state.projID]) {
+          this.setState({isCompletedProject: true, open: false});
+        }
+      })
     }
   }
 
 
-  componentWillMount = () => {
-    window.scrollTo(0, 0);
+  componentDidMount = () => {
+    window.scrollTo(0, 0)
+    if(this.props.userID) {
+      firebase.database().ref('users/' + this.props.userID).once('value').then((snapshot) => {
+        if(_.indexOf(snapshot.val().activeProjects, this.state.projID) > -1) this.setState({isActiveProject: true});
+        if(snapshot.val().completedProjects[this.state.projID]) {
+          this.setState({isCompletedProject: true});
+        }
+      })
+    }
     firebase.database().ref('/projects/' + this.props.match.params.projectID).once('value').then((snapshot) => {
       let project = snapshot.val();
       if(project) {
@@ -74,7 +90,7 @@ class Project extends Component {
     firebase.database().ref('users/' + this.state.userID + "/activeProjects").once('value', (snapshot) => {
       var actProjects = snapshot.val();
       // If this is the first project that the user is adding to their list
-      if(actProjects == null){
+      if(actProjects === null){
         actProjects = [];
         actProjects[0] = this.state.projID;
       } else {
@@ -88,14 +104,12 @@ class Project extends Component {
         activeProjects: actProjects
       }).then(() => {
         // After project is uploaded, sends user to the full specification of the page
-        this.props.history.push('/projectfull/' + this.state.projID);
+        //this.props.history.push('/projectfull/' + this.state.projID)
+        this.setState({showLoading: false, open: false});
+        location.reload();
       });
-
     });
-
   }
-
-
 
   handleOpen = () => {
     this.setState({open: true})
@@ -105,8 +119,42 @@ class Project extends Component {
     this.setState({open: false})
   };
 
+  handleReturn = () => {
+    this.props.history.goBack();
+  }
+
+  //helper function
+  capFirst = (string) => {
+    if(string) return string.charAt(0).toUpperCase() + string.slice(1);
+    else return '';
+  }
+
+  getProjectHeader = (imgLink,title,profession,diff,dueDate) => {
+    let imgCSS = "url(" + imgLink + ") center center / cover no-repeat";
+    return (
+      <div className="" style={{backgroundColor: "#2F9CAA",background:imgCSS, backgroundSize: "cover"}}>
+        {/*<div style={{background:"rgba(0, 0, 0, 0.5)"}}>
+          <div className="container" style={{paddingTop:"10px"}}>
+            <Link to="/browse" style={{color:"white"}}> <FA name="angle-double-left"></FA> Back To Projects</Link>
+          </div>
+        </div>*/}
+
+        <div className="projectHeaderSection">
+          <div className="container">
+            <p className="howmightyouTagline">How might you...</p>
+            <h1>{title}</h1>
+            <div className="chip">{profession}</div>
+            <div className="chip">Difficulty: {this.capFirst(diff)}</div>
+            <div className="chip">Project Ends: {dueDate}</div>
+          </div>
+        </div>
+
+      </div>
+    );
+  }
 
   render() {
+    console.log(this.state.project);
     const actions = [
       <FlatButton
         label="Cancel"
@@ -126,59 +174,236 @@ class Project extends Component {
         onTouchTap={() => {this.handleClose()}}
       />,
     ];
+
+    let showButton;
+    if(this.state.isActiveProject) {
+      showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RaisedButton primary={true} fullWidth={true} onTouchTap={() => this.props.history.push('/submit/' + this.state.projID)} label="Submit Project" />
+      </MuiThemeProvider>;
+    } else if(this.state.isCompletedProject) {
+      showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RaisedButton primary={true} fullWidth={true} disabled={true} label="Submitted" />
+      </MuiThemeProvider>
+    } else {
+      showButton = <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
+      </MuiThemeProvider>
+    }
+
+    let result;
+    switch (this.state.view) {
+
+
+
+      // Summary Page Content
+      case 'a':
+      let tags = _.map(this.state.project.tags, (elem2, index2) => {
+        return (
+          <div key={'project_'+index2} className="chip">{elem2}</div>
+        )
+      });
+
+      let companies = _.map(this.state.project.supporting_companies, (elem2, index2) => {
+        console.log(elem2);
+        return (
+          <div key={index2} style={{textAlign:"center"}}>
+              <img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + elem2.props.children.toLowerCase() + '.png'}/>
+          </div>
+        )
+      });
+
+      result = <div className="projectContent">
+        <Row>
+          <Col s={12} m={8}>
+            <h3>Project Description</h3>
+            <p style={{padding: '10px'}}>{this.state.project.short_description}</p>
+            <p>Tags</p>
+            {tags}
+          </Col>
+          <Col s={12} m={4} style={{textAlign:"center"}}>
+            <h4>Posting Company</h4>
+            <img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + this.state.project.posting_company + '.png'}/>
+            <h4>Interested Companies</h4>
+            {companies}
+          </Col>
+        </Row>
+
+      </div>
+      break;
+
+      // Requirements Page Content
+      case 'b':
+      let reqs = _.map(this.state.project.submission_requirements, (elem, index) => {
+        return (
+          <li key={'subrequirements-'+index}>{elem}</li>
+        )
+      });
+      result = <div className="projectContent">
+        <h3>Project Requirements</h3>
+        <p>The following are required to be in your submission in order to be evaluated by employers.</p>
+        <ul>{reqs}</ul>
+      </div>
+      break;
+
+      // Scope Page Content
+      case 'c':
+      let targetProject = this.state.project;
+      let personas = _.map(targetProject.scope.personas, (elem, index) => {
+        return (
+          <Col s={12} m={6} key={'personas-'+index}>
+            <h3>{elem.name}</h3>
+            <h4>{elem.title}</h4>
+            <ul>
+              <li>Age: {elem.age}</li>
+              <li>Employment: {elem.employment}</li>
+              <li>Income: {elem.income}</li>
+              <li>Location: {elem.location}</li>
+            </ul>
+            <p>{elem.biography}</p>
+          </Col>
+        )
+      });
+
+      let usecases = _.map(targetProject.scope.use_cases, (elem, index) => {
+        return (
+          <li key={index}>{elem}</li>
+        )
+      });
+
+      let platforms = _.map(targetProject.scope.platform, (elem, index) => {
+        return (
+          <li key={index}>{elem}</li>
+        )
+      });
+
+      result = <div className="projectContent">
+        <h3>Optional Project Scope</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+        {this.state.isActiveProject ?
+
+          <div>
+            <Row>
+              <Col s={12} m={8}>
+                <h3>User Personas</h3>
+                <p>Here are example user personas of people who would use this product.</p>
+                <Row>
+                  {personas}
+                </Row>
+              </Col>
+              <Col s={12} m={4}>
+                <h3>Use Cases</h3>
+                  <ul>
+                    {usecases}
+                  </ul>
+                  <h3>Platform Considerations</h3>
+                  <p>Here are platform that you could consdier designing this experience for:</p>
+                  <ul>
+                    {platforms}
+                  </ul>
+              </Col>
+            </Row>
+          </div>
+        :
+          <div>
+
+            <div className="lockedContent">
+              <h2> <FA name="lock"></FA> </h2>
+              <h3>You must begin the project in order to see the scope</h3>
+            </div>
+          </div>
+        }
+      </div>
+      break;
+
+      // Helpful Resources Page Content
+      case 'd':
+      let resources = _.map(this.state.project.additional_resources, (elem, index) => {
+        return (
+          <div key={index}>{elem}</div>
+        )
+      });
+
+      result = <div className="projectContent">
+        <h3>Helpful Resources</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+        {this.state.isActiveProject ?
+          <ul>
+            {resources}
+          </ul>
+        :
+          <div className="lockedContent">
+            <h2> <FA name="lock"></FA> </h2>
+            <h3>You must begin the project in order to see the helpful resources</h3>
+          </div>
+        }
+      </div>
+      break;
+
+      // Inspiration Page Content
+      case 'e':
+      result = <div className="projectContent">
+        <h3>Inspiration</h3>
+        <p>The following is an optional project scope that you can use to narrow your project and get ideas for what to consider for this project. It is not required that reference it nor will it affect employer evaluation if you use it.</p>
+        {this.state.isActiveProject ?
+          <div style={{padding: '10px'}}>
+            <p>Inspirational content coming soon!</p>
+          </div>
+        :
+          <div className="lockedContent">
+            <h2> <FA name="lock"></FA> </h2>
+            <h3>You must begin the project in order to see the project's inspiration</h3>
+          </div>
+        }
+      </div>
+      break;
+
+
+      default:
+      result = <div className="projectContent">
+        Default switch case
+      </div>
+    }
+
     return (
       <section id="projectPage">
         {this.state.showLoading ? <Loading /> : ""}
+
+        {this.getProjectHeader(this.state.project.cover_image_link,this.state.project.name,this.state.project.profession_type,this.state.project.difficulty,this.state.project.due_date)}
+
         <div className="container">
-          {Object.keys(this.state.project).length > 0 ?
-            <Row>
-              <Col s={12} m={12} l={8}>
-                <h2 className="projectTitle">{this.state.project.name}</h2>
-                <h4 className="oneLiner">
-                  {this.state.project.one_liner}
-                </h4>
-                <Row>
-                  <Col s={4}>
-                    <p>{this.state.project.profession_type}</p>
-                  </Col>
-                  <Col s={4}>
-                    <p>Posted: {this.state.project.posting_date}</p>
-                  </Col>
-                  <Col s={4}>
-                    <p>Submission Due: {this.state.project.due_date}</p>
-                  </Col>
-                </Row>
-                <p>{this.state.project.short_description}</p>
-                <br/>
-                <div>
-                  <ul>
-                    Additional Resources:
-                    {this.state.project.additional_resources}
-                  </ul>
-                </div>
-                <div>
-                  Tags:
-                  {this.state.project.tags}
+          <Row className="zeroBotMargin">
+
+              <Col s={12} m={4} l={2}>
+                <div className="projectPartButtons">
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Summary" onTouchTap={() => this.setState({view: 'a'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Requirements" onTouchTap={() => this.setState({view: 'b'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Scope" onTouchTap={() => this.setState({view: 'c'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton style={{textAlign:"right"}} fullWidth={true} label="Resources" onTouchTap={() => this.setState({view: 'd'})} />
+                </MuiThemeProvider>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                  <FlatButton fullWidth={true} style={{marginBottom: 20, textAlign:"right"}} label="Inspiration" onTouchTap={() => this.setState({view: 'e'})} />
+                </MuiThemeProvider>
+
+                <div className="hide-on-med-and-down">{showButton}</div>
                 </div>
               </Col>
-              <Col s={12} m={12} l={4}>
-                <div className="card">
-                  <div className="card-image">
-                    <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
-                  </div>
-                  <div className="card-content">
-                    <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
-                    <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
-                    <MuiThemeProvider muiTheme={getMuiTheme()}>
-                      <RaisedButton secondary={true} fullWidth={true} onTouchTap={() => {this.handleOpen('fullOpen')}} label="Begin Project" />
-                    </MuiThemeProvider>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-            :
-            <div>That project doesn't exist</div>
-          }
+
+            <Col s={12} m={8} l={10}>
+                {result}
+            </Col>
+            <Col s={12} className="hide-on-large-only">
+              {showButton}
+              <br/>
+              <br/>
+            </Col>
+          </Row>
         </div>
         <MuiThemeProvider muiTheme={getMuiTheme()}>
           <Dialog
@@ -200,7 +425,6 @@ class Project extends Component {
                 <SignUpForm/>
                 <p>Already have an account? Log in:</p>
                 <SignInForm/>
-                
               </div>
             }
           </Dialog>
@@ -212,3 +436,47 @@ class Project extends Component {
 
 
 export default withRouter(Project);
+
+/*
+{Object.keys(this.state.project).length > 0 ?
+  <Row>
+    <Col s={12} m={12} l={8}>
+      <h2 className="projectTitle">{this.state.project.name}</h2>
+      <h4 className="oneLiner">
+        {this.state.project.one_liner}
+      </h4>
+      <Row>
+        <Col s={4}>
+          <p>{this.state.project.profession_type}</p>
+        </Col>
+        <Col s={4}>
+          <p>Posted: {this.state.project.posting_date}</p>
+        </Col>
+        <Col s={4}>
+          <p>Submission Due: {this.state.project.due_date}</p>
+        </Col>
+      </Row>
+      <p>{this.state.project.short_description}</p>
+      <br/>
+      <div>
+        Tags:
+        {this.state.project.tags}
+      </div>
+    </Col>
+    <Col s={12} m={12} l={4}>
+      <div className="card">
+        <div className="card-image">
+          <img src={this.state.project.cover_image_link} alt={this.state.project.name + ' Banner'} className="responsive-img"/>
+        </div>
+        <div className="card-content">
+          <div>Posting Company: <b>{this.state.project.posting_company}</b></div>
+          <div style={{paddingBottom: "15px"}}>Supporting Companies: <b>{this.state.project.supporting_companies}</b></div>
+          {showButton}
+        </div>
+      </div>
+    </Col>
+  </Row>
+  :
+  <div>That project doesn't exist. <a href="" onTouchTap={this.handleReturn}>Click here to return to your previous location.</a></div>
+}
+*/

@@ -1,7 +1,7 @@
+/*eslint no-unused-vars: "off"*/ //don't show warnings for unused
 import React, { Component } from 'react';
 import Redirect from 'react-router-dom';
 import * as firebase from 'firebase';
-import { Row, Col } from 'react-materialize';
 
 
 class signupForm extends Component {
@@ -26,7 +26,8 @@ class signupForm extends Component {
               fullName: user.displayName,
               photoURL: user.photoURL,
               email: user.email,
-              firstName: fName
+              firstName: fName,
+              onboard: false,
             }
             var userPromise = userRef.set(userData).then(() => {
               this.props.history.push('/interests');
@@ -37,7 +38,7 @@ class signupForm extends Component {
           }
         });
 
-        
+
 
     }).catch(function(error) {
         // Handle Errors here.
@@ -54,7 +55,7 @@ class signupForm extends Component {
   render() {
     return (
     <span>
-      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="http://app.candidatezap.com/images/signUpGoogle.png" alt=""/>      
+      <img className="googleAuthImg" onClick={this.popupGoogleSignup} src="http://app.candidatezap.com/images/signUpGoogle.png" alt=""/>
     </span>
     );
   }
