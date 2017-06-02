@@ -50,12 +50,14 @@ class ProjectSubmissionForm extends Component {
     var due = this.state.dueDate;
     var estDur = this.state.estimatedDuration;
     var coverImage = this.state.coverImageLink;
+    var theTags = this.state.tagsList.split(",");
+    var diff = this.state.difficulty;
 
     // Testing variables
 
     var supportingCompanies = ["-Kgl0j0pOVUWZdrczJXB","-KglpkMFxCoiFyr_vt_x"];
-    var additionalResources = ["Check out this link: https://www.google.com/", "A great resources for memes: https://www.reddit.com/r/AskReddit/"];
-    var submissionRequirements = ["Must be mobile responsive", "Please add colors to show off visual design"];
+    var additionalResources = ["Here's a great list of sample design projects: http://www.creativebloq.com/portfolios/examples-712368", "InVision outlines fantastic tips on what to consider about your portfolio project: https://www.invisionapp.com/blog/building-a-design-portfolio/", "Build a solid foundation for Design: http://vanseodesign.com/downloads/learn-design-fundamentals/"];
+    var submissionRequirements = ["Create some form of a case study where employers can evaluate your reasoning and the sequential steps you took", "Include a reflection on creating this project", "The experience must allow for a single user to use it (it cannot be a multiplayer-only experience)", "Submission format must be a URL link or one of the following file types: pdf, psd, ai, sketch, png."];
     var exScope = {
       "platform":[
         "Mobile","Desktop","Tablet","Virtual Reality","Augmented Reality / Mixed Reality"
@@ -82,7 +84,6 @@ class ProjectSubmissionForm extends Component {
       "use_cases":["Find a new home with an intent to purcahse for oneself","Peruse a map to find interesting properties for investors"]
     };
 
-
     var newProjectKey = firebase.database().ref().child('projects').push().key;
     // Adds project to database
     firebase.database().ref('/projects/' + newProjectKey).set({
@@ -98,7 +99,9 @@ class ProjectSubmissionForm extends Component {
         additional_resources: additionalResources,
         submission_requirements: submissionRequirements,
         cover_image_link: coverImage,
-        // scope:exScope
+        scope:exScope,
+        tags: theTags,
+        difficulty: diff
     });
   }
 
@@ -128,6 +131,16 @@ class ProjectSubmissionForm extends Component {
         <label>
           Short Description:
           <input name="shortDesc" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Difficulty:
+          <input name="difficulty" type="text" onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Tags
+          <input name="tagsList" type="text" onChange={this.handleInputChange} />
         </label>
         <br />
         <label>

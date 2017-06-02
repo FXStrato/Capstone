@@ -221,6 +221,8 @@ class Project extends Component {
             {tags}
           </Col>
           <Col s={12} m={4} style={{textAlign:"center"}}>
+            <h4>Posting Company</h4>
+            <img className="logoImage" src={process.env.PUBLIC_URL + '/img/' + this.state.project.posting_company + '.png'}/>
             <h4>Interested Companies</h4>
             {companies}
           </Col>
