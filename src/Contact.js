@@ -11,7 +11,8 @@ class Contact extends Component {
       <div className="container">
         <Row>
           <Col s={12}>
-            <p>This is the contact us page</p>
+            <h3>Have questions?</h3>
+            <p>Email us at questions@frontier.com (Please don't actually email us, we don't have that set up)</p>
           </Col>
         </Row>
       </div>

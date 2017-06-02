@@ -208,6 +208,7 @@ class SearchProjects extends Component {
           //Prob have some kind of regex here to ensure that we aren't getting something stupid from user, like / or space or some other weird characters
           //Otherwise, search by tag and also project title
           let foundMatch = false;
+          console.log(temp.tags);
           for(let i = 0; i < temp.tags.length; i++) {
             if(_.includes(temp.tags[i].toLowerCase(), this.state.searchTerm.toLowerCase())) foundMatch = true;
           }
@@ -352,7 +353,7 @@ class SearchProjects extends Component {
             <Row>
               <Col s={12} l={8} className="left-align">
                 <p style={{color:"white"}} className="topTagline">Explore brilliant project ideas</p>
-                
+
               </Col>
               <Col s={12} l={4}>
                 <form onSubmit={(e) => {this.passSearch(e)}}>

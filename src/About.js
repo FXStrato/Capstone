@@ -10,7 +10,8 @@ class About extends Component {
       <div className="container">
         <Row>
           <Col s={12}>
-            <p>This is the About page</p>
+            <h3>About US</h3>
+            <p>Frontier connects students to employers through sponsored projects, giving students access to full projects to put on their resume wile providing potential hirees for searching companies</p>
           </Col>
         </Row>
       </div>
