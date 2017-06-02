@@ -203,9 +203,9 @@ class App extends Component {
               <div className="col l4 offset-l2 s12">
                 <h5 className="white-text">Links</h5>
                 <ul>
-                  <li><Link to="projects" className="grey-text text-lighten-3">Projects</Link></li>
-                  <li><Link to="about" className="grey-text text-lighten-3">About</Link></li>
-                  <li><Link to="contact" className="grey-text text-lighten-3">Contact Us</Link></li>
+                  <li><Link to="/browse" className="grey-text text-lighten-3">Projects</Link></li>
+                  <li><Link to="/about" className="grey-text text-lighten-3">About</Link></li>
+                  <li><Link to="/contact" className="grey-text text-lighten-3">Contact Us</Link></li>
                 </ul>
               </div>
             </div>

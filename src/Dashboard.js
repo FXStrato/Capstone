@@ -108,7 +108,7 @@ class Dashboard extends React.PureComponent {
           timeLeft = <span style={{color: '#C62828'}}>Project has stopped accepting submissions</span>
         }
         return (
-           <Col key={"activeProject-"+index} s={12} m={4}>
+           <Col key={'activeProjects-'+index} s={12} m={4}>
             <p>{timeLeft} | <span style={{cursor: 'pointer'}} onTouchTap={() => this.handleOpen(projectID, targetProject.name)}>Remove</span></p>
             <Link target="_blank" key={'project-'+index} to={'/project/' + projectID}>
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
